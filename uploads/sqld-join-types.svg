@@ -1,0 +1,68 @@
+<svg viewBox="0 0 720 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="조인 종류별 반환 행 벤다이어그램: INNER는 교집합, LEFT와 RIGHT는 한쪽 전체, FULL OUTER는 합집합">
+  <defs>
+    <clipPath id="jt-a"><circle cx="66" cy="74" r="38"/></clipPath>
+    <clipPath id="jt-b"><circle cx="112" cy="74" r="38"/></clipPath>
+    <style>
+      .card{fill:#fff;stroke:#17324c;stroke-width:1.5}
+      .sh{fill:#17324c;opacity:.12}
+      .circ{fill:none;stroke:#17324c;stroke-width:1.5}
+      .fillY{fill:#ffe066}
+      .lbl{font:700 13px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .ttl{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .sub{font:400 10px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+    </style>
+  </defs>
+
+  <!-- INNER -->
+  <g transform="translate(0,0)">
+    <rect class="sh" x="14" y="12" width="152" height="150" rx="10"/>
+    <rect class="card" x="10" y="8" width="152" height="150" rx="10"/>
+    <circle cx="112" cy="74" r="38" class="fillY" clip-path="url(#jt-a)"/>
+    <circle cx="66" cy="74" r="38" class="circ"/>
+    <circle cx="112" cy="74" r="38" class="circ"/>
+    <text x="50" y="34" class="lbl">A</text>
+    <text x="128" y="34" class="lbl">B</text>
+    <text x="86" y="140" class="ttl">INNER</text>
+    <text x="86" y="153" class="sub">A ∩ B</text>
+  </g>
+
+  <!-- LEFT OUTER -->
+  <g transform="translate(178,0)">
+    <rect class="sh" x="14" y="12" width="152" height="150" rx="10"/>
+    <rect class="card" x="10" y="8" width="152" height="150" rx="10"/>
+    <circle cx="66" cy="74" r="38" class="fillY"/>
+    <circle cx="66" cy="74" r="38" class="circ"/>
+    <circle cx="112" cy="74" r="38" class="circ"/>
+    <text x="50" y="34" class="lbl">A</text>
+    <text x="128" y="34" class="lbl">B</text>
+    <text x="86" y="140" class="ttl">LEFT OUTER</text>
+    <text x="86" y="153" class="sub">A 전부 + 짝없으면 NULL</text>
+  </g>
+
+  <!-- RIGHT OUTER -->
+  <g transform="translate(356,0)">
+    <rect class="sh" x="14" y="12" width="152" height="150" rx="10"/>
+    <rect class="card" x="10" y="8" width="152" height="150" rx="10"/>
+    <circle cx="112" cy="74" r="38" class="fillY"/>
+    <circle cx="66" cy="74" r="38" class="circ"/>
+    <circle cx="112" cy="74" r="38" class="circ"/>
+    <text x="50" y="34" class="lbl">A</text>
+    <text x="128" y="34" class="lbl">B</text>
+    <text x="86" y="140" class="ttl">RIGHT OUTER</text>
+    <text x="86" y="153" class="sub">B 전부 + 짝없으면 NULL</text>
+  </g>
+
+  <!-- FULL OUTER -->
+  <g transform="translate(534,0)">
+    <rect class="sh" x="14" y="12" width="152" height="150" rx="10"/>
+    <rect class="card" x="10" y="8" width="152" height="150" rx="10"/>
+    <circle cx="66" cy="74" r="38" class="fillY"/>
+    <circle cx="112" cy="74" r="38" class="fillY"/>
+    <circle cx="66" cy="74" r="38" class="circ"/>
+    <circle cx="112" cy="74" r="38" class="circ"/>
+    <text x="50" y="34" class="lbl">A</text>
+    <text x="128" y="34" class="lbl">B</text>
+    <text x="86" y="140" class="ttl">FULL OUTER</text>
+    <text x="86" y="153" class="sub">A ∪ B</text>
+  </g>
+</svg>

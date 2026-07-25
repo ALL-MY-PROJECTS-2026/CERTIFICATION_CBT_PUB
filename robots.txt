@@ -1,0 +1,7 @@
+# CBT 전자문제집 robots.txt
+# 애드센스/검색 크롤러 전체 허용 — 승인 심사 시 크롤러 차단 금지
+User-agent: *
+Allow: /
+
+# ⚠️ 도메인 확정 후 아래 URL 을 실제 도메인으로 교체하세요 (src/content/site.json 의 siteUrl 과 일치).
+Sitemap: https://cbt.example.com/sitemap.xml
