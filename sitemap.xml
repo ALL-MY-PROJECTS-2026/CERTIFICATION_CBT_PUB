@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://cbt.example.com/</loc>
-    <lastmod>2026-07-26</lastmod>
+    <loc>https://pancocbt.site/</loc>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://cbt.example.com/posts</loc>
-    <lastmod>2026-07-26</lastmod>
+    <loc>https://pancocbt.site/posts</loc>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://cbt.example.com/about</loc>
-    <lastmod>2026-07-26</lastmod>
+    <loc>https://pancocbt.site/about</loc>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://cbt.example.com/contact</loc>
-    <lastmod>2026-07-26</lastmod>
+    <loc>https://pancocbt.site/contact</loc>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://cbt.example.com/privacy</loc>
-    <lastmod>2026-07-26</lastmod>
+    <loc>https://pancocbt.site/privacy</loc>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://cbt.example.com/terms</loc>
-    <lastmod>2026-07-26</lastmod>
+    <loc>https://pancocbt.site/terms</loc>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://cbt.example.com/stats</loc>
-    <lastmod>2026-07-26</lastmod>
+    <loc>https://pancocbt.site/stats</loc>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://cbt.example.com/mock</loc>
-    <lastmod>2026-07-26</lastmod>
+    <loc>https://pancocbt.site/mock</loc>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://cbt.example.com/schedule</loc>
-    <lastmod>2026-07-26</lastmod>
+    <loc>https://pancocbt.site/schedule</loc>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://cbt.example.com/posts/sqld-join</loc>
+    <loc>https://pancocbt.site/posts/sqld-join</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://cbt.example.com/category/SQL%20%EA%B8%B0%EB%B3%B8</loc>
-    <lastmod>2026-07-26</lastmod>
+    <loc>https://pancocbt.site/category/SQL%20%EA%B8%B0%EB%B3%B8</loc>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
   </url>
 </urlset>
