@@ -13,7 +13,7 @@ import{r as d,a as us,L as w,N as js,u as ue,O as ps,R as J,b as je,c as gs,d as
 `,e.jsxs(s.li,{children:["이 첫 단원의 이론(3단계·3층 스키마·독립성·3관점·유의점)은 그 20점 안에서 ",e.jsx(s.strong,{children:"반복 노출되는 기본기"}),"입니다. ",e.jsx(s.em,{children:"(단원별 정량 출제 문항수를 공식으로 공개하진 않습니다 — 출처: KDATA 출제기준.)"})]}),`
 `]}),`
 `,e.jsx(s.h2,{id:"출제-포인트--시험이-실제로-묻는-것",children:e.jsx(s.a,{href:"#출제-포인트--시험이-실제로-묻는-것",children:"출제 포인트 — 시험이 실제로 묻는 것"})}),`
-`,e.jsxs(s.p,{children:["딥리서치로 확인한 이 단원의 핵심 출제 각도는 아래 다섯입니다. ",e.jsx(s.strong,{children:"특히 ①②는 매 회차 헷갈리게 내는 단골"}),"이라, 이 글은 여기에 분량을 집중합니다."]}),`
+`,e.jsxs(s.p,{children:["이 단원에서 시험이 실제로 묻는 핵심 각도는 아래 다섯입니다. ",e.jsx(s.strong,{children:"특히 ①②는 매 회차 헷갈리게 내는 단골"}),"이라, 이 글은 여기에 분량을 집중합니다."]}),`
 `,e.jsxs(s.ol,{children:[`
 `,e.jsxs(s.li,{children:[e.jsx(s.strong,{children:"모델링 3단계 vs ANSI 3층 스키마 구분"})," (최다 함정)"]}),`
 `,e.jsx(s.li,{children:e.jsx(s.strong,{children:"논리적 / 물리적 데이터 독립성의 방향"})}),`

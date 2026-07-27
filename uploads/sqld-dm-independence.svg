@@ -1,4 +1,4 @@
-<svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ANSI 3층 스키마를 외부·개념·내부로 쌓고, 개념 스키마가 바뀌어도 외부가 안전한 것을 논리적 독립성, 내부 스키마가 바뀌어도 개념이 안전한 것을 물리적 독립성으로 화살표와 함께 표시">
+<svg viewBox="0 0 560 300" width="560" height="300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ANSI 3층 스키마를 외부·개념·내부로 쌓고, 개념 스키마가 바뀌어도 외부가 안전한 것을 논리적 독립성, 내부 스키마가 바뀌어도 개념이 안전한 것을 물리적 독립성으로 화살표와 함께 표시">
   <defs>
     <style>
       .lay{stroke:#17324c;stroke-width:1.6}

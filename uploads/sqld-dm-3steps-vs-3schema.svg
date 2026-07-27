@@ -1,4 +1,4 @@
-<svg viewBox="0 0 600 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="왼쪽은 데이터 모델링 3단계로 개념적에서 논리적, 물리적으로 진행하는 설계 순서이고, 오른쪽은 ANSI 3층 스키마로 외부·개념·내부 스키마가 쌓인 DB 구조 계층임을 대비해, 이름은 비슷하지만 서로 다른 축임을 보여주는 도식">
+<svg viewBox="0 0 600 330" width="600" height="330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="왼쪽은 데이터 모델링 3단계로 개념적에서 논리적, 물리적으로 진행하는 설계 순서이고, 오른쪽은 ANSI 3층 스키마로 외부·개념·내부 스키마가 쌓인 DB 구조 계층임을 대비해, 이름은 비슷하지만 서로 다른 축임을 보여주는 도식">
   <defs>
     <style>
       .box{stroke:#17324c;stroke-width:1.6;fill:#fff}
