@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>SQL 함수 — 단일행 vs 집계, 그리고 NULL 처리 함정 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 제2과목 함수를 시험 관점으로 정리합니다. 단일행 함수와 집계 함수의 결과 개수 차이, COUNT(*)와 COUNT(컬럼)의 차이, NVL·COALESCE·NULLIF·CASE의 NULL 처리를 도식·확인 문제로 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-function" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="SQL 함수 — 단일행 vs 집계, 그리고 NULL 처리 함정 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 제2과목 함수를 시험 관점으로 정리합니다. 단일행 함수와 집계 함수의 결과 개수 차이, COUNT(*)와 COUNT(컬럼)의 차이, NVL·COALESCE·NULLIF·CASE의 NULL 처리를 도식·확인 문제로 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-function" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-27T11:00" />
+    <meta property="article:modified_time" content="2026-07-27T11:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SQL 함수 — 단일행 vs 집계, 그리고 NULL 처리 함정 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 제2과목 함수를 시험 관점으로 정리합니다. 단일행 함수와 집계 함수의 결과 개수 차이, COUNT(*)와 COUNT(컬럼)의 차이, NVL·COALESCE·NULLIF·CASE의 NULL 처리를 도식·확인 문제로 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"SQL 함수 — 단일행 vs 집계, 그리고 NULL 처리 함정","description":"SQLD 제2과목 함수를 시험 관점으로 정리합니다. 단일행 함수와 집계 함수의 결과 개수 차이, COUNT(*)와 COUNT(컬럼)의 차이, NVL·COALESCE·NULLIF·CASE의 NULL 처리를 도식·확인 문제로 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-27T11:00","dateModified":"2026-07-27T11:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-function"},"keywords":"SQLD, 함수, 단일행함수, 집계함수, NVL, COALESCE, COUNT"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"SQL 기본 및 활용","item":"https://pancocbt.site/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9"},{"@type":"ListItem","position":3,"name":"SQL 함수 — 단일행 vs 집계, 그리고 NULL 처리 함정","item":"https://pancocbt.site/posts/sqld-function"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-Cp5X-yQw.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-D1qdQw1G.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a></li><li><span aria-current="page">SQL 함수 — 단일행 vs 집계, 그리고 NULL 처리 함정</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a><h1 style="margin-top:0.75rem">SQL 함수 — 단일행 vs 집계, 그리고 NULL 처리 함정</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-27T11:00">2026년 7월 27일 11:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->함수</span><span class="tag">#<!-- -->단일행함수</span><span class="tag">#<!-- -->집계함수</span><span class="tag">#<!-- -->NVL</span><span class="tag">#<!-- -->COALESCE</span><span class="tag">#<!-- -->COUNT</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>함수</strong>는 값을 받아 가공한 결과를 돌려줍니다. SQLD에서는 <strong>함수가 행마다 결과를 내는지(단일행), 그룹당 하나를 내는지(집계)</strong> 를 구분하는 것과, <strong>NULL을 다루는 함수</strong>가 핵심입니다.</p>
+<h2 id="이-단원-시험에서-어디에-나오나-출제-비중"><a href="#이-단원-시험에서-어디에-나오나-출제-비중">이 단원, 시험에서 어디에 나오나 (출제 비중)</a></h2>
+<ul>
+<li><strong>제2과목 「SQL 기본 및 활용」 = 40문항 · 80점.</strong> 함수는 SELECT·WHERE·GROUP BY 어디서나 쓰여, 다른 단원 문제 속에 섞여 나옵니다.</li>
+<li>특히 <strong>집계 함수의 NULL 처리</strong>와 <strong>COUNT의 차이</strong>는 결과표 예측 문제에서 자주 함정으로 등장합니다. <em>(단원별 문항수는 공개되지 않습니다 — 출처: KDATA 출제기준.)</em></li>
+</ul>
+<h2 id="출제-포인트--시험이-실제로-묻는-것"><a href="#출제-포인트--시험이-실제로-묻는-것">출제 포인트 — 시험이 실제로 묻는 것</a></h2>
+<ol>
+<li><strong>단일행 함수 vs 집계(다중행) 함수</strong> — 결과 개수 차이</li>
+<li><strong>집계 함수의 NULL 무시</strong>와 <code>COUNT(*)</code> vs <code>COUNT(컬럼)</code></li>
+<li><strong>NULL 처리 함수</strong> <code>NVL</code>·<code>COALESCE</code>·<code>NULLIF</code>·<code>CASE</code></li>
+</ol>
+<h2 id="-단일행-함수-vs-집계-함수--결과-개수가-다르다"><a href="#-단일행-함수-vs-집계-함수--결과-개수가-다르다">① 단일행 함수 vs 집계 함수 — 결과 &quot;개수&quot;가 다르다</a></h2>
+<p>가장 기본 구분입니다. <strong>단일행 함수는 행마다 1개씩</strong>, <strong>집계 함수는 여러 행을 묶어 그룹당 1개</strong>를 냅니다.</p>
+<p><img alt="단일행 함수는 입력 3행에 결과 3개를 내고, 집계 함수는 입력 3행을 묶어 결과 1개를 내며 그 과정에서 NULL을 무시함을 보여주는 도식" src="/uploads/sqld-func-single-vs-agg.svg" loading="lazy"/></p>
+<p><em>그림 1. 단일행 함수(LENGTH 등)는 3행 → 3결과, 집계 함수(SUM 등)는 3행 → 1결과. 집계는 NULL을 빼고 계산합니다. (자작 도식)</em></p>
+<table><thead><tr><th>구분</th><th>결과 개수</th><th>예</th></tr></thead><tbody><tr><td><strong>단일행 함수</strong></td><td>행마다 1개</td><td><code>LENGTH</code>·<code>SUBSTR</code>·<code>ROUND</code>·<code>NVL</code></td></tr><tr><td><strong>집계 함수</strong></td><td>그룹당 1개</td><td><code>COUNT</code>·<code>SUM</code>·<code>AVG</code>·<code>MAX</code>·<code>MIN</code></td></tr></tbody></table>
+<h2 id="-집계-함수는-null을-무시--count의-두-얼굴"><a href="#-집계-함수는-null을-무시--count의-두-얼굴">② 집계 함수는 NULL을 무시 — COUNT의 두 얼굴</a></h2>
+<p>집계 함수는 <strong>NULL을 빼고</strong> 계산합니다. 그래서 <code>COUNT(컬럼)</code> 은 NULL이 아닌 값만 세고, <code>COUNT(*)</code> 는 <strong>행 수</strong>를 셉니다.</p>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 수당 컬럼 값: [100, NULL, 300]  (3행)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)    </span><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 사원;   </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 3  (행 수)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(수당) </span><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 사원;   </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 2  (NULL 제외)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> SUM</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(수당)   </span><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 사원;   </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 400</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> AVG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(수당)   </span><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 사원;   </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 200  (400 / 2, 분모도 2!)</span></span></code></pre>
+<blockquote>
+<p><strong>함정:</strong> <code>AVG(수당)</code> 의 분모는 3이 아니라 <strong>NULL을 뺀 2</strong>입니다. NULL을 0으로 세려면 <code>AVG(NVL(수당, 0))</code> 을 써야 합니다.</p>
+</blockquote>
+<h2 id="-null을-다루는-함수"><a href="#-null을-다루는-함수">③ NULL을 다루는 함수</a></h2>
+<table><thead><tr><th>함수</th><th>동작</th></tr></thead><tbody><tr><td><code>NVL(A, B)</code></td><td>A가 NULL이면 B, 아니면 A</td></tr><tr><td><code>NVL2(A, B, C)</code></td><td>A가 NULL 아니면 B, NULL이면 C</td></tr><tr><td><code>COALESCE(A, B, …)</code></td><td><strong>처음으로 NULL이 아닌</strong> 값</td></tr><tr><td><code>NULLIF(A, B)</code></td><td>A = B이면 NULL, 아니면 A</td></tr></tbody></table>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> NVL(수당, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),               </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 수당 없으면 0</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">       COALESCE</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(수당, 상여, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),    </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 수당→상여→0 순으로 첫 값</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">       NULLIF</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(등급, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">&#x27;없음&#x27;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)        </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 등급이 &#x27;없음&#x27;이면 NULL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 사원;</span></span></code></pre>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li><strong>단일행 = 행마다 1결과</strong>(LENGTH·NVL), <strong>집계 = 그룹당 1결과</strong>(SUM·COUNT).</li>
+<li>집계는 <strong>NULL 무시</strong>. <code>COUNT(*)</code>=행 수, <code>COUNT(컬럼)</code>=NULL 제외, <strong><code>AVG</code> 분모도 NULL 제외</strong>.</li>
+<li>NULL 처리: <code>NVL</code>(치환)·<code>NVL2</code>·<code>COALESCE</code>(첫 NOT NULL)·<code>NULLIF</code>(같으면 NULL).</li>
+</ul>
+<aside class="related-problems" aria-label="함수 (단일행·집계·NULL) 연계 문제"><div class="related-problems__info"><span class="related-problems__label">함수 (단일행·집계·NULL)</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->6<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/%ED%95%A8%EC%88%98">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·배점: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>함수 분류·NULL 처리 동작은 오라클 SQL·표준 SQL에 근거하며, 본문 설명·도식·예시는 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-select"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">SELECT문과 실행 순서 — SQLD, 별칭은 어디서 쓸 수 있나</h3><p>SQLD 제2과목 SELECT문을 시험 관점으로 정리합니다. FROM→WHERE→GROUP BY→HAVING→SELECT→ORDER BY 논리적 실행 순서와, SELECT 별칭을 WHERE에서 못 쓰고 ORDER BY에서만 쓰는 이유를 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T10:00">2026년 7월 27일 10:00</time><span>· <!-- -->SQLD, SELECT, 실행순서</span></div></a><a class="post-card " href="/posts/sqld-data-modeling"><span class="tag" style="align-self:flex-start">데이터 모델링의 이해</span><h3 style="margin-top:0.75rem">데이터 모델링의 이해 — SQLD 1과목 첫 단원, 시험이 묻는 것만 정리</h3><p>SQLD 제1과목 첫 단원을 시험 관점으로 정리합니다. 모델링 3단계와 ANSI 3층 스키마의 혼동, 논리적·물리적 독립성 방향, 정규화가 논리 단계인 이유 등 자주 틀리는 함정을 도식·확인 문제와 함께 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T09:00">2026년 7월 27일 09:00</time><span>· <!-- -->SQLD, 데이터모델링, 3층스키마</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>

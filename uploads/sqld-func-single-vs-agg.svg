@@ -1,0 +1,38 @@
+<svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="단일행 함수는 행마다 결과를 하나씩 만들고, 집계 함수는 여러 행을 묶어 그룹당 결과 하나를 만든다">
+  <defs>
+    <marker id="f" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#17324c"/></marker>
+    <style>
+      .row{fill:#fff;stroke:#cbd6de;stroke-width:1}
+      .out{fill:#ffe066;stroke:#17324c;stroke-width:1.2}
+      .t{font:700 12px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .c{font:600 12px 'IBM Plex Mono',monospace;fill:#17324c;text-anchor:middle}
+      .sub{font:400 10px 'Nanum Gothic',sans-serif;fill:#4a6580;text-anchor:middle}
+    </style>
+  </defs>
+  <!-- 단일행 -->
+  <text class="t" x="150" y="22">단일행 함수 (행마다 1결과)</text>
+  <g>
+    <rect class="row" x="40" y="34" width="70" height="24"/><text class="c" x="75" y="51">abc</text>
+    <rect class="row" x="40" y="62" width="70" height="24"/><text class="c" x="75" y="79">de</text>
+    <rect class="row" x="40" y="90" width="70" height="24"/><text class="c" x="75" y="107">fghi</text>
+    <path d="M115 46 H150" stroke="#17324c" stroke-width="1.2" marker-end="url(#f)"/>
+    <path d="M115 74 H150" stroke="#17324c" stroke-width="1.2" marker-end="url(#f)"/>
+    <path d="M115 102 H150" stroke="#17324c" stroke-width="1.2" marker-end="url(#f)"/>
+    <rect class="out" x="152" y="34" width="80" height="24" rx="4"/><text class="c" x="192" y="51">3</text>
+    <rect class="out" x="152" y="62" width="80" height="24" rx="4"/><text class="c" x="192" y="79">2</text>
+    <rect class="out" x="152" y="90" width="80" height="24" rx="4"/><text class="c" x="192" y="107">4</text>
+    <text class="sub" x="150" y="134">LENGTH() 등 · 3행 → 3결과</text>
+  </g>
+  <!-- 집계 -->
+  <text class="t" x="500" y="22">집계 함수 (그룹당 1결과)</text>
+  <g>
+    <rect class="row" x="400" y="34" width="70" height="24"/><text class="c" x="435" y="51">100</text>
+    <rect class="row" x="400" y="62" width="70" height="24"/><text class="c" x="435" y="79">200</text>
+    <rect class="row" x="400" y="90" width="70" height="24"/><text class="c" x="435" y="107">300</text>
+    <path d="M475 46 C520 46 520 74 545 74" stroke="#17324c" stroke-width="1.2" fill="none"/>
+    <path d="M475 74 H545" stroke="#17324c" stroke-width="1.2" fill="none"/>
+    <path d="M475 102 C520 102 520 74 543 74" stroke="#17324c" stroke-width="1.2" fill="none" marker-end="url(#f)"/>
+    <rect class="out" x="560" y="62" width="90" height="24" rx="4"/><text class="c" x="605" y="79">600</text>
+    <text class="sub" x="520" y="134">SUM() 등 · 3행 → 1결과 (NULL 무시)</text>
+  </g>
+</svg>
