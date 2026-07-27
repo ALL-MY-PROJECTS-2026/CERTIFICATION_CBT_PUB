@@ -1,0 +1,56 @@
+<svg viewBox="0 0 600 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="왼쪽은 데이터 모델링 3단계로 개념적에서 논리적, 물리적으로 진행하는 설계 순서이고, 오른쪽은 ANSI 3층 스키마로 외부·개념·내부 스키마가 쌓인 DB 구조 계층임을 대비해, 이름은 비슷하지만 서로 다른 축임을 보여주는 도식">
+  <defs>
+    <style>
+      .box{stroke:#17324c;stroke-width:1.6;fill:#fff}
+      .hl{fill:#ffe066}
+      .t{font:800 15px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .s{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+      .cap{font:800 13.5px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .sub{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .arw{stroke:#3b5bdb;stroke-width:2;fill:none;marker-end:url(#a)}
+      .note{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+      .div{stroke:#9fb3c2;stroke-width:1.4;stroke-dasharray:5 4}
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3b5bdb"/></marker>
+  </defs>
+
+  <!-- 왼쪽: 모델링 3단계 (설계 진행 순서) -->
+  <text class="cap" x="150" y="28">모델링 3단계</text>
+  <text class="sub" x="150" y="45">설계 진행 순서 (추상→구체)</text>
+
+  <rect class="box" x="40" y="60" width="220" height="48" rx="10"/>
+  <text class="t" x="58" y="82">개념적</text>
+  <text class="s" x="58" y="99">핵심 엔터티·관계 · DBMS 독립</text>
+
+  <path class="arw" d="M150 110 L150 128"/>
+  <rect class="box" x="40" y="130" width="220" height="48" rx="10"/>
+  <text class="t" x="58" y="152">논리적</text>
+  <text class="s" x="58" y="169">정규화·키·상세속성 · DBMS 독립</text>
+
+  <path class="arw" d="M150 180 L150 198"/>
+  <rect class="box" x="40" y="200" width="220" height="48" rx="10"/>
+  <text class="t" x="58" y="222">물리적</text>
+  <text class="s" x="58" y="239">테이블·인덱스·성능 · 특정 DBMS</text>
+
+  <!-- 구분선 -->
+  <line class="div" x1="300" y1="55" x2="300" y2="255"/>
+
+  <!-- 오른쪽: ANSI 3층 스키마 (DB 구조 계층) -->
+  <text class="cap" x="450" y="28">ANSI 3층 스키마</text>
+  <text class="sub" x="450" y="45">DB 구조 계층 (동시에 존재)</text>
+
+  <rect class="box" x="340" y="60" width="220" height="48" rx="10"/>
+  <text class="t" x="358" y="82">외부 스키마</text>
+  <text class="s" x="358" y="99">응용·사용자별 View</text>
+
+  <rect class="box hl" x="340" y="122" width="220" height="48" rx="10" stroke="#17324c" stroke-width="1.6"/>
+  <text class="t" x="358" y="144">개념 스키마</text>
+  <text class="s" x="358" y="161" style="fill:#6b5900">조직 전체 통합 논리 구조</text>
+
+  <rect class="box" x="340" y="184" width="220" height="48" rx="10"/>
+  <text class="t" x="358" y="206">내부 스키마</text>
+  <text class="s" x="358" y="223">파일·인덱스 (물리 저장)</text>
+
+  <text class="note" x="40" y="290">※ 이름은 비슷해도 축이 다르다 — 왼쪽은 '설계 진행 순서', 오른쪽은 '구조 계층'.</text>
+  <text class="note" x="40" y="310">   '개념적 모델링(단계)' ≠ '개념 스키마(계층)' — 섞어 내는 문제가 최다 함정.</text>
+</svg>

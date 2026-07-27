@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>데이터 모델링의 이해 — SQLD 1과목 첫 단원, 시험이 묻는 것만 정리 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 제1과목 첫 단원을 시험 관점으로 정리합니다. 모델링 3단계와 ANSI 3층 스키마의 혼동, 논리적·물리적 독립성 방향, 정규화가 논리 단계인 이유 등 자주 틀리는 함정을 도식·확인 문제와 함께 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-data-modeling" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="데이터 모델링의 이해 — SQLD 1과목 첫 단원, 시험이 묻는 것만 정리 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 제1과목 첫 단원을 시험 관점으로 정리합니다. 모델링 3단계와 ANSI 3층 스키마의 혼동, 논리적·물리적 독립성 방향, 정규화가 논리 단계인 이유 등 자주 틀리는 함정을 도식·확인 문제와 함께 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-data-modeling" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-27T09:00" />
+    <meta property="article:modified_time" content="2026-07-27T09:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="데이터 모델링의 이해 — SQLD 1과목 첫 단원, 시험이 묻는 것만 정리 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 제1과목 첫 단원을 시험 관점으로 정리합니다. 모델링 3단계와 ANSI 3층 스키마의 혼동, 논리적·물리적 독립성 방향, 정규화가 논리 단계인 이유 등 자주 틀리는 함정을 도식·확인 문제와 함께 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"데이터 모델링의 이해 — SQLD 1과목 첫 단원, 시험이 묻는 것만 정리","description":"SQLD 제1과목 첫 단원을 시험 관점으로 정리합니다. 모델링 3단계와 ANSI 3층 스키마의 혼동, 논리적·물리적 독립성 방향, 정규화가 논리 단계인 이유 등 자주 틀리는 함정을 도식·확인 문제와 함께 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-27T09:00","dateModified":"2026-07-27T09:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-data-modeling"},"keywords":"SQLD, 데이터모델링, 3층스키마, 데이터독립성, 모델링3단계"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"데이터 모델링의 이해","item":"https://pancocbt.site/category/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4"},{"@type":"ListItem","position":3,"name":"데이터 모델링의 이해 — SQLD 1과목 첫 단원, 시험이 묻는 것만 정리","item":"https://pancocbt.site/posts/sqld-data-modeling"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-BdvMZh_i.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-X4WqXaTY.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4">데이터 모델링의 이해</a></li><li><span aria-current="page">데이터 모델링의 이해 — SQLD 1과목 첫 단원, 시험이 묻는 것만 정리</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4">데이터 모델링의 이해</a><h1 style="margin-top:0.75rem">데이터 모델링의 이해 — SQLD 1과목 첫 단원, 시험이 묻는 것만 정리</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-27T09:00">2026년 7월 27일 09:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->데이터모델링</span><span class="tag">#<!-- -->3층스키마</span><span class="tag">#<!-- -->데이터독립성</span><span class="tag">#<!-- -->모델링3단계</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>데이터 모델링</strong>은 현실의 업무를 <strong>약속된 표기법으로 데이터 구조로 추상화</strong>하는 설계 활동입니다. SQLD 제1과목 「데이터 모델링의 이해」의 출발점으로, 이 단원은 <strong>암기보다 &quot;비슷한 개념을 구분&quot;하는 문제</strong>로 나옵니다.</p>
+<h2 id="이-단원-시험에서-어디에-나오나-출제-비중"><a href="#이-단원-시험에서-어디에-나오나-출제-비중">이 단원, 시험에서 어디에 나오나 (출제 비중)</a></h2>
+<ul>
+<li><strong>제1과목 「데이터 모델링의 이해」 = 10문항 · 20점</strong>(문항당 2점, 전체 100점 중 20%). <strong>과목 40%(8점) 미만이면 과락</strong>입니다.</li>
+<li>이 첫 단원의 이론(3단계·3층 스키마·독립성·3관점·유의점)은 그 20점 안에서 <strong>반복 노출되는 기본기</strong>입니다. <em>(단원별 정량 출제 문항수를 공식으로 공개하진 않습니다 — 출처: KDATA 출제기준.)</em></li>
+</ul>
+<h2 id="출제-포인트--시험이-실제로-묻는-것"><a href="#출제-포인트--시험이-실제로-묻는-것">출제 포인트 — 시험이 실제로 묻는 것</a></h2>
+<p>딥리서치로 확인한 이 단원의 핵심 출제 각도는 아래 다섯입니다. <strong>특히 ①②는 매 회차 헷갈리게 내는 단골</strong>이라, 이 글은 여기에 분량을 집중합니다.</p>
+<ol>
+<li><strong>모델링 3단계 vs ANSI 3층 스키마 구분</strong> (최다 함정)</li>
+<li><strong>논리적 / 물리적 데이터 독립성의 방향</strong></li>
+<li><strong>정규화가 &quot;논리적&quot; 단계 활동</strong>이라는 점 (반정규화 = 물리)</li>
+<li><strong>데이터 모델링 3관점</strong> — 데이터(What)·프로세스(How)·상관(Interaction)</li>
+<li><strong>좋은 모델 유의점</strong> — 중복·비유연성·비일관성의 정의 매칭</li>
+</ol>
+<h2 id="-모델링-3단계-vs-3층-스키마--최다-함정"><a href="#-모델링-3단계-vs-3층-스키마--최다-함정">① 모델링 3단계 vs 3층 스키마 — 최다 함정</a></h2>
+<p>이름이 비슷해 섞어 내는 문제가 가장 많습니다. <strong>두 개념은 완전히 다른 축</strong>입니다.</p>
+<p><img alt="왼쪽은 데이터 모델링 3단계로 개념적에서 논리적, 물리적으로 진행하는 설계 순서이고, 오른쪽은 ANSI 3층 스키마로 외부·개념·내부 스키마가 쌓인 DB 구조 계층임을 대비한 도식" src="/uploads/sqld-dm-3steps-vs-3schema.svg" loading="lazy"/></p>
+<p><em>그림 1. 왼쪽 「3단계」는 설계가 진행되는 순서(시간축), 오른쪽 「3층 스키마」는 DB 구조의 계층입니다. &#x27;개념적 모델링&#x27;과 &#x27;개념 스키마&#x27;는 이름만 닮은 다른 개념입니다. (자작 도식)</em></p>
+<p><strong>모델링 3단계 (설계 진행 순서, 추상 → 구체)</strong></p>
+<table><thead><tr><th>단계</th><th>산출물·활동</th><th>특징</th></tr></thead><tbody><tr><td><strong>개념적</strong></td><td>핵심 엔터티·관계(전사·업무 중심)</td><td><strong>DBMS 독립</strong>, 추상적</td></tr><tr><td><strong>논리적</strong></td><td><strong>정규화</strong>·상세 속성·식별자(키)</td><td>재사용성↑, <strong>DBMS 독립</strong></td></tr><tr><td><strong>물리적</strong></td><td>테이블·컬럼·인덱스·저장·성능</td><td><strong>특정 DBMS 반영</strong>, 구체</td></tr></tbody></table>
+<p><strong>ANSI 3층 스키마 (DB 구조 계층, 동시에 존재)</strong></p>
+<table><thead><tr><th>스키마</th><th>관점</th></tr></thead><tbody><tr><td><strong>외부</strong></td><td>사용자·응용별 <strong>뷰(View)</strong></td></tr><tr><td><strong>개념</strong></td><td>조직 전체 통합 <strong>논리 구조</strong>(엔터티·관계·제약)</td></tr><tr><td><strong>내부</strong></td><td>데이터의 <strong>물리적 저장 구조</strong>(인덱스·파일)</td></tr></tbody></table>
+<blockquote>
+<p>핵심: <strong>3단계 = &quot;언제 만드나&quot;(순서)</strong>, <strong>3층 스키마 = &quot;어떻게 쌓이나&quot;(구조)</strong>. 보기에서 <code>개념적↔개념</code>, <code>물리적↔내부</code>를 슬쩍 바꿔치기하면 오답입니다.</p>
+</blockquote>
+<h2 id="-데이터-독립성--방향을-거꾸로-내는-함정"><a href="#-데이터-독립성--방향을-거꾸로-내는-함정">② 데이터 독립성 — 방향을 거꾸로 내는 함정</a></h2>
+<p>3층 스키마를 나눈 <strong>목적이 곧 데이터 독립성</strong>입니다. 방향을 반대로 적은 보기가 대표 오답입니다.</p>
+<p><img alt="ANSI 3층 스키마를 외부·개념·내부로 쌓고, 개념 스키마가 바뀌어도 외부가 안전하면 논리적 독립성, 내부 스키마가 바뀌어도 개념이 안전하면 물리적 독립성으로 표시한 도식" src="/uploads/sqld-dm-independence.svg" loading="lazy"/></p>
+<p><em>그림 2. &#x27;무엇을 바꿔도 위층이 안전한가&#x27;로 외웁니다. 개념→외부 = 논리적, 내부→개념 = 물리적 독립성. (자작 도식)</em></p>
+<ul>
+<li><strong>논리적 독립성</strong>: <strong>개념 스키마</strong>가 바뀌어도 <strong>외부 스키마(응용)</strong> 는 영향을 최소로 받음.</li>
+<li><strong>물리적 독립성</strong>: <strong>내부 스키마(저장)</strong> 가 바뀌어도 <strong>개념 스키마</strong> 는 영향을 최소로 받음.</li>
+</ul>
+<blockquote>
+<p>암기법: <em>&quot;저장 구조(내부)를 바꿔도 앱이 안 깨진다&quot;</em> → <strong>물리적</strong> 독립성. <em>&quot;통합 구조(개념)를 바꿔도 각 화면(외부)이 안 깨진다&quot;</em> → <strong>논리적</strong> 독립성.</p>
+</blockquote>
+<h2 id="-정규화는-논리적-단계--반정규화는-물리적"><a href="#-정규화는-논리적-단계--반정규화는-물리적">③ 정규화는 &quot;논리적&quot; 단계 — 반정규화는 &quot;물리적&quot;</a></h2>
+<p><strong>정규화(중복 제거)는 논리적 모델링 단계</strong>의 활동입니다. 성능을 위해 일부러 중복을 허용해 되돌리는 <strong>반정규화(비정규화)는 물리적 단계</strong>입니다. &quot;정규화를 물리 단계에서 한다&quot;는 보기는 오답입니다.</p>
+<h2 id="-데이터-모델링의-3가지-관점"><a href="#-데이터-모델링의-3가지-관점">④ 데이터 모델링의 3가지 관점</a></h2>
+<table><thead><tr><th>관점</th><th>무엇을 보나</th><th>영문</th></tr></thead><tbody><tr><td><strong>데이터</strong></td><td>업무가 다루는 데이터(엔터티·속성)의 구조</td><td>What</td></tr><tr><td><strong>프로세스</strong></td><td>업무가 하는 일(처리·기능)</td><td>How</td></tr><tr><td><strong>상관(데이터↔프로세스)</strong></td><td>프로세스가 데이터를 어떻게 쓰는지(CRUD)</td><td>Interaction</td></tr></tbody></table>
+<p>데이터 모델이 제공하는 3요소는 <strong>구조(Structure)·연산(Operation)·제약(Constraint)</strong> 입니다.</p>
+<h2 id="-좋은-모델을-위한-유의점--정의-매칭에-주의"><a href="#-좋은-모델을-위한-유의점--정의-매칭에-주의">⑤ 좋은 모델을 위한 유의점 — 정의 매칭에 주의</a></h2>
+<p>정의를 서로 바꿔 내는 매칭 문제가 나옵니다.</p>
+<ul>
+<li><strong>중복(Duplication)</strong>: 같은 데이터를 여러 곳에 저장하지 않는다(→ 정규화).</li>
+<li><strong>비유연성(Inflexibility)</strong>: 데이터 정의를 사용 프로세스와 <strong>분리</strong>해, 사소한 업무 변화에 구조가 흔들리지 않게.</li>
+<li><strong>비일관성(Inconsistency)</strong>: 데이터 간 <strong>상호 연관관계를 명확히 정의</strong>해 모순된 데이터가 저장되지 않게.</li>
+</ul>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li><strong>3단계</strong>(순서): 개념적(추상·DBMS독립) → 논리적(<strong>정규화</strong>) → 물리적(성능·DBMS).</li>
+<li><strong>3층 스키마</strong>(구조): 외부(뷰)·개념(통합)·내부(저장). <strong>← 3단계와 다른 축!</strong></li>
+<li><strong>독립성</strong>: 논리(개념→외부 안전)·물리(내부→개념 안전).</li>
+<li><strong>3관점</strong>: 데이터(What)·프로세스(How)·상관(Interaction). <strong>3요소</strong>: 구조·연산·제약.</li>
+<li><strong>유의점</strong>: 중복·비유연성(정의↔프로세스 분리)·비일관성(연관관계 명확).</li>
+</ul>
+<aside class="related-problems" aria-label="데이터 모델링의 이해 연계 문제"><div class="related-problems__info"><span class="related-problems__label">데이터 모델링의 이해</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->8<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·출제기준·배점·과락: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>3층 스키마·데이터 독립성은 ANSI/SPARC 아키텍처(1975) 이론에 근거하며, 본문 설명·도식·암기법은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>
