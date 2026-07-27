@@ -1,0 +1,54 @@
+<svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="WHERE 연산자 우선순위: 괄호, 비교·SQL연산자, NOT, AND, OR 순서. NULL은 IS NULL로 비교">
+  <defs>
+    <style>
+      .t{font:800 13px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .step{fill:#fff;stroke:#17324c;stroke-width:1.5}
+      .st{font:700 12px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .sn{font:400 10px 'Nanum Gothic',sans-serif;fill:#4a6580;text-anchor:middle}
+      .num{font:800 12px 'IBM Plex Mono',monospace;fill:#fff;text-anchor:middle}
+      .ncirc{fill:#17324c}
+      .warn{fill:#fdecea;stroke:#d62b2b;stroke-width:1.2}
+      .wt{font:700 11px 'Nanum Gothic',sans-serif;fill:#d62b2b;text-anchor:middle}
+    </style>
+  </defs>
+  <text x="18" y="26" class="t">WHERE 논리 연산자 우선순위 (위 → 아래)</text>
+  <g>
+    <rect class="step" x="60" y="40" width="200" height="30" rx="8"/>
+    <circle class="ncirc" cx="80" cy="55" r="10"/><text class="num" x="80" y="59">1</text>
+    <text class="st" x="165" y="59">( ) 괄호</text>
+  </g>
+  <g>
+    <rect class="step" x="60" y="76" width="200" height="30" rx="8"/>
+    <circle class="ncirc" cx="80" cy="91" r="10"/><text class="num" x="80" y="95">2</text>
+    <text class="st" x="170" y="95">비교·SQL 연산자</text>
+  </g>
+  <g>
+    <rect class="step" x="60" y="112" width="200" height="30" rx="8"/>
+    <circle class="ncirc" cx="80" cy="127" r="10"/><text class="num" x="80" y="131">3</text>
+    <text class="st" x="165" y="131">NOT</text>
+  </g>
+  <g>
+    <rect class="step" x="60" y="148" width="200" height="30" rx="8" fill="#ffe066" stroke="#17324c" stroke-width="1.5"/>
+    <circle class="ncirc" cx="80" cy="163" r="10"/><text class="num" x="80" y="167">4</text>
+    <text class="st" x="165" y="167">AND</text>
+  </g>
+  <g>
+    <rect class="step" x="60" y="184" width="200" height="30" rx="8"/>
+    <circle class="ncirc" cx="80" cy="199" r="10"/><text class="num" x="80" y="203">5</text>
+    <text class="st" x="165" y="203">OR</text>
+  </g>
+  <line x1="160" y1="70" x2="160" y2="76" stroke="#17324c" stroke-width="1.2"/>
+  <line x1="160" y1="106" x2="160" y2="112" stroke="#17324c" stroke-width="1.2"/>
+  <line x1="160" y1="142" x2="160" y2="148" stroke="#17324c" stroke-width="1.2"/>
+  <line x1="160" y1="178" x2="160" y2="184" stroke="#17324c" stroke-width="1.2"/>
+  <g>
+    <rect class="warn" x="320" y="60" width="300" height="52" rx="10"/>
+    <text class="wt" x="470" y="82">A OR B AND C</text>
+    <text class="sn" x="470" y="100" style="fill:#d62b2b">= A OR (B AND C)  · AND가 먼저</text>
+  </g>
+  <g>
+    <rect class="warn" x="320" y="126" width="300" height="52" rx="10"/>
+    <text class="wt" x="470" y="148">= NULL / != NULL  →  결과 없음</text>
+    <text class="sn" x="470" y="166" style="fill:#d62b2b">NULL 비교는 반드시 IS NULL</text>
+  </g>
+</svg>
