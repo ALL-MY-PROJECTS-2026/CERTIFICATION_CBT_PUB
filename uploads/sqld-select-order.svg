@@ -1,0 +1,33 @@
+<svg viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SELECT 논리적 실행순서: FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY 순서로 실행되며, WHERE는 그룹 전 행 필터, HAVING은 그룹 후 필터다. 별칭은 SELECT에서 만들어져 ORDER BY에서만 쓸 수 있다">
+  <defs>
+    <marker id="so-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#17324c"/></marker>
+    <style>
+      .b{fill:#fff;stroke:#17324c;stroke-width:1.5}
+      .hl{fill:#ffe066;stroke:#17324c;stroke-width:1.5}
+      .t{font:700 12px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .n{font:700 10px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .sub{font:400 10px 'Nanum Gothic',sans-serif;fill:#4a6580;text-anchor:middle}
+      .note{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+    </style>
+  </defs>
+
+  <g>
+    <rect class="b" x="8" y="44" width="96" height="40" rx="8"/><text class="n" x="56" y="40">1</text><text class="t" x="56" y="69">FROM</text>
+    <rect class="b" x="124" y="44" width="96" height="40" rx="8"/><text class="n" x="172" y="40">2</text><text class="t" x="172" y="69">WHERE</text>
+    <rect class="b" x="240" y="44" width="104" height="40" rx="8"/><text class="n" x="292" y="40">3</text><text class="t" x="292" y="69">GROUP BY</text>
+    <rect class="b" x="364" y="44" width="96" height="40" rx="8"/><text class="n" x="412" y="40">4</text><text class="t" x="412" y="69">HAVING</text>
+    <rect class="hl" x="480" y="44" width="96" height="40" rx="8"/><text class="n" x="528" y="40">5</text><text class="t" x="528" y="69">SELECT</text>
+    <rect class="b" x="596" y="44" width="112" height="40" rx="8"/><text class="n" x="652" y="40">6</text><text class="t" x="652" y="69">ORDER BY</text>
+  </g>
+
+  <path d="M104 64 H124" stroke="#17324c" stroke-width="1.5" marker-end="url(#so-a)"/>
+  <path d="M220 64 H240" stroke="#17324c" stroke-width="1.5" marker-end="url(#so-a)"/>
+  <path d="M344 64 H364" stroke="#17324c" stroke-width="1.5" marker-end="url(#so-a)"/>
+  <path d="M460 64 H480" stroke="#17324c" stroke-width="1.5" marker-end="url(#so-a)"/>
+  <path d="M576 64 H596" stroke="#17324c" stroke-width="1.5" marker-end="url(#so-a)"/>
+
+  <text class="sub" x="172" y="100">행 필터(그룹 전)</text>
+  <text class="sub" x="412" y="100">그룹 필터(그룹 후)</text>
+
+  <text x="360" y="130" class="note">※ 별칭은 5(SELECT)에서 만들어짐 → WHERE·GROUP BY엔 못 쓰고 6(ORDER BY)에서만 사용</text>
+</svg>
