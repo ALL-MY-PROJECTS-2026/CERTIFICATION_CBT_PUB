@@ -1,0 +1,41 @@
+<svg viewBox="0 0 600 250" width="600" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="정규화 단계. 1정규형은 원자값, 2정규형은 부분 함수 종속 제거, 3정규형은 이행 함수 종속 제거, 보이스코드 정규형은 결정자가 후보키">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .t{font:800 13px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .s{font:400 10.5px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .arw{stroke:#3b5bdb;stroke-width:2;fill:none;marker-end:url(#a)}
+      .note{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3b5bdb"/></marker>
+  </defs>
+
+  <text class="cap" x="24" y="30">정규화 단계 — 무엇을 제거하나</text>
+
+  <rect class="box" x="20" y="48" width="120" height="72" rx="10"/>
+  <text class="t" x="80" y="76">1NF</text>
+  <text class="s" x="80" y="96">한 칸에 값 하나</text>
+  <text class="s" x="80" y="110">(원자값)</text>
+
+  <path class="arw" d="M142 84 L162 84"/>
+  <rect class="box" x="164" y="48" width="130" height="72" rx="10"/>
+  <text class="t" x="229" y="76">2NF</text>
+  <text class="s" x="229" y="96">부분 함수 종속</text>
+  <text class="s" x="229" y="110">제거</text>
+
+  <path class="arw" d="M296 84 L316 84"/>
+  <rect class="box" x="318" y="48" width="130" height="72" rx="10"/>
+  <text class="t" x="383" y="76">3NF</text>
+  <text class="s" x="383" y="96">이행 함수 종속</text>
+  <text class="s" x="383" y="110">제거</text>
+
+  <path class="arw" d="M450 84 L470 84"/>
+  <rect class="box" x="472" y="48" width="108" height="72" rx="10"/>
+  <text class="t" x="526" y="76">BCNF</text>
+  <text class="s" x="526" y="96">결정자가</text>
+  <text class="s" x="526" y="110">모두 후보키</text>
+
+  <text class="note" x="24" y="158">※ 2NF = 복합키의 "일부"에만 종속된 것 제거 / 3NF = 키가 아닌 속성끼리(X→Y→Z) 종속 제거.</text>
+  <text class="note" x="24" y="180">   반정규화 = 성능을 위해 물리 단계에서 일부러 중복을 허용(정규화의 반대).</text>
+</svg>

@@ -1,0 +1,30 @@
+<svg viewBox="0 0 560 240" width="560" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="이상현상 세 가지. 삽입 이상은 필요 없는 값까지 넣어야 하고, 삭제 이상은 지우면 다른 정보까지 사라지며, 갱신 이상은 중복된 값을 일부만 고쳐 불일치가 생긴다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .t{font:800 13px 'Nanum Gothic',sans-serif;fill:#d62b2b;text-anchor:middle}
+      .s{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .note{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="30">이상현상(Anomaly) — 정규화로 없애는 문제</text>
+
+  <rect class="box" x="24" y="48" width="170" height="78" rx="10"/>
+  <text class="t" x="109" y="74">삽입 이상</text>
+  <text class="s" x="109" y="96">불필요한 값까지</text>
+  <text class="s" x="109" y="112">함께 넣어야 함</text>
+
+  <rect class="box" x="206" y="48" width="170" height="78" rx="10"/>
+  <text class="t" x="291" y="74">삭제 이상</text>
+  <text class="s" x="291" y="96">한 건 지우면</text>
+  <text class="s" x="291" y="112">다른 정보도 사라짐</text>
+
+  <rect class="box" x="388" y="48" width="170" height="78" rx="10"/>
+  <text class="t" x="473" y="74">갱신 이상</text>
+  <text class="s" x="473" y="96">중복값 일부만 수정</text>
+  <text class="s" x="473" y="112">→ 데이터 불일치</text>
+
+  <text class="note" x="24" y="168">※ 세 이상현상은 한 테이블에 정보가 과하게 뭉쳐 있어 생긴다 — 정규화로 분리해 없앤다.</text>
+</svg>
