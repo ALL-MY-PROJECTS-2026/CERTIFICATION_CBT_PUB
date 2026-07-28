@@ -1,0 +1,31 @@
+<svg viewBox="0 0 600 250" width="600" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="속성을 성질에 따라 기본·설계·파생으로 분류. 기본은 업무 분석으로 바로 나온 속성, 설계는 코드나 일련번호처럼 설계 중 만든 속성, 파생은 다른 속성에서 계산해 얻은 속성">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .t{font:800 13.5px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .s{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .note{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="30">속성 분류 — 성질 기준 (기본 · 설계 · 파생)</text>
+
+  <rect class="box" x="24" y="48" width="176" height="76" rx="10"/>
+  <text class="t" x="112" y="76">기본 속성</text>
+  <text class="s" x="112" y="96">업무 분석으로</text>
+  <text class="s" x="112" y="111">바로 도출 · 이름·주소</text>
+
+  <rect class="box" x="212" y="48" width="176" height="76" rx="10"/>
+  <text class="t" x="300" y="76">설계 속성</text>
+  <text class="s" x="300" y="96">설계 중 생성</text>
+  <text class="s" x="300" y="111">코드·일련번호</text>
+
+  <rect class="box" x="400" y="48" width="176" height="76" rx="10" fill="#fff6d6"/>
+  <text class="t" x="488" y="76">파생 속성</text>
+  <text class="s" x="488" y="96">다른 속성에서 계산</text>
+  <text class="s" x="488" y="111">나이·합계·평균</text>
+
+  <text class="note" x="24" y="165">※ 함정 — '나이'(생년월일에서 계산)·'주문금액 합계'는 파생 속성이다.</text>
+  <text class="note" x="24" y="187">   파생 속성은 중복·불일치 위험이 있어 저장 여부를 신중히 정한다.</text>
+</svg>

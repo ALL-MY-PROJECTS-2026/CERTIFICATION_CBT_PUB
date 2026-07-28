@@ -21,6 +21,13 @@
       <description>SQLD 제2과목 함수를 시험 관점으로 정리합니다. 단일행 함수와 집계 함수의 결과 개수 차이, COUNT(*)와 COUNT(컬럼)의 차이, NVL·COALESCE·NULLIF·CASE의 NULL 처리를 도식·확인 문제로 짚습니다.</description>
     </item>
     <item>
+      <title>속성(Attribute) — SQLD가 유형 판별로 묻는 것만 정리</title>
+      <link>https://pancocbt.site/posts/sqld-attribute</link>
+      <guid isPermaLink="true">https://pancocbt.site/posts/sqld-attribute</guid>
+      <pubDate>Mon, 27 Jul 2026 11:00:00 GMT</pubDate>
+      <description>SQLD 속성을 시험 관점으로 정리합니다. 기본·설계·파생 속성 구분, 단일값과 다중값(별도 엔터티 분리), PK·FK 역할, 파생속성 함정을 도식·확인 문제와 함께 짚습니다.</description>
+    </item>
+    <item>
       <title>SELECT문과 실행 순서 — SQLD, 별칭은 어디서 쓸 수 있나</title>
       <link>https://pancocbt.site/posts/sqld-select</link>
       <guid isPermaLink="true">https://pancocbt.site/posts/sqld-select</guid>
