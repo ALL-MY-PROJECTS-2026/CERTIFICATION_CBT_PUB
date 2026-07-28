@@ -1,0 +1,39 @@
+<svg viewBox="0 0 560 220" width="560" height="220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="중복이 많은 한 표를 부서와 사원 두 표로 정규화해 나눈 뒤, 조인으로 다시 합쳐 필요한 결과를 보는 과정을 나타낸 도식">
+  <defs>
+    <style>
+      .cap{font:800 13px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{fill:#fff;stroke:#17324c;stroke-width:1.4}
+      .t{font:800 12px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .s{font:400 10.5px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .arw{stroke:#3b5bdb;stroke-width:2;fill:none;marker-end:url(#a)}
+      .g{font:700 10.5px 'Nanum Gothic',sans-serif;text-anchor:middle;fill:#1a7d45}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3b5bdb"/></marker>
+  </defs>
+
+  <text class="cap" x="24" y="26">정규화로 나눈 표를 조인으로 다시 합친다</text>
+
+  <rect class="box" x="24" y="44" width="120" height="70" rx="8"/>
+  <text class="t" x="84" y="70">중복 많은</text>
+  <text class="t" x="84" y="88">한 표</text>
+  <text class="s" x="84" y="106">부서명 반복 저장</text>
+
+  <path class="arw" d="M148 79 L180 79"/>
+  <text class="g" x="164" y="70">정규화</text>
+
+  <rect class="box" x="184" y="44" width="110" height="32" rx="8"/><text class="t" x="239" y="65">부서</text>
+  <rect class="box" x="184" y="82" width="110" height="32" rx="8"/><text class="t" x="239" y="103">사원</text>
+  <text class="s" x="239" y="128">중복 제거·분리</text>
+
+  <path class="arw" d="M298 79 L330 79"/>
+  <text class="g" x="314" y="70">조인</text>
+
+  <rect class="box" x="334" y="44" width="200" height="70" rx="8"/>
+  <text class="t" x="434" y="70">필요할 때 다시 결합</text>
+  <text class="s" x="434" y="90">사원 + 부서명</text>
+  <text class="s" x="434" y="106">(한 화면에 함께)</text>
+
+  <text class="note" x="24" y="165">※ 정규화는 중복을 없애 나누고, 조인은 나뉜 것을 필요할 때 다시 잇는다 — 짝을 이루는 개념.</text>
+  <text class="note" x="24" y="187">   조인의 연결 고리는 부모 PK를 상속받은 자식 FK(조인키)다.</text>
+</svg>

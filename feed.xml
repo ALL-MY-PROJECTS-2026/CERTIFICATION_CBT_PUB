@@ -7,6 +7,13 @@
     <language>ko</language>
     <atom:link href="https://pancocbt.site/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>관계와 조인의 이해 — SQLD, 관계가 어떻게 조인이 되는가</title>
+      <link>https://pancocbt.site/posts/sqld-relationship-join</link>
+      <guid isPermaLink="true">https://pancocbt.site/posts/sqld-relationship-join</guid>
+      <pubDate>Mon, 27 Jul 2026 15:00:00 GMT</pubDate>
+      <description>SQLD 관계와 조인의 이해를 시험 관점으로 정리합니다. 부모 PK가 자식 FK로 상속되어 조인키가 되는 원리, 정규화와 조인의 짝 관계, 식별·비식별 상속 차이를 도식·확인 문제와 함께 짚습니다.</description>
+    </item>
+    <item>
       <title>정규화(Normalization) — SQLD 단골, 단계 판별과 함수 종속 정리</title>
       <link>https://pancocbt.site/posts/sqld-normalization</link>
       <guid isPermaLink="true">https://pancocbt.site/posts/sqld-normalization</guid>

@@ -1,0 +1,39 @@
+<svg viewBox="0 0 560 250" width="560" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="부모 부서의 기본키 부서코드가 자식 사원에 외래키로 상속되고, 그 부서코드가 두 테이블을 잇는 조인키로 쓰이는 도식">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .th{fill:#e9f0f5;stroke:#17324c;stroke-width:1.3}
+      .pk{fill:#fff6d6;stroke:#17324c;stroke-width:1.3}
+      .td{fill:#fff;stroke:#cbd6de;stroke-width:1.1}
+      .h{font:800 11px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .x{font:400 11px 'IBM Plex Mono',monospace;fill:#10283d;text-anchor:middle}
+      .lbl{font:800 12px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .arw{stroke:#3b5bdb;stroke-width:2;fill:none;marker-end:url(#a)}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3b5bdb"/></marker>
+  </defs>
+
+  <text class="cap" x="24" y="28">관계 → 조인키 : 부모 PK가 자식 FK로 상속</text>
+
+  <!-- 부모: 부서 -->
+  <text class="lbl" x="30" y="58">부서 (부모)</text>
+  <rect class="pk" x="30" y="66" width="90" height="28"/><text class="h" x="75" y="85">부서코드 PK</text>
+  <rect class="th" x="120" y="66" width="90" height="28"/><text class="h" x="165" y="85">부서명</text>
+  <rect class="td" x="30" y="94" width="90" height="26"/><text class="x" x="75" y="112">D1</text>
+  <rect class="td" x="120" y="94" width="90" height="26"/><text class="x" x="165" y="112">영업</text>
+
+  <!-- 상속 화살표 -->
+  <path class="arw" d="M120 130 C 200 150, 240 150, 300 150"/>
+  <text class="note" x="150" y="145">부서코드 상속</text>
+
+  <!-- 자식: 사원 -->
+  <text class="lbl" x="300" y="58">사원 (자식)</text>
+  <rect class="pk" x="300" y="66" width="70" height="28"/><text class="h" x="335" y="85">사번 PK</text>
+  <rect class="pk" x="370" y="66" width="90" height="28"/><text class="h" x="415" y="85">부서코드 FK</text>
+  <rect class="td" x="300" y="94" width="70" height="26"/><text class="x" x="335" y="112">100</text>
+  <rect class="td" x="370" y="94" width="90" height="26"/><text class="x" x="415" y="112">D1</text>
+
+  <text class="note" x="24" y="180">※ 자식으로 상속된 부서코드(FK)가 곧 두 표를 잇는 '조인키'다.</text>
+  <text class="note" x="24" y="202">   사원.부서코드 = 부서.부서코드 로 조인하면 사원의 부서명을 함께 볼 수 있다.</text>
+</svg>
