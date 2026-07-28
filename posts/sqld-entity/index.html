@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>엔터티(Entity) — SQLD가 분류로 묻는 것만 정리 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 엔터티를 시험 관점으로 정리합니다. 유형·개념·사건, 기본·중심·행위 두 분류 기준과 예시 짝짓기 함정, 엔터티가 되기 위한 조건을 도식·확인 문제와 함께 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-entity" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="엔터티(Entity) — SQLD가 분류로 묻는 것만 정리 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 엔터티를 시험 관점으로 정리합니다. 유형·개념·사건, 기본·중심·행위 두 분류 기준과 예시 짝짓기 함정, 엔터티가 되기 위한 조건을 도식·확인 문제와 함께 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-entity" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-27T10:00" />
+    <meta property="article:modified_time" content="2026-07-27T10:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="엔터티(Entity) — SQLD가 분류로 묻는 것만 정리 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 엔터티를 시험 관점으로 정리합니다. 유형·개념·사건, 기본·중심·행위 두 분류 기준과 예시 짝짓기 함정, 엔터티가 되기 위한 조건을 도식·확인 문제와 함께 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"엔터티(Entity) — SQLD가 분류로 묻는 것만 정리","description":"SQLD 엔터티를 시험 관점으로 정리합니다. 유형·개념·사건, 기본·중심·행위 두 분류 기준과 예시 짝짓기 함정, 엔터티가 되기 위한 조건을 도식·확인 문제와 함께 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-27T10:00","dateModified":"2026-07-27T10:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-entity"},"keywords":"SQLD, 엔터티, Entity, 데이터모델링, 엔터티분류"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"데이터 모델링의 이해","item":"https://pancocbt.site/category/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4"},{"@type":"ListItem","position":3,"name":"엔터티(Entity) — SQLD가 분류로 묻는 것만 정리","item":"https://pancocbt.site/posts/sqld-entity"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-aBzGZSHh.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-D1qdQw1G.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4">데이터 모델링의 이해</a></li><li><span aria-current="page">엔터티(Entity) — SQLD가 분류로 묻는 것만 정리</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4">데이터 모델링의 이해</a><h1 style="margin-top:0.75rem">엔터티(Entity) — SQLD가 분류로 묻는 것만 정리</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-27T10:00">2026년 7월 27일 10:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->엔터티</span><span class="tag">#<!-- -->Entity</span><span class="tag">#<!-- -->데이터모델링</span><span class="tag">#<!-- -->엔터티분류</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>엔터티(Entity)</strong> 는 <strong>업무에 필요하고 유용한 정보를 저장·관리하는 &quot;집합적인 것&quot;</strong> 입니다. 사원, 부서, 주문처럼 <strong>여러 건(인스턴스)이 모여 하나의 집합</strong>을 이룹니다. 이 단원은 개념 자체보다 <strong>&quot;어떤 기준으로 분류하고, 이 예시는 어디에 속하나&quot;</strong> 를 묻습니다.</p>
+<h2 id="이-단원-시험에서-어디에-나오나"><a href="#이-단원-시험에서-어디에-나오나">이 단원, 시험에서 어디에 나오나</a></h2>
+<ul>
+<li>제1과목 「데이터 모델링의 이해」(10문항·20점)의 기본 개념입니다.</li>
+<li>특히 <strong>엔터티 분류(유형·개념·사건 / 기본·중심·행위)</strong> 는 <strong>예시를 주고 어디에 속하는지 고르는</strong> 형태로 자주 나옵니다.</li>
+</ul>
+<h2 id="엔터티가-되기-위한-조건"><a href="#엔터티가-되기-위한-조건">엔터티가 되기 위한 조건</a></h2>
+<p><img alt="엔터티 사원이 사원번호·이름·부서 속성(열)과 여러 인스턴스(행)로 이루어진 집합임을 보여주는 표 도식" src="/uploads/sqld-entity-structure.svg" loading="lazy"/></p>
+<p><em>그림 1. 엔터티는 인스턴스(행)와 속성(열)의 집합입니다. 사원 한 명(100번)은 엔터티가 아니라 그 안의 한 건입니다. (자작 도식)</em></p>
+<ul>
+<li><strong>인스턴스가 2개 이상</strong> — 한 건만 있으면 엔터티로 보기 어렵습니다.</li>
+<li><strong>속성이 2개 이상</strong> — 식별자(키) + 일반 속성.</li>
+<li><strong>업무에 필요한 정보</strong> — 쓰지 않는 정보는 엔터티로 만들지 않습니다.</li>
+<li><strong>식별 가능</strong> — 각 인스턴스를 구분할 수 있어야 합니다(주식별자).</li>
+</ul>
+<h2 id="출제-포인트--두-가지-분류-기준"><a href="#출제-포인트--두-가지-분류-기준">출제 포인트 — 두 가지 분류 기준</a></h2>
+<p>엔터티 분류는 아래 <strong>두 축</strong>으로 나옵니다. 이 글은 여기에 분량을 집중합니다.</p>
+<p><img alt="엔터티 분류 두 기준 도식. 유무형 기준은 유형·개념·사건, 발생 시점 기준은 기본·중심·행위로 나뉜다" src="/uploads/sqld-entity-classify.svg" loading="lazy"/></p>
+<p><em>그림 2. 위 = 유무형 기준(유형·개념·사건), 아래 = 발생 시점 기준(기본→중심→행위). 시험은 예시를 주고 짝을 맞추게 합니다. (자작 도식)</em></p>
+<h3 id="-유무형-기준--유형--개념--사건"><a href="#-유무형-기준--유형--개념--사건">① 유무형 기준 — 유형 · 개념 · 사건</a></h3>
+<table><thead><tr><th>구분</th><th>뜻</th><th>예시</th></tr></thead><tbody><tr><td><strong>유형</strong></td><td>물리적 실체가 있음</td><td>사원, 물품</td></tr><tr><td><strong>개념</strong></td><td>실체 없는 개념·분류</td><td>조직, 보험상품</td></tr><tr><td><strong>사건</strong></td><td>업무활동으로 발생</td><td>주문, 청구, 전표</td></tr></tbody></table>
+<blockquote>
+<p>함정: <strong>전표·주문 = 사건</strong>, <strong>조직·상품 = 개념</strong>. &quot;전표는 서류니까 유형&quot; 같은 보기가 대표 오답입니다.</p>
+</blockquote>
+<h3 id="-발생-시점-기준--기본--중심--행위"><a href="#-발생-시점-기준--기본--중심--행위">② 발생 시점 기준 — 기본 · 중심 · 행위</a></h3>
+<table><thead><tr><th>구분</th><th>특징</th></tr></thead><tbody><tr><td><strong>기본</strong></td><td>독립 생성, 자체 식별, 다른 엔터티의 부모</td></tr><tr><td><strong>중심</strong></td><td>기본에서 파생, 데이터량이 많음</td></tr><tr><td><strong>행위</strong></td><td>여러 부모에서 발생, 변경이 잦음</td></tr></tbody></table>
+<blockquote>
+<p>외우는 법: <strong>먼저 생기는 순서</strong> 로 기본 → 중심 → 행위. (기본이 있어야 중심이, 중심이 있어야 행위가 생깁니다.)</p>
+</blockquote>
+<h2 id="자주-틀리는-함정"><a href="#자주-틀리는-함정">자주 틀리는 함정</a></h2>
+<ul>
+<li><strong>예시 짝짓기 뒤집기</strong> — &quot;사건&quot;에 해당하는 주문·전표를 &quot;유형&quot;으로 분류한 보기.</li>
+<li><strong>인스턴스 ≠ 엔터티</strong> — &quot;사원 100번&quot;은 인스턴스(한 건)이지 엔터티가 아닙니다.</li>
+<li><strong>기본·중심·행위 순서</strong> — 발생 순서를 뒤집어 낸 보기.</li>
+</ul>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li>엔터티 = <strong>집합</strong>(인스턴스 2개+, 속성 2개+, 업무 필요, 식별 가능).</li>
+<li>유무형: <strong>유형</strong>(사원·물품)·<strong>개념</strong>(조직·상품)·<strong>사건</strong>(주문·전표).</li>
+<li>발생시점: <strong>기본 → 중심 → 행위</strong>(먼저 생기는 순).</li>
+<li>인스턴스는 엔터티의 &quot;한 건&quot; — 엔터티 자체가 아니다.</li>
+</ul>
+<aside class="related-problems" aria-label="엔터티 연계 문제"><div class="related-problems__info"><span class="related-problems__label">엔터티</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->8<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/%EC%97%94%ED%84%B0%ED%8B%B0">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·출제기준: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>엔터티 정의·분류는 데이터 모델링 표준 이론에 근거하며, 본문 설명·예시·도식은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-data-modeling"><span class="tag" style="align-self:flex-start">데이터 모델링의 이해</span><h3 style="margin-top:0.75rem">데이터 모델링의 이해 — SQLD 1과목 첫 단원, 시험이 묻는 것만 정리</h3><p>SQLD 제1과목 첫 단원을 시험 관점으로 정리합니다. 모델링 3단계와 ANSI 3층 스키마의 혼동, 논리적·물리적 독립성 방향, 정규화가 논리 단계인 이유 등 자주 틀리는 함정을 도식·확인 문제와 함께 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T09:00">2026년 7월 27일 09:00</time><span>· <!-- -->SQLD, 데이터모델링, 3층스키마</span></div></a><a class="post-card " href="/posts/sqld-where"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">WHERE절과 연산자 — SQLD, NULL과 AND·OR 우선순위 함정</h3><p>SQLD 제2과목 WHERE절을 시험 관점으로 정리합니다. NULL은 =가 아니라 IS NULL로 비교하는 이유, AND/OR/NOT 우선순위, NOT IN에 NULL이 섞이면 결과가 사라지는 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T12:00">2026년 7월 27일 12:00</time><span>· <!-- -->SQLD, WHERE, </span></div></a><a class="post-card " href="/posts/sqld-function"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">SQL 함수 — 단일행 vs 집계, 그리고 NULL 처리 함정</h3><p>SQLD 제2과목 함수를 시험 관점으로 정리합니다. 단일행 함수와 집계 함수의 결과 개수 차이, COUNT(*)와 COUNT(컬럼)의 차이, NVL·COALESCE·NULLIF·CASE의 NULL 처리를 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T11:00">2026년 7월 27일 11:00</time><span>· <!-- -->SQLD, 함수, 단일행함수</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>

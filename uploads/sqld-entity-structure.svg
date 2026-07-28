@@ -1,0 +1,48 @@
+<svg viewBox="0 0 560 300" width="560" height="300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="엔터티 사원은 인스턴스(행) 여러 개와 속성(열) 여러 개로 이루어진 집합. 사원번호·이름·부서 속성을 가진 사원 두 명이 인스턴스로 표시됨">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .th{fill:#e9f0f5;stroke:#17324c;stroke-width:1.4}
+      .td{fill:#fff;stroke:#cbd6de;stroke-width:1.2}
+      .htx{font:800 12.5px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .tx{font:400 12.5px 'IBM Plex Mono',monospace;fill:#10283d;text-anchor:middle}
+      .lbl{font:800 12px 'Nanum Gothic',sans-serif;fill:#3b5bdb}
+      .note{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="30">엔터티 「사원」 = 인스턴스(행) + 속성(열)의 집합</text>
+
+  <!-- 헤더 -->
+  <rect class="th" x="120" y="50" width="130" height="40"/>
+  <text class="htx" x="185" y="75">사원번호</text>
+  <rect class="th" x="250" y="50" width="130" height="40"/>
+  <text class="htx" x="315" y="75">이름</text>
+  <rect class="th" x="380" y="50" width="150" height="40"/>
+  <text class="htx" x="455" y="75">부서</text>
+
+  <!-- 행 1 -->
+  <rect class="td" x="120" y="90" width="130" height="40"/>
+  <text class="tx" x="185" y="115">100</text>
+  <rect class="td" x="250" y="90" width="130" height="40"/>
+  <text class="tx" x="315" y="115">김철수</text>
+  <rect class="td" x="380" y="90" width="150" height="40"/>
+  <text class="tx" x="455" y="115">영업부</text>
+
+  <!-- 행 2 -->
+  <rect class="td" x="120" y="130" width="130" height="40"/>
+  <text class="tx" x="185" y="155">101</text>
+  <rect class="td" x="250" y="130" width="130" height="40"/>
+  <text class="tx" x="315" y="155">이영희</text>
+  <rect class="td" x="380" y="130" width="150" height="40"/>
+  <text class="tx" x="455" y="155">인사부</text>
+
+  <!-- 라벨 -->
+  <text class="lbl" x="24" y="115" transform="rotate(-90 30 150)"></text>
+  <text class="lbl" x="30" y="150" text-anchor="middle">인스턴스</text>
+  <text class="lbl" x="30" y="166" text-anchor="middle" font-size="10">(행)</text>
+  <text class="lbl" x="315" y="42" text-anchor="middle">속성 (열)</text>
+
+  <text class="note" x="24" y="215">※ 엔터티가 되려면 인스턴스 2개 이상 + 속성 2개 이상 + 업무에 필요한 정보여야 한다.</text>
+  <text class="note" x="24" y="237">   인스턴스 하나(사원 100)는 엔터티가 아니라 엔터티의 '한 건'이다.</text>
+</svg>

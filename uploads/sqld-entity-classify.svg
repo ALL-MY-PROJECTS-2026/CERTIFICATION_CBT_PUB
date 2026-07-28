@@ -1,0 +1,49 @@
+<svg viewBox="0 0 600 350" width="600" height="350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="엔터티 분류 두 기준. 유무형 기준은 유형(사원·물품)·개념(조직·상품)·사건(주문·전표)으로 나뉘고, 발생 시점 기준은 기본에서 중심, 행위 순으로 나뉜다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .t{font:800 13.5px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .s{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .arw{stroke:#3b5bdb;stroke-width:2;fill:none;marker-end:url(#a)}
+      .note{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3b5bdb"/></marker>
+  </defs>
+
+  <!-- 기준 1: 유무형 -->
+  <text class="cap" x="24" y="30">① 유무형 기준</text>
+  <rect class="box" x="24" y="44" width="170" height="58" rx="10"/>
+  <text class="t" x="109" y="70">유형(有形)</text>
+  <text class="s" x="109" y="89">물리적 실체 · 사원·물품</text>
+
+  <rect class="box" x="215" y="44" width="170" height="58" rx="10"/>
+  <text class="t" x="300" y="70">개념(概念)</text>
+  <text class="s" x="300" y="89">비물리 · 조직·보험상품</text>
+
+  <rect class="box" x="406" y="44" width="170" height="58" rx="10"/>
+  <text class="t" x="491" y="70">사건(事件)</text>
+  <text class="s" x="491" y="89">업무활동 발생 · 주문·전표</text>
+
+  <!-- 기준 2: 발생 시점 -->
+  <text class="cap" x="24" y="150">② 발생 시점 기준</text>
+  <rect class="box" x="24" y="164" width="150" height="66" rx="10"/>
+  <text class="t" x="99" y="190">기본</text>
+  <text class="s" x="99" y="209">독립 생성 · 자체 식별</text>
+  <text class="s" x="99" y="223">부모 역할</text>
+
+  <path class="arw" d="M178 197 L212 197"/>
+  <rect class="box" x="216" y="164" width="150" height="66" rx="10"/>
+  <text class="t" x="291" y="190">중심</text>
+  <text class="s" x="291" y="209">기본에서 파생</text>
+  <text class="s" x="291" y="223">데이터량 많음</text>
+
+  <path class="arw" d="M370 197 L404 197"/>
+  <rect class="box" x="408" y="164" width="168" height="66" rx="10"/>
+  <text class="t" x="492" y="190">행위</text>
+  <text class="s" x="492" y="209">여러 부모에서 발생</text>
+  <text class="s" x="492" y="223">변경 잦음</text>
+
+  <text class="note" x="24" y="290">※ 시험 함정 — 예시 짝짓기로 낸다: 전표=사건, 조직=개념, 주문=사건.</text>
+  <text class="note" x="24" y="312">   기본→중심→행위는 '먼저 생기는 순서'로 이해하면 헷갈리지 않는다.</text>
+</svg>
