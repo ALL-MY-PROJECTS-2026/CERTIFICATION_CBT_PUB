@@ -1,0 +1,41 @@
+<svg viewBox="0 0 600 240" width="600" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="트랜잭션의 ACID 네 가지 특성. 원자성은 모두 성공 또는 모두 취소, 일관성은 전후 무결성 유지, 고립성은 동시 트랜잭션 간 간섭 없음, 지속성은 커밋되면 영구 보존">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .t{font:800 13px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .s{font:400 10.5px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .badge{font:800 12px 'IBM Plex Mono',monospace;fill:#3b5bdb;text-anchor:middle}
+      .note{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="30">트랜잭션 4대 특성 — ACID</text>
+
+  <rect class="box" x="24" y="46" width="132" height="80" rx="10"/>
+  <text class="badge" x="90" y="66">A</text>
+  <text class="t" x="90" y="86">원자성</text>
+  <text class="s" x="90" y="104">모두 성공 or</text>
+  <text class="s" x="90" y="118">모두 취소</text>
+
+  <rect class="box" x="168" y="46" width="132" height="80" rx="10"/>
+  <text class="badge" x="234" y="66">C</text>
+  <text class="t" x="234" y="86">일관성</text>
+  <text class="s" x="234" y="104">전후 무결성</text>
+  <text class="s" x="234" y="118">유지</text>
+
+  <rect class="box" x="312" y="46" width="132" height="80" rx="10"/>
+  <text class="badge" x="378" y="66">I</text>
+  <text class="t" x="378" y="86">고립성</text>
+  <text class="s" x="378" y="104">동시 실행 간</text>
+  <text class="s" x="378" y="118">간섭 없음</text>
+
+  <rect class="box" x="456" y="46" width="120" height="80" rx="10"/>
+  <text class="badge" x="516" y="66">D</text>
+  <text class="t" x="516" y="86">지속성</text>
+  <text class="s" x="516" y="104">커밋되면</text>
+  <text class="s" x="516" y="118">영구 보존</text>
+
+  <text class="note" x="24" y="162">※ 함정 — 원자성(all-or-nothing)과 일관성(무결성 유지)의 정의를 바꿔 내는 문제가 잦다.</text>
+  <text class="note" x="24" y="184">   트랜잭션 = 나눌 수 없는 하나의 논리적 작업 단위.</text>
+</svg>

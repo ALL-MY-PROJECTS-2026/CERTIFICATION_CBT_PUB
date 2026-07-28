@@ -1,0 +1,29 @@
+<svg viewBox="0 0 560 240" width="560" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="커밋과 롤백. DML 작업은 커밋 전이면 롤백으로 되돌릴 수 있지만, TRUNCATE나 DROP 같은 DDL은 자동 커밋되어 롤백으로 복구할 수 없다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .ok{fill:#eaf6ee;stroke:#1a7d45;stroke-width:1.5}
+      .no{fill:#fdeceb;stroke:#d62b2b;stroke-width:1.5}
+      .t{font:800 12.5px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .s{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .lbl{font:800 12px 'Nanum Gothic',sans-serif;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="28">되돌릴 수 있나? — DML vs DDL</text>
+
+  <text class="lbl" x="150" y="58" fill="#1a7d45">DML (INSERT·UPDATE·DELETE)</text>
+  <rect class="ok" x="40" y="70" width="220" height="54" rx="10"/>
+  <text class="t" x="150" y="94">커밋 전이면</text>
+  <text class="s" x="150" y="112">ROLLBACK 으로 되돌리기 O</text>
+
+  <text class="lbl" x="410" y="58" fill="#d62b2b">DDL (TRUNCATE·DROP·CREATE)</text>
+  <rect class="no" x="300" y="70" width="220" height="54" rx="10"/>
+  <text class="t" x="410" y="94">자동 커밋(auto-commit)</text>
+  <text class="s" x="410" y="112">ROLLBACK 복구 X</text>
+
+  <text class="note" x="24" y="168">※ TCL: COMMIT(확정)·ROLLBACK(취소). DELETE는 롤백되지만 TRUNCATE는 안 된다(대표 함정).</text>
+  <text class="note" x="24" y="190">   기준: Oracle·ANSI. 일부 DBMS는 DDL 트랜잭션을 지원해 예외가 있다.</text>
+</svg>

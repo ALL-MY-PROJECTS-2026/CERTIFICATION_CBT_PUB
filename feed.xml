@@ -7,6 +7,13 @@
     <language>ko</language>
     <atom:link href="https://pancocbt.site/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>트랜잭션 — SQLD, ACID와 커밋·롤백 핵심 정리</title>
+      <link>https://pancocbt.site/posts/sqld-transaction</link>
+      <guid isPermaLink="true">https://pancocbt.site/posts/sqld-transaction</guid>
+      <pubDate>Mon, 27 Jul 2026 16:00:00 GMT</pubDate>
+      <description>SQLD 트랜잭션을 시험 관점으로 정리합니다. ACID 4대 특성, COMMIT·ROLLBACK, DML은 롤백되지만 TRUNCATE·DROP(DDL)은 자동 커밋되어 복구 불가한 함정을 도식·확인 문제와 함께 짚습니다.</description>
+    </item>
+    <item>
       <title>관계와 조인의 이해 — SQLD, 관계가 어떻게 조인이 되는가</title>
       <link>https://pancocbt.site/posts/sqld-relationship-join</link>
       <guid isPermaLink="true">https://pancocbt.site/posts/sqld-relationship-join</guid>

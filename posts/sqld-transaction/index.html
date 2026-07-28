@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>트랜잭션 — SQLD, ACID와 커밋·롤백 핵심 정리 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 트랜잭션을 시험 관점으로 정리합니다. ACID 4대 특성, COMMIT·ROLLBACK, DML은 롤백되지만 TRUNCATE·DROP(DDL)은 자동 커밋되어 복구 불가한 함정을 도식·확인 문제와 함께 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-transaction" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="트랜잭션 — SQLD, ACID와 커밋·롤백 핵심 정리 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 트랜잭션을 시험 관점으로 정리합니다. ACID 4대 특성, COMMIT·ROLLBACK, DML은 롤백되지만 TRUNCATE·DROP(DDL)은 자동 커밋되어 복구 불가한 함정을 도식·확인 문제와 함께 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-transaction" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-27T16:00" />
+    <meta property="article:modified_time" content="2026-07-27T16:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="트랜잭션 — SQLD, ACID와 커밋·롤백 핵심 정리 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 트랜잭션을 시험 관점으로 정리합니다. ACID 4대 특성, COMMIT·ROLLBACK, DML은 롤백되지만 TRUNCATE·DROP(DDL)은 자동 커밋되어 복구 불가한 함정을 도식·확인 문제와 함께 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"트랜잭션 — SQLD, ACID와 커밋·롤백 핵심 정리","description":"SQLD 트랜잭션을 시험 관점으로 정리합니다. ACID 4대 특성, COMMIT·ROLLBACK, DML은 롤백되지만 TRUNCATE·DROP(DDL)은 자동 커밋되어 복구 불가한 함정을 도식·확인 문제와 함께 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-27T16:00","dateModified":"2026-07-27T16:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-transaction"},"keywords":"SQLD, 트랜잭션, ACID, COMMIT, ROLLBACK"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"데이터 모델링의 이해","item":"https://pancocbt.site/category/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4"},{"@type":"ListItem","position":3,"name":"트랜잭션 — SQLD, ACID와 커밋·롤백 핵심 정리","item":"https://pancocbt.site/posts/sqld-transaction"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-BgFUaWZ9.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-tTOp4O6P.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4">데이터 모델링의 이해</a></li><li><span aria-current="page">트랜잭션 — SQLD, ACID와 커밋·롤백 핵심 정리</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4">데이터 모델링의 이해</a><h1 style="margin-top:0.75rem">트랜잭션 — SQLD, ACID와 커밋·롤백 핵심 정리</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-27T16:00">2026년 7월 27일 16:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->트랜잭션</span><span class="tag">#<!-- -->ACID</span><span class="tag">#<!-- -->COMMIT</span><span class="tag">#<!-- -->ROLLBACK</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>트랜잭션(Transaction)</strong> 은 <strong>더 이상 나눌 수 없는 하나의 논리적 작업 단위</strong> 입니다. 계좌 이체처럼 &quot;출금과 입금이 함께 성공하거나, 함께 취소되어야&quot; 하는 묶음입니다. 이 단원은 <strong>ACID 특성</strong> 과 <strong>커밋·롤백</strong> 을 정확히 아는지 묻습니다.</p>
+<h2 id="이-단원-시험에서-어디에-나오나"><a href="#이-단원-시험에서-어디에-나오나">이 단원, 시험에서 어디에 나오나</a></h2>
+<ul>
+<li>제1과목 「데이터 모델링의 이해」의 &#x27;데이터 모델과 SQL&#x27; 세부항목입니다.</li>
+<li><strong>ACID 정의 구분</strong> 과 <strong>어떤 작업이 롤백되는가(DML vs DDL)</strong> 가 단골입니다.</li>
+</ul>
+<h2 id="-acid--트랜잭션-4대-특성"><a href="#-acid--트랜잭션-4대-특성">① ACID — 트랜잭션 4대 특성</a></h2>
+<p><img alt="트랜잭션 ACID 네 가지 특성 도식. 원자성·일관성·고립성·지속성" src="/uploads/sqld-tx-acid.svg" loading="lazy"/></p>
+<p><em>그림 1. 원자성·일관성·고립성·지속성. 원자성과 일관성의 정의를 바꿔 내는 함정이 잦습니다. (자작 도식)</em></p>
+<table><thead><tr><th>특성</th><th>뜻</th></tr></thead><tbody><tr><td><strong>원자성(A)</strong></td><td>모두 성공하거나 모두 취소(all-or-nothing)</td></tr><tr><td><strong>일관성(C)</strong></td><td>실행 전후 데이터 무결성 유지</td></tr><tr><td><strong>고립성(I)</strong></td><td>동시 실행 트랜잭션끼리 간섭 없음</td></tr><tr><td><strong>지속성(D)</strong></td><td>커밋되면 결과가 영구 보존</td></tr></tbody></table>
+<blockquote>
+<p>함정: <strong>원자성</strong>(전부/전무)과 <strong>일관성</strong>(무결성 유지)의 정의를 서로 바꾼 보기.</p>
+</blockquote>
+<h2 id="-commit과-rollback-tcl"><a href="#-commit과-rollback-tcl">② COMMIT과 ROLLBACK (TCL)</a></h2>
+<p>트랜잭션은 <strong>TCL</strong> 로 제어합니다.</p>
+<ul>
+<li><strong>COMMIT</strong>: 변경을 <strong>확정</strong> (지속성 확보).</li>
+<li><strong>ROLLBACK</strong>: 변경을 <strong>취소</strong> 하고 이전 상태로 되돌림.</li>
+<li><strong>SAVEPOINT</strong>: 롤백할 지점을 지정.</li>
+</ul>
+<h2 id="-되돌릴-수-있나--dml-vs-ddl-핵심-함정"><a href="#-되돌릴-수-있나--dml-vs-ddl-핵심-함정">③ 되돌릴 수 있나? — DML vs DDL (핵심 함정)</a></h2>
+<p><img alt="DML은 커밋 전 롤백 가능하지만 TRUNCATE·DROP 같은 DDL은 자동 커밋되어 롤백 불가함을 보여주는 도식" src="/uploads/sqld-tx-commit.svg" loading="lazy"/></p>
+<p><em>그림 2. DML은 커밋 전이면 롤백으로 되돌릴 수 있지만, DDL(TRUNCATE·DROP)은 자동 커밋되어 롤백해도 복구되지 않습니다. (자작 도식)</em></p>
+<ul>
+<li><strong>DML</strong>(INSERT·UPDATE·<strong>DELETE</strong>): 커밋 전이면 <code>ROLLBACK</code> 으로 되돌리기 <strong>가능</strong>.</li>
+<li><strong>DDL</strong>(<strong>TRUNCATE</strong>·DROP·CREATE·ALTER): 실행 즉시 <strong>자동 커밋(auto-commit)</strong> → <code>ROLLBACK</code> 으로 <strong>복구 불가</strong>.</li>
+</ul>
+<blockquote>
+<p>대표 함정: <strong>&quot;DELETE와 TRUNCATE는 같다&quot;</strong> 는 보기. DELETE는 롤백되지만 TRUNCATE는 되돌릴 수 없습니다. <em>(기준: Oracle·ANSI. 일부 DBMS는 예외가 있습니다.)</em></p>
+</blockquote>
+<h2 id="자주-틀리는-함정"><a href="#자주-틀리는-함정">자주 틀리는 함정</a></h2>
+<ul>
+<li><strong>원자성 ↔ 일관성</strong> 정의 바꿔치기.</li>
+<li><strong>TRUNCATE 롤백 가능</strong> 이라고 오인 — DDL은 auto-commit이라 불가.</li>
+<li><strong>COMMIT 후 롤백</strong> 으로 되돌릴 수 있다고 착각 — 커밋되면 확정됩니다.</li>
+</ul>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li><strong>ACID</strong>: 원자성(전부/전무)·일관성(무결성)·고립성(간섭없음)·지속성(영구보존).</li>
+<li><strong>TCL</strong>: COMMIT(확정)·ROLLBACK(취소)·SAVEPOINT(지점).</li>
+<li><strong>DML</strong>(DELETE 등)은 롤백 O, <strong>DDL</strong>(TRUNCATE·DROP)은 auto-commit → 롤백 X.</li>
+<li>트랜잭션 = 나눌 수 없는 하나의 작업 단위.</li>
+</ul>
+<aside class="related-problems" aria-label="트랜잭션 연계 문제"><div class="related-problems__info"><span class="related-problems__label">트랜잭션</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->8<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·출제기준: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>ACID·트랜잭션 제어는 관계형 DB 표준(Oracle·ANSI) 이론에 근거하며, 본문 설명·예시·도식은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-relationship-join"><span class="tag" style="align-self:flex-start">데이터 모델링의 이해</span><h3 style="margin-top:0.75rem">관계와 조인의 이해 — SQLD, 관계가 어떻게 조인이 되는가</h3><p>SQLD 관계와 조인의 이해를 시험 관점으로 정리합니다. 부모 PK가 자식 FK로 상속되어 조인키가 되는 원리, 정규화와 조인의 짝 관계, 식별·비식별 상속 차이를 도식·확인 문제와 함께 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T15:00">2026년 7월 27일 15:00</time><span>· <!-- -->SQLD, 관계, 조인</span></div></a><a class="post-card " href="/posts/sqld-normalization"><span class="tag" style="align-self:flex-start">데이터 모델링의 이해</span><h3 style="margin-top:0.75rem">정규화(Normalization) — SQLD 단골, 단계 판별과 함수 종속 정리</h3><p>SQLD 정규화를 시험 관점으로 정리합니다. 1NF·2NF·3NF·BCNF 단계별 제거 대상, 부분 함수 종속과 이행 함수 종속 구분, 이상현상과 반정규화를 도식·확인 문제와 함께 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T14:00">2026년 7월 27일 14:00</time><span>· <!-- -->SQLD, 정규화, 1NF</span></div></a><a class="post-card " href="/posts/sqld-identifier"><span class="tag" style="align-self:flex-start">데이터 모델링의 이해</span><h3 style="margin-top:0.75rem">식별자(Identifier) — SQLD 최다 함정, 특징·분류·식별관계 정리</h3><p>SQLD 식별자를 시험 관점으로 정리합니다. 주식별자 4대 특징(유일·최소·불변·존재), 본질 vs 인조 식별자, 식별관계와 비식별관계 차이를 도식·확인 문제와 함께 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T13:00">2026년 7월 27일 13:00</time><span>· <!-- -->SQLD, 식별자, 주식별자</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>
