@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>식별자(Identifier) — SQLD 최다 함정, 특징·분류·식별관계 정리 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 식별자를 시험 관점으로 정리합니다. 주식별자 4대 특징(유일·최소·불변·존재), 본질 vs 인조 식별자, 식별관계와 비식별관계 차이를 도식·확인 문제와 함께 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-identifier" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="식별자(Identifier) — SQLD 최다 함정, 특징·분류·식별관계 정리 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 식별자를 시험 관점으로 정리합니다. 주식별자 4대 특징(유일·최소·불변·존재), 본질 vs 인조 식별자, 식별관계와 비식별관계 차이를 도식·확인 문제와 함께 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-identifier" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-27T13:00" />
+    <meta property="article:modified_time" content="2026-07-27T13:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="식별자(Identifier) — SQLD 최다 함정, 특징·분류·식별관계 정리 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 식별자를 시험 관점으로 정리합니다. 주식별자 4대 특징(유일·최소·불변·존재), 본질 vs 인조 식별자, 식별관계와 비식별관계 차이를 도식·확인 문제와 함께 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"식별자(Identifier) — SQLD 최다 함정, 특징·분류·식별관계 정리","description":"SQLD 식별자를 시험 관점으로 정리합니다. 주식별자 4대 특징(유일·최소·불변·존재), 본질 vs 인조 식별자, 식별관계와 비식별관계 차이를 도식·확인 문제와 함께 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-27T13:00","dateModified":"2026-07-27T13:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-identifier"},"keywords":"SQLD, 식별자, 주식별자, 본질식별자, 인조식별자"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"데이터 모델링의 이해","item":"https://pancocbt.site/category/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4"},{"@type":"ListItem","position":3,"name":"식별자(Identifier) — SQLD 최다 함정, 특징·분류·식별관계 정리","item":"https://pancocbt.site/posts/sqld-identifier"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-CyW-WXIo.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-D1qdQw1G.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4">데이터 모델링의 이해</a></li><li><span aria-current="page">식별자(Identifier) — SQLD 최다 함정, 특징·분류·식별관계 정리</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%AA%A8%EB%8D%B8%EB%A7%81%EC%9D%98%20%EC%9D%B4%ED%95%B4">데이터 모델링의 이해</a><h1 style="margin-top:0.75rem">식별자(Identifier) — SQLD 최다 함정, 특징·분류·식별관계 정리</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-27T13:00">2026년 7월 27일 13:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->식별자</span><span class="tag">#<!-- -->주식별자</span><span class="tag">#<!-- -->본질식별자</span><span class="tag">#<!-- -->인조식별자</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>식별자(Identifier)</strong> 는 <strong>엔터티의 각 인스턴스를 구분하는 속성(또는 속성 묶음)</strong> 입니다. 사원의 사원번호, 주문의 주문번호가 식별자입니다. 이 단원은 SQLD 1과목에서 <strong>가장 헷갈리게 내는 부분</strong> 이라 특징·분류·관계를 정확히 나눠 익혀야 합니다.</p>
+<h2 id="이-단원-시험에서-어디에-나오나"><a href="#이-단원-시험에서-어디에-나오나">이 단원, 시험에서 어디에 나오나</a></h2>
+<ul>
+<li>제1과목 「데이터 모델링의 이해」(10문항·20점)의 핵심이자 <strong>최다 함정 영역</strong> 입니다.</li>
+<li><strong>주식별자 4대 특징</strong>, <strong>본질 vs 인조</strong>, <strong>식별 vs 비식별 관계</strong> 세 가지가 단골입니다.</li>
+</ul>
+<h2 id="-주식별자의-4대-특징"><a href="#-주식별자의-4대-특징">① 주식별자의 4대 특징</a></h2>
+<p><img alt="주식별자의 네 가지 특징 도식. 유일성·최소성·불변성·존재성" src="/uploads/sqld-identifier-features.svg" loading="lazy"/></p>
+<p><em>그림 1. 유일성·최소성·불변성·존재성. 최소성(속성 개수)과 존재성(NULL 불가)의 정의를 바꿔 내는 함정이 잦습니다. (자작 도식)</em></p>
+<table><thead><tr><th>특징</th><th>뜻</th></tr></thead><tbody><tr><td><strong>유일성</strong></td><td>모든 인스턴스를 유일하게 구분</td></tr><tr><td><strong>최소성</strong></td><td>유일성을 만족하는 <strong>최소 속성 수</strong></td></tr><tr><td><strong>불변성</strong></td><td>값이 잘 바뀌지 않음</td></tr><tr><td><strong>존재성</strong></td><td>반드시 값 존재(<strong>NULL 불가</strong>)</td></tr></tbody></table>
+<blockquote>
+<p>함정: <strong>최소성</strong>(속성을 꼭 필요한 만큼만)과 <strong>존재성</strong>(NULL 금지)의 정의를 서로 바꿔 낸 보기.</p>
+</blockquote>
+<h2 id="-식별자-분류--본질-vs-인조가-핵심"><a href="#-식별자-분류--본질-vs-인조가-핵심">② 식별자 분류 — 본질 vs 인조가 핵심</a></h2>
+<p>식별자는 여러 기준으로 나뉩니다. 시험은 특히 <strong>본질 vs 인조</strong> 를 묻습니다.</p>
+<table><thead><tr><th>기준</th><th>종류</th></tr></thead><tbody><tr><td>대표성</td><td>주식별자 / 보조식별자</td></tr><tr><td>생성 위치</td><td>내부식별자 / 외부식별자</td></tr><tr><td>속성 수</td><td>단일식별자 / 복합식별자</td></tr><tr><td><strong>대체 여부</strong></td><td><strong>본질식별자 / 인조식별자</strong></td></tr></tbody></table>
+<ul>
+<li><strong>본질식별자</strong>: 업무에 <strong>원래 존재하는</strong> 키(주민번호, 사업자번호).</li>
+<li><strong>인조식별자</strong>: 업무에 없던 것을 <strong>인위적으로 만든</strong> 대체키(일련번호, 자동 채번 ID).</li>
+</ul>
+<blockquote>
+<p>인조식별자는 본질식별자가 너무 길거나 복잡할 때 대신 쓰는 <strong>대체키</strong> 입니다.</p>
+</blockquote>
+<h2 id="-식별관계-vs-비식별관계"><a href="#-식별관계-vs-비식별관계">③ 식별관계 vs 비식별관계</a></h2>
+<p>부모의 키가 자식으로 내려올 때, <strong>자식의 주식별자에 포함되면 식별관계</strong>, <strong>일반 속성(FK)이 되면 비식별관계</strong> 입니다.</p>
+<p><img alt="식별관계와 비식별관계 비교 도식. 식별관계는 실선, 비식별관계는 점선" src="/uploads/sqld-identifier-relation.svg" loading="lazy"/></p>
+<p><em>그림 2. 부모 키가 자식 주식별자에 들어가면 식별(실선), 일반 속성이면 비식별(점선)입니다. (자작 도식)</em></p>
+<table><thead><tr><th>구분</th><th>부모 키 위치</th><th>표기</th><th>종속</th></tr></thead><tbody><tr><td><strong>식별관계</strong></td><td>자식 <strong>주식별자</strong>에 포함</td><td>실선</td><td>강함</td></tr><tr><td><strong>비식별관계</strong></td><td>자식 <strong>일반 속성(FK)</strong></td><td>점선</td><td>약함</td></tr></tbody></table>
+<h2 id="자주-틀리는-함정"><a href="#자주-틀리는-함정">자주 틀리는 함정</a></h2>
+<ul>
+<li><strong>본질 vs 인조 뒤집기</strong> — 일련번호(인조)를 본질로, 주민번호(본질)를 인조로.</li>
+<li><strong>최소성 ↔ 존재성</strong> — 정의를 서로 바꿔 낸 보기.</li>
+<li><strong>식별 ↔ 비식별</strong> — 실선/점선, 주식별자 포함 여부를 반대로 설명.</li>
+</ul>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li>주식별자 4특징: <strong>유일·최소·불변·존재(NULL 불가)</strong>.</li>
+<li>분류: 대표성·생성·속성수 + <strong>본질(원래 있음) / 인조(새로 만든 대체키)</strong>.</li>
+<li>식별관계: 부모 키가 <strong>자식 주식별자에 포함</strong>(실선, 강함).</li>
+<li>비식별관계: 부모 키가 <strong>자식 일반속성</strong>(점선, 약함).</li>
+</ul>
+<aside class="related-problems" aria-label="식별자 연계 문제"><div class="related-problems__info"><span class="related-problems__label">식별자</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->8<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/%EC%8B%9D%EB%B3%84%EC%9E%90">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·출제기준: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>식별자 특징·분류·관계는 데이터 모델링 표준 이론에 근거하며, 본문 설명·예시·도식은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-relationship"><span class="tag" style="align-self:flex-start">데이터 모델링의 이해</span><h3 style="margin-top:0.75rem">관계(Relationship) — SQLD가 ERD 해석으로 묻는 것만 정리</h3><p>SQLD 관계를 시험 관점으로 정리합니다. 차수(1:1·1:M·M:N)와 선택사양(필수·선택), Crow&#x27;s Foot 표기 읽는 법, M:N 해소를 도식·확인 문제와 함께 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T12:00">2026년 7월 27일 12:00</time><span>· <!-- -->SQLD, 관계, Relationship</span></div></a><a class="post-card " href="/posts/sqld-attribute"><span class="tag" style="align-self:flex-start">데이터 모델링의 이해</span><h3 style="margin-top:0.75rem">속성(Attribute) — SQLD가 유형 판별로 묻는 것만 정리</h3><p>SQLD 속성을 시험 관점으로 정리합니다. 기본·설계·파생 속성 구분, 단일값과 다중값(별도 엔터티 분리), PK·FK 역할, 파생속성 함정을 도식·확인 문제와 함께 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T11:00">2026년 7월 27일 11:00</time><span>· <!-- -->SQLD, 속성, Attribute</span></div></a><a class="post-card " href="/posts/sqld-entity"><span class="tag" style="align-self:flex-start">데이터 모델링의 이해</span><h3 style="margin-top:0.75rem">엔터티(Entity) — SQLD가 분류로 묻는 것만 정리</h3><p>SQLD 엔터티를 시험 관점으로 정리합니다. 유형·개념·사건, 기본·중심·행위 두 분류 기준과 예시 짝짓기 함정, 엔터티가 되기 위한 조건을 도식·확인 문제와 함께 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T10:00">2026년 7월 27일 10:00</time><span>· <!-- -->SQLD, 엔터티, Entity</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>

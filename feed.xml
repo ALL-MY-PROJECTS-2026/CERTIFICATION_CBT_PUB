@@ -7,6 +7,13 @@
     <language>ko</language>
     <atom:link href="https://pancocbt.site/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>식별자(Identifier) — SQLD 최다 함정, 특징·분류·식별관계 정리</title>
+      <link>https://pancocbt.site/posts/sqld-identifier</link>
+      <guid isPermaLink="true">https://pancocbt.site/posts/sqld-identifier</guid>
+      <pubDate>Mon, 27 Jul 2026 13:00:00 GMT</pubDate>
+      <description>SQLD 식별자를 시험 관점으로 정리합니다. 주식별자 4대 특징(유일·최소·불변·존재), 본질 vs 인조 식별자, 식별관계와 비식별관계 차이를 도식·확인 문제와 함께 짚습니다.</description>
+    </item>
+    <item>
       <title>WHERE절과 연산자 — SQLD, NULL과 AND·OR 우선순위 함정</title>
       <link>https://pancocbt.site/posts/sqld-where</link>
       <guid isPermaLink="true">https://pancocbt.site/posts/sqld-where</guid>

@@ -1,0 +1,38 @@
+<svg viewBox="0 0 560 250" width="560" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="식별관계와 비식별관계 비교. 식별관계는 실선으로 부모 주식별자가 자식의 주식별자에 포함되고, 비식별관계는 점선으로 부모 식별자가 자식의 일반 속성이 된다">
+  <defs>
+    <style>
+      .cap{font:800 13px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .t{font:800 12px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .k{font:700 10.5px 'IBM Plex Mono',monospace;fill:#10283d;text-anchor:middle}
+      .pk{fill:#fff6d6}
+      .solid{stroke:#17324c;stroke-width:2;fill:none}
+      .dash{stroke:#17324c;stroke-width:2;fill:none;stroke-dasharray:6 4}
+      .lbl{font:800 12px 'Nanum Gothic',sans-serif;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <!-- 식별관계 -->
+  <text class="lbl" x="140" y="24" fill="#17324c">식별관계 (실선)</text>
+  <rect class="box" x="40" y="36" width="90" height="30" rx="6"/><text class="t" x="85" y="56">부서</text>
+  <line class="solid" x1="130" y1="51" x2="200" y2="51"/>
+  <rect class="box" x="200" y="36" width="60" height="30" rx="6"/><text class="t" x="230" y="56">사원</text>
+  <rect class="box pk" x="40" y="80" width="220" height="30"/>
+  <text class="k" x="150" y="100">사원PK = (부서코드 + 사번)</text>
+  <text class="note" x="40" y="130">부모 주식별자가 자식 주식별자에 포함 = 강한 종속</text>
+
+  <!-- 비식별관계 -->
+  <text class="lbl" x="410" y="24" fill="#17324c">비식별관계 (점선)</text>
+  <rect class="box" x="310" y="36" width="90" height="30" rx="6"/><text class="t" x="355" y="56">부서</text>
+  <line class="dash" x1="400" y1="51" x2="470" y2="51"/>
+  <rect class="box" x="470" y="36" width="60" height="30" rx="6"/><text class="t" x="500" y="56">사원</text>
+  <rect class="box pk" x="310" y="80" width="130" height="30"/>
+  <text class="k" x="375" y="100">사원PK = (사번)</text>
+  <rect class="box" x="444" y="80" width="86" height="30"/>
+  <text class="k" x="487" y="100">부서코드(FK)</text>
+  <text class="note" x="310" y="130">부모 식별자가 자식 일반속성(FK) = 약한 구성</text>
+
+  <text class="note" x="40" y="180">※ 핵심 — 부모 키가 자식의 '주식별자에 들어가면 식별', '일반속성이면 비식별'.</text>
+  <text class="note" x="40" y="202">   ERD에서 실선=식별, 점선=비식별로 구분해 읽는다.</text>
+</svg>

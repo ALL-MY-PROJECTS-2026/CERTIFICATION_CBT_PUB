@@ -1,0 +1,36 @@
+<svg viewBox="0 0 600 250" width="600" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="주식별자의 네 가지 특징. 유일성은 모든 행을 구분, 최소성은 꼭 필요한 최소 속성, 불변성은 값이 바뀌지 않음, 존재성은 널 값이 없음">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .t{font:800 13px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .s{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .note{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="30">주식별자의 4대 특징</text>
+
+  <rect class="box" x="24" y="46" width="132" height="64" rx="10"/>
+  <text class="t" x="90" y="72">유일성</text>
+  <text class="s" x="90" y="92">모든 행을</text>
+  <text class="s" x="90" y="106">유일하게 구분</text>
+
+  <rect class="box" x="168" y="46" width="132" height="64" rx="10"/>
+  <text class="t" x="234" y="72">최소성</text>
+  <text class="s" x="234" y="92">유일성 만족하는</text>
+  <text class="s" x="234" y="106">최소 속성 수</text>
+
+  <rect class="box" x="312" y="46" width="132" height="64" rx="10"/>
+  <text class="t" x="378" y="72">불변성</text>
+  <text class="s" x="378" y="92">값이 잘</text>
+  <text class="s" x="378" y="106">바뀌지 않음</text>
+
+  <rect class="box" x="456" y="46" width="120" height="64" rx="10"/>
+  <text class="t" x="516" y="72">존재성</text>
+  <text class="s" x="516" y="92">반드시 값 존재</text>
+  <text class="s" x="516" y="106">(NULL 불가)</text>
+
+  <text class="note" x="24" y="150">※ 함정 — '최소성'은 속성 개수, '존재성'은 NULL 불가. 두 정의를 바꿔 낸다.</text>
+  <text class="note" x="24" y="172">   본질 식별자 = 업무에 원래 있는 키 / 인조 식별자 = 일련번호처럼 새로 만든 대체키.</text>
+</svg>
