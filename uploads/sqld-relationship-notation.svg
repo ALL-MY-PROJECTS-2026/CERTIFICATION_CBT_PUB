@@ -1,0 +1,40 @@
+<svg viewBox="0 0 560 240" width="560" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Crow's Foot 표기법. 다(many) 쪽은 까마귀발 세 갈래로, 하나(one) 쪽은 짧은 막대로 표시하며, 필수 관계는 실선 참여, 선택 관계는 동그라미로 나타낸다">
+  <defs>
+    <style>
+      .cap{font:800 13px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .t{font:800 12px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .ln{stroke:#17324c;stroke-width:1.8;fill:none}
+      .lbl{font:800 11.5px 'Nanum Gothic',sans-serif;fill:#3b5bdb}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="20" y="26">Crow's Foot 표기 — 종단 기호로 읽는다</text>
+
+  <!-- one (막대) -->
+  <text class="lbl" x="20" y="60">하나(one)</text>
+  <line class="ln" x1="120" y1="55" x2="200" y2="55"/>
+  <line class="ln" x1="180" y1="45" x2="180" y2="65"/>
+  <text class="note" x="215" y="59">짧은 막대 = 1</text>
+
+  <!-- many (까마귀발) -->
+  <text class="lbl" x="20" y="104">다(many)</text>
+  <line class="ln" x1="120" y1="99" x2="185" y2="99"/>
+  <path class="ln" d="M185 99 L205 89 M185 99 L205 99 M185 99 L205 109"/>
+  <text class="note" x="215" y="103">까마귀발 = 여럿</text>
+
+  <!-- mandatory -->
+  <text class="lbl" x="20" y="148">필수(mandatory)</text>
+  <line class="ln" x1="150" y1="143" x2="220" y2="143"/>
+  <line class="ln" x1="200" y1="133" x2="200" y2="153"/>
+  <text class="note" x="235" y="147">막대 = 반드시 참여</text>
+
+  <!-- optional -->
+  <text class="lbl" x="20" y="192">선택(optional)</text>
+  <line class="ln" x1="150" y1="187" x2="220" y2="187"/>
+  <circle cx="196" cy="187" r="7" fill="#fff" stroke="#17324c" stroke-width="1.8"/>
+  <text class="note" x="235" y="191">동그라미 = 없어도 됨</text>
+
+  <text class="note" x="20" y="228">※ 양끝 선은 모두 실선 — 구분은 '종단 기호'(막대·까마귀발·동그라미)로 읽는다.</text>
+</svg>

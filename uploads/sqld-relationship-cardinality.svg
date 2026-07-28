@@ -1,0 +1,38 @@
+<svg viewBox="0 0 600 240" width="600" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="관계의 차수 세 가지. 1대1은 사원과 사물함, 1대다는 부서 하나에 사원 여럿, 다대다는 학생과 과목이 서로 여럿으로 연결됨">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .t{font:800 12.5px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .ln{stroke:#17324c;stroke-width:1.6}
+      .deg{font:800 13px 'IBM Plex Mono',monospace;fill:#3b5bdb;text-anchor:middle}
+      .s{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .note{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="28">관계의 차수(Cardinality)</text>
+
+  <!-- 1:1 -->
+  <rect class="box" x="24" y="46" width="80" height="34" rx="8"/><text class="t" x="64" y="68">사원</text>
+  <line class="ln" x1="104" y1="63" x2="176" y2="63"/>
+  <text class="deg" x="140" y="56">1 : 1</text>
+  <rect class="box" x="176" y="46" width="80" height="34" rx="8"/><text class="t" x="216" y="68">사물함</text>
+  <text class="s" x="140" y="98">한 명 ↔ 한 개</text>
+
+  <!-- 1:M -->
+  <rect class="box" x="344" y="46" width="80" height="34" rx="8"/><text class="t" x="384" y="68">부서</text>
+  <line class="ln" x1="424" y1="63" x2="496" y2="63"/>
+  <text class="deg" x="460" y="56">1 : M</text>
+  <rect class="box" x="496" y="46" width="80" height="34" rx="8"/><text class="t" x="536" y="68">사원</text>
+  <text class="s" x="460" y="98">부서 1 ↔ 사원 여럿</text>
+
+  <!-- M:N -->
+  <rect class="box" x="184" y="134" width="80" height="34" rx="8"/><text class="t" x="224" y="156">학생</text>
+  <line class="ln" x1="264" y1="151" x2="336" y2="151"/>
+  <text class="deg" x="300" y="144">M : N</text>
+  <rect class="box" x="336" y="134" width="80" height="34" rx="8"/><text class="t" x="376" y="156">과목</text>
+  <text class="s" x="300" y="186">학생 여럿 ↔ 과목 여럿</text>
+
+  <text class="note" x="24" y="220">※ M:N은 그대로 구현하지 못해 → 중간(교차) 엔터티로 1:M + M:1 로 푼다.</text>
+</svg>
