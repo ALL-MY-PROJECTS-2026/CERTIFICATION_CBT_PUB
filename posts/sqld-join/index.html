@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 제2과목 조인을 시험 관점으로 정리합니다. INNER·OUTER(LEFT/RIGHT/FULL)·CROSS·SELF가 각각 어떤 행을 남기는지, 조인 조건 누락 시 행 수가 M×N으로 폭발하는 카티션 곱, 오라클 (+) 표기의 방향 함정을 도식·확인 문제로 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-join" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 제2과목 조인을 시험 관점으로 정리합니다. INNER·OUTER(LEFT/RIGHT/FULL)·CROSS·SELF가 각각 어떤 행을 남기는지, 조인 조건 누락 시 행 수가 M×N으로 폭발하는 카티션 곱, 오라클 (+) 표기의 방향 함정을 도식·확인 문제로 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-join" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-31T01:00" />
+    <meta property="article:modified_time" content="2026-07-31T01:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 제2과목 조인을 시험 관점으로 정리합니다. INNER·OUTER(LEFT/RIGHT/FULL)·CROSS·SELF가 각각 어떤 행을 남기는지, 조인 조건 누락 시 행 수가 M×N으로 폭발하는 카티션 곱, 오라클 (+) 표기의 방향 함정을 도식·확인 문제로 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향","description":"SQLD 제2과목 조인을 시험 관점으로 정리합니다. INNER·OUTER(LEFT/RIGHT/FULL)·CROSS·SELF가 각각 어떤 행을 남기는지, 조인 조건 누락 시 행 수가 M×N으로 폭발하는 카티션 곱, 오라클 (+) 표기의 방향 함정을 도식·확인 문제로 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-31T01:00","dateModified":"2026-07-31T01:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-join"},"keywords":"SQLD, JOIN, OUTERJOIN, 카티션곱, SELFJOIN"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"SQL 기본 및 활용","item":"https://pancocbt.site/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9"},{"@type":"ListItem","position":3,"name":"조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향","item":"https://pancocbt.site/posts/sqld-join"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-B4W6imU9.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-tTOp4O6P.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a></li><li><span aria-current="page">조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a><h1 style="margin-top:0.75rem">조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-31T01:00">2026년 7월 31일 01:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->JOIN</span><span class="tag">#<!-- -->OUTERJOIN</span><span class="tag">#<!-- -->카티션곱</span><span class="tag">#<!-- -->SELFJOIN</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>조인</strong>은 두 개 이상의 테이블을 <strong>공통 컬럼(키)</strong> 으로 연결해 하나의 결과로 조회하는 연산입니다. 관계형 DB는 데이터를 나눠 저장하므로(정규화), 조회할 때 조인으로 다시 합칩니다. 시험은 <strong>&quot;이 조인의 결과표(행 수)는?&quot;</strong> 을 가장 많이 묻습니다.</p>
+<h2 id="이-단원-시험에서-어디에-나오나-출제-비중"><a href="#이-단원-시험에서-어디에-나오나-출제-비중">이 단원, 시험에서 어디에 나오나 (출제 비중)</a></h2>
+<ul>
+<li><strong>제2과목 「SQL 기본 및 활용」 = 40문항 · 80점.</strong> 조인은 배점 최상위권의 고빈출·고난도 단원입니다.</li>
+<li><strong>조인 유형 구분</strong>과 <strong>결과 행 수 계산(카티션 곱)</strong> 이 핵심 출제 각도입니다. <em>(단원별 문항수는 공개되지 않습니다 — 출처: KDATA 출제기준.)</em></li>
+</ul>
+<h2 id="출제-포인트--시험이-실제로-묻는-것"><a href="#출제-포인트--시험이-실제로-묻는-것">출제 포인트 — 시험이 실제로 묻는 것</a></h2>
+<ol>
+<li><strong>INNER / OUTER(LEFT·RIGHT·FULL) / CROSS / SELF가 어떤 행을 남기는지</strong> (최다 출제)</li>
+<li><strong>조인 조건 누락 = 카티션 곱, 행 수 = M×N</strong></li>
+<li>OUTER JOIN의 <strong>NULL 채움</strong>과 <strong>어느 쪽을 다 남길지(방향)</strong></li>
+<li>오라클 <code>(+)</code> ↔ ANSI OUTER JOIN 대응 <em>(문법 상세는 표준 조인 단원)</em></li>
+</ol>
+<h2 id="-종류별로-남는-행--한눈에"><a href="#-종류별로-남는-행--한눈에">① 종류별로 남는 행 — 한눈에</a></h2>
+<p><img alt="조인 종류 벤다이어그램: INNER는 교집합, LEFT는 왼쪽 표 전체, RIGHT는 오른쪽 표 전체, FULL OUTER는 합집합을 반환" src="/uploads/sqld-join-types.svg" loading="lazy"/></p>
+<p><em>그림 1. 노란 영역이 각 조인이 반환하는 행. (자작 도식)</em></p>
+<table><thead><tr><th>조인</th><th>남는 행</th><th>짝 없을 때</th></tr></thead><tbody><tr><td><strong>INNER</strong></td><td>양쪽이 일치하는 행만</td><td>제외</td></tr><tr><td><strong>LEFT OUTER</strong></td><td>왼쪽 전부 + 일치분</td><td>오른쪽 컬럼 NULL</td></tr><tr><td><strong>RIGHT OUTER</strong></td><td>오른쪽 전부 + 일치분</td><td>왼쪽 컬럼 NULL</td></tr><tr><td><strong>FULL OUTER</strong></td><td>양쪽 전부</td><td>없는 쪽 NULL</td></tr><tr><td><strong>CROSS</strong></td><td>모든 조합(<strong>M×N</strong>)</td><td>(조건 없음)</td></tr><tr><td><strong>SELF</strong></td><td>같은 표를 별칭 2개로</td><td>조건에 따름</td></tr></tbody></table>
+<h2 id="-구체-예시--짝-없는-행의-운명"><a href="#-구체-예시--짝-없는-행의-운명">② 구체 예시 — 짝 없는 행의 운명</a></h2>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 주문한 회원만 (INNER)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> m</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">이름</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">금액</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원 m </span><span style="color:#D73A49;--shiki-dark:#F97583">INNER JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 주문 o </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> m</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">회원번호</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">회원번호</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 주문 없는 회원까지 (LEFT) → 금액은 NULL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> m</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">이름</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">금액</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원 m </span><span style="color:#D73A49;--shiki-dark:#F97583">LEFT OUTER JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 주문 o </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> m</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">회원번호</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">회원번호</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+<p><img alt="회원 표와 주문 표를 회원번호로 INNER JOIN 하면 주문이 있는 회원만 남고, 주문이 없는 박은 결과에서 빠지는 예시 표" src="/uploads/sqld-join-example.svg" loading="lazy"/></p>
+<p><em>그림 2. INNER JOIN 결과 — 짝 없는 &#x27;박&#x27;은 빠진다. 모두 남기려면 LEFT OUTER. (자작 도식)</em></p>
+<blockquote>
+<p><strong>판별법:</strong> 통째로 남길 표를 먼저 정하고, 그 표를 <code>LEFT</code>(왼쪽)/<code>RIGHT</code>(오른쪽) 자리에 둡니다. INNER는 짝 있는 행만 남겨 <strong>한쪽에만 있는 데이터가 사라집니다.</strong></p>
+</blockquote>
+<h2 id="-카티션-곱--on-누락이면-행-수는-mn"><a href="#-카티션-곱--on-누락이면-행-수는-mn">③ 카티션 곱 — ON 누락이면 행 수는 M×N</a></h2>
+<p>연결 조건(<code>ON</code>)을 빠뜨리면 <strong>모든 행 조합</strong>이 만들어집니다(CROSS JOIN과 동일).</p>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원, 주문;   </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 조건 없음: 회원 4행 × 주문 3행 = 12행</span></span></code></pre>
+<p>시험은 &quot;회원 4행, 주문 3행일 때 결과 행 수는?&quot; 처럼 <strong>곱셈으로 계산</strong>하게 합니다. 조인 문제에서 결과 행 수가 갑자기 커졌다면 조건 누락부터 의심하세요.</p>
+<h2 id="-오라클--표기--붙는-쪽이-반대"><a href="#-오라클--표기--붙는-쪽이-반대">④ 오라클 (+) 표기 — 붙는 쪽이 반대</a></h2>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- ANSI                              -- 오라클 전통</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">LEFT JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> a</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">k</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">k</span><span style="color:#D73A49;--shiki-dark:#F97583">      FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a, b </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> a</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">k</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">k</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre>
+<p><code>(+)</code>는 <strong>NULL을 채워줄(부족한) 쪽</strong>에 붙습니다. <code>a.k = b.k(+)</code>는 b가 없어도 a를 다 남기는 <strong>LEFT OUTER JOIN</strong> — &quot;다 남길 쪽에 (+)&quot;로 외우면 <strong>반대로 틀립니다.</strong></p>
+<h2 id="-self-join--같은-표를-두-번"><a href="#-self-join--같은-표를-두-번">⑤ SELF JOIN — 같은 표를 두 번</a></h2>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 사원과 그 관리자(같은 사원 테이블을 별칭 2개로)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> e</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">이름</span><span style="color:#D73A49;--shiki-dark:#F97583"> AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 사원, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">m</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">이름</span><span style="color:#D73A49;--shiki-dark:#F97583"> AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 관리자</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 사원 e </span><span style="color:#D73A49;--shiki-dark:#F97583">LEFT JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 사원 m </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> e</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">관리자번호</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> m</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">사번</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+<p>같은 테이블에 <strong>별칭을 2개</strong> 주어 자기 자신과 조인합니다. 계층(상사-부하) 구조 조회가 대표 예입니다.</p>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li><strong>INNER 교집합 / LEFT·RIGHT 한쪽 전체+NULL / FULL 합집합 / CROSS M×N / SELF 자기조인.</strong></li>
+<li><strong>ON 누락 = 카티션 곱</strong>, 행 수는 두 표의 <strong>곱</strong>.</li>
+<li>오라클 <code>a.k = b.k(+)</code> = <strong>a를 다 남기는 LEFT</strong> — (+)는 NULL 채울 쪽.</li>
+<li>문법 상세(ON/USING/NATURAL)는 표준 조인 단원에서.</li>
+</ul>
+<aside class="related-problems" aria-label="조인(JOIN) 연계 문제"><div class="related-problems__info"><span class="related-problems__label">조인(JOIN)</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->6<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/%EC%A1%B0%EC%9D%B8">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·배점: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>조인 동작은 ANSI SQL·오라클 SQL 표기에 근거하며, 본문 예시·도식·설명은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-orderby"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">ORDER BY — SQLD, NULL 정렬 위치와 별칭·순번 함정</h3><p>SQLD 제2과목 ORDER BY를 시험 관점으로 정리합니다. 오라클에서 NULL이 오름차순 맨 뒤로 가는 이유, SELECT 별칭·컬럼 순번을 ORDER BY에서만 쓸 수 있는 이유, 다중 정렬에서 방향을 각각 지정해야 하는 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T00:00">2026년 7월 31일 00:00</time><span>· <!-- -->SQLD, ORDERBY, 정렬</span></div></a><a class="post-card " href="/posts/sqld-groupby-having"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">GROUP BY · HAVING — SQLD, WHERE와 HAVING을 가르는 기준</h3><p>SQLD 제2과목 GROUP BY·HAVING을 시험 관점으로 정리합니다. WHERE는 그룹 전 행을 거르고 HAVING은 그룹 후 집계값을 거른다는 구분, 집계함수를 WHERE에 못 쓰는 이유, SELECT 컬럼과 GROUP BY의 관계를 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-30T23:00">2026년 7월 30일 23:00</time><span>· <!-- -->SQLD, GROUPBY, HAVING</span></div></a><a class="post-card " href="/posts/sqld-where"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">WHERE절과 연산자 — SQLD, NULL과 AND·OR 우선순위 함정</h3><p>SQLD 제2과목 WHERE절을 시험 관점으로 정리합니다. NULL은 =가 아니라 IS NULL로 비교하는 이유, AND/OR/NOT 우선순위, NOT IN에 NULL이 섞이면 결과가 사라지는 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T12:00">2026년 7월 27일 12:00</time><span>· <!-- -->SQLD, WHERE, </span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>
