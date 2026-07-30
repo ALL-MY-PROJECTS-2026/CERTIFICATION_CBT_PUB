@@ -1,0 +1,31 @@
+<svg viewBox="0 0 560 240" width="560" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="NULL의 연산과 비교. 산술 연산에 NULL이 들어가면 결과도 NULL이 되고, 값과 등호로 비교하면 UNKNOWN이 되어 IS NULL을 써야 한다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.4;fill:#fff}
+      .no{fill:#fdeceb;stroke:#d62b2b;stroke-width:1.4}
+      .ok{fill:#eaf6ee;stroke:#1a7d45;stroke-width:1.4}
+      .code{font:700 12.5px 'IBM Plex Mono',monospace;fill:#10283d;text-anchor:middle}
+      .lbl{font:800 12px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+      .r{font:800 12px 'IBM Plex Mono',monospace;text-anchor:middle}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="28">NULL 은 0·공백이 아니라 '값 없음'</text>
+
+  <text class="lbl" x="24" y="58">산술 연산</text>
+  <rect class="box" x="24" y="66" width="240" height="32"/>
+  <text class="code" x="144" y="87">1000 + NULL  →  NULL</text>
+  <text class="note" x="24" y="116">NULL이 섞이면 결과는 무조건 NULL (NVL로 치환 필요)</text>
+
+  <text class="lbl" x="300" y="58">비교 연산 (3값 논리)</text>
+  <rect class="no" x="300" y="66" width="236" height="32"/>
+  <text class="code" x="418" y="87" fill="#d62b2b">수당 = NULL  →  UNKNOWN</text>
+  <rect class="ok" x="300" y="104" width="236" height="32"/>
+  <text class="code" x="418" y="125" fill="#1a7d45">수당 IS NULL  →  참/거짓</text>
+  <text class="note" x="300" y="152">= 로는 NULL을 못 찾는다 → IS NULL 사용</text>
+
+  <text class="note" x="24" y="192">※ 3값 논리 = 참·거짓·UNKNOWN. WHERE가 UNKNOWN이면 그 행은 결과에서 빠진다.</text>
+  <text class="note" x="24" y="214">   COALESCE(a, b, c) = 앞에서부터 처음 만나는 NULL 아닌 값을 반환.</text>
+</svg>
