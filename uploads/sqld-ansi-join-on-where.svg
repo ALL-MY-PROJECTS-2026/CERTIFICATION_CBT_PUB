@@ -1,0 +1,43 @@
+<svg viewBox="0 0 560 226" width="560" height="226" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="회원과 주문을 LEFT JOIN 하며 금액 1만 이상 조건을 ON에 두면 회원 3명이 다 남고 조건 미달은 NULL, WHERE에 두면 NULL이 걸러져 이만 남아 INNER처럼 된다">
+  <defs>
+    <style>
+      .q{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+      .cap{font:800 12.5px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .hd{fill:#17324c}
+      .ht{font:700 11.5px 'Nanum Gothic',sans-serif;fill:#fff;text-anchor:middle}
+      .cell{fill:#fff;stroke:#e2ebf1;stroke-width:1}
+      .nul{font:400 11px 'IBM Plex Mono',monospace;fill:#94a3b8;text-anchor:middle}
+      .ct{font:400 12px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .box{fill:none;stroke:#17324c;stroke-width:1.6}
+      .good{font:700 11px 'Nanum Gothic',sans-serif;fill:#1a7d45;text-anchor:middle}
+      .bad{font:700 11px 'Nanum Gothic',sans-serif;fill:#d62b2b;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text x="20" y="22" class="q">회원 m LEFT JOIN 주문 o … 조건: o.금액 >= 10000   (김 5000 · 이 12000 · 박 주문없음)</text>
+
+  <!-- (A) ON 에 조건 -->
+  <text x="140" y="52" class="cap">조건을 ON 에</text>
+  <rect class="hd" x="40" y="60" width="90" height="24"/><text class="ht" x="85" y="76">이름</text>
+  <rect class="hd" x="130" y="60" width="110" height="24"/><text class="ht" x="185" y="76">금액</text>
+  <rect class="cell" x="40" y="84" width="90" height="26"/><text class="ct" x="85" y="102">김</text>
+  <rect class="cell" x="130" y="84" width="110" height="26"/><text class="nul" x="185" y="102">NULL</text>
+  <rect class="cell" x="40" y="110" width="90" height="26"/><text class="ct" x="85" y="128">이</text>
+  <rect class="cell" x="130" y="110" width="110" height="26"/><text class="ct" x="185" y="128">12000</text>
+  <rect class="cell" x="40" y="136" width="90" height="26"/><text class="ct" x="85" y="154">박</text>
+  <rect class="cell" x="130" y="136" width="110" height="26"/><text class="nul" x="185" y="154">NULL</text>
+  <rect class="box" x="40" y="60" width="200" height="102"/>
+  <text x="140" y="182" class="good">회원 3명 다 남음 (OUTER 유지) ✔</text>
+
+  <!-- (B) WHERE 에 조건 -->
+  <text x="420" y="52" class="cap">조건을 WHERE 에</text>
+  <rect class="hd" x="320" y="60" width="90" height="24"/><text class="ht" x="365" y="76">이름</text>
+  <rect class="hd" x="410" y="60" width="110" height="24"/><text class="ht" x="465" y="76">금액</text>
+  <rect class="cell" x="320" y="84" width="90" height="26"/><text class="ct" x="365" y="102">이</text>
+  <rect class="cell" x="410" y="84" width="110" height="26"/><text class="ct" x="465" y="102">12000</text>
+  <rect class="box" x="320" y="60" width="200" height="52"/>
+  <text x="420" y="130" class="bad">김·박(NULL) 탈락 → INNER 처럼 ✘</text>
+
+  <text x="20" y="212" class="note">※ 옵션 테이블(주문) 조건을 WHERE 에 두면 NULL 행이 걸러져 아우터가 사라진다 — 조건은 ON 에</text>
+</svg>

@@ -1,0 +1,37 @@
+<svg viewBox="0 0 660 160" width="660" height="160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="표준 조인 조건: ON은 조건을 직접 명시, USING은 같은 이름 컬럼 하나로, NATURAL은 같은 이름 컬럼 전부 자동">
+  <defs>
+    <style>
+      .card{fill:#fff;stroke:#17324c;stroke-width:1.5}
+      .h{fill:#17324c}
+      .ht{font:800 13px 'IBM Plex Mono',monospace;fill:#fff;text-anchor:middle}
+      .d{font:400 11px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .warn{font:700 10px 'Nanum Gothic',sans-serif;fill:#d62b2b;text-anchor:middle}
+      .y{fill:#ffe066}
+    </style>
+  </defs>
+  <text x="20" y="24" style="font:800 13px 'Nanum Gothic',sans-serif;fill:#17324c">표준 조인 — 조건 지정 방식</text>
+  <g>
+    <rect class="card" x="20" y="36" width="196" height="106" rx="10"/>
+    <rect class="h" x="20" y="36" width="196" height="30" rx="10"/><rect class="h" x="20" y="52" width="196" height="14"/>
+    <text class="ht" x="118" y="56">ON</text>
+    <text class="d" x="118" y="88">조건을 직접 명시</text>
+    <text class="d" x="118" y="106">(가장 유연)</text>
+    <text class="d" x="118" y="128" style="font-family:'IBM Plex Mono';font-size:10px">ON a.부서=b.부서</text>
+  </g>
+  <g>
+    <rect class="card" x="232" y="36" width="196" height="106" rx="10"/>
+    <rect class="h" x="232" y="36" width="196" height="30" rx="10"/><rect class="h" x="232" y="52" width="196" height="14"/>
+    <text class="ht" x="330" y="56">USING</text>
+    <text class="d" x="330" y="88">같은 이름 컬럼 1개</text>
+    <text class="warn" x="330" y="106">공통 컬럼에 별칭 금지</text>
+    <text class="d" x="330" y="128" style="font-family:'IBM Plex Mono';font-size:10px">USING (부서코드)</text>
+  </g>
+  <g>
+    <rect class="card y" x="444" y="36" width="196" height="106" rx="10" stroke="#17324c" stroke-width="1.5"/>
+    <rect class="h" x="444" y="36" width="196" height="30" rx="10"/><rect class="h" x="444" y="52" width="196" height="14"/>
+    <text class="ht" x="542" y="56">NATURAL</text>
+    <text class="d" x="542" y="88">같은 이름 컬럼 전부 자동</text>
+    <text class="warn" x="542" y="106">의도치 않은 조인 주의</text>
+    <text class="d" x="542" y="128" style="font-family:'IBM Plex Mono';font-size:10px">NATURAL JOIN</text>
+  </g>
+</svg>

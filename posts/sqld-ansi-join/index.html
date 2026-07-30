@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 제2과목 표준 조인을 시험 관점으로 정리합니다. ON·USING·NATURAL 세 조건 지정 방식의 차이와 별칭 금지 규칙, OUTER JOIN에서 옵션 테이블 조건을 WHERE에 두면 INNER처럼 되는 최다 함정을 도식·확인 문제로 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-ansi-join" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 제2과목 표준 조인을 시험 관점으로 정리합니다. ON·USING·NATURAL 세 조건 지정 방식의 차이와 별칭 금지 규칙, OUTER JOIN에서 옵션 테이블 조건을 WHERE에 두면 INNER처럼 되는 최다 함정을 도식·확인 문제로 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-ansi-join" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-31T02:00" />
+    <meta property="article:modified_time" content="2026-07-31T02:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 제2과목 표준 조인을 시험 관점으로 정리합니다. ON·USING·NATURAL 세 조건 지정 방식의 차이와 별칭 금지 규칙, OUTER JOIN에서 옵션 테이블 조건을 WHERE에 두면 INNER처럼 되는 최다 함정을 도식·확인 문제로 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정","description":"SQLD 제2과목 표준 조인을 시험 관점으로 정리합니다. ON·USING·NATURAL 세 조건 지정 방식의 차이와 별칭 금지 규칙, OUTER JOIN에서 옵션 테이블 조건을 WHERE에 두면 INNER처럼 되는 최다 함정을 도식·확인 문제로 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-31T02:00","dateModified":"2026-07-31T02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-ansi-join"},"keywords":"SQLD, ANSIJOIN, USING, NATURALJOIN, OUTERJOIN"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"SQL 기본 및 활용","item":"https://pancocbt.site/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9"},{"@type":"ListItem","position":3,"name":"표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정","item":"https://pancocbt.site/posts/sqld-ansi-join"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-guOz3stx.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-tTOp4O6P.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a></li><li><span aria-current="page">표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a><h1 style="margin-top:0.75rem">표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-31T02:00">2026년 7월 31일 02:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->ANSIJOIN</span><span class="tag">#<!-- -->USING</span><span class="tag">#<!-- -->NATURALJOIN</span><span class="tag">#<!-- -->OUTERJOIN</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>표준 조인(ANSI JOIN)</strong> 은 <code>FROM 테이블 JOIN 테이블 ON 조건</code>처럼 조인을 <strong>명시적으로</strong> 쓰는 SQL 표준 문법입니다. 조인 조건이 <code>FROM</code>에 모여 <code>WHERE</code>의 검색 조건과 분리됩니다. 시험은 <strong>조건 지정 방식 3가지의 제약</strong>과 <strong>ON vs WHERE의 결과 차이</strong>를 묻습니다. <em>(조인 종류 자체는 조인 단원 참고.)</em></p>
+<h2 id="이-단원-시험에서-어디에-나오나-출제-비중"><a href="#이-단원-시험에서-어디에-나오나-출제-비중">이 단원, 시험에서 어디에 나오나 (출제 비중)</a></h2>
+<ul>
+<li><strong>제2과목 「SQL 기본 및 활용」 = 40문항 · 80점.</strong> 표준 조인은 오류 찾기·실행결과 예측 유형으로 출제됩니다.</li>
+<li><strong>USING·NATURAL의 별칭 금지</strong>와 <strong>OUTER 조건 위치(ON vs WHERE)</strong> 가 오답을 가르는 포인트입니다. <em>(단원별 문항수는 공개되지 않습니다 — 출처: KDATA 출제기준.)</em></li>
+</ul>
+<h2 id="출제-포인트--시험이-실제로-묻는-것"><a href="#출제-포인트--시험이-실제로-묻는-것">출제 포인트 — 시험이 실제로 묻는 것</a></h2>
+<ol>
+<li><code>ON</code> / <code>USING</code> / <code>NATURAL JOIN</code> <strong>세 방식의 차이와 제약</strong></li>
+<li><strong>USING·NATURAL의 공통 컬럼에 테이블 별칭 금지</strong></li>
+<li><strong>OUTER JOIN에서 옵션 테이블 조건은 ON에</strong> — WHERE에 두면 INNER처럼 (최다 함정)</li>
+<li><code>JOIN</code> = INNER JOIN (생략 규칙), 오라클 <code>(+)</code>와 ANSI <strong>혼용 금지</strong></li>
+</ol>
+<h2 id="-조건-지정-3가지--오른쪽으로-갈수록-자동위험"><a href="#-조건-지정-3가지--오른쪽으로-갈수록-자동위험">① 조건 지정 3가지 — 오른쪽으로 갈수록 자동·위험</a></h2>
+<p><img alt="표준 조인 조건 지정 방식 비교: ON은 조건을 직접 명시, USING은 같은 이름 컬럼 하나를 지정, NATURAL은 같은 이름 컬럼 전부를 자동으로 묶는다" src="/uploads/sqld-ansi-join-cond.svg" loading="lazy"/></p>
+<p><em>그림 1. 조건을 지정하는 세 방식. 오른쪽으로 갈수록 자동·위험. (자작 도식)</em></p>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> a</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">부서코드</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">부서코드</span><span style="color:#6A737D;--shiki-dark:#6A737D">   -- ON: 직접 명시(가장 유연)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b </span><span style="color:#D73A49;--shiki-dark:#F97583">USING</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (부서코드)             </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- USING: 같은 이름 컬럼 1개</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">NATURAL JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b                      </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- NATURAL: 같은 이름 전부 자동</span></span></code></pre>
+<table><thead><tr><th>방식</th><th>조건</th><th>주의</th></tr></thead><tbody><tr><td><code>ON</code></td><td>직접 명시</td><td>컬럼명 달라도 됨</td></tr><tr><td><code>USING(컬럼)</code></td><td>같은 이름 1개</td><td>결과에 1번만, <strong>별칭 금지</strong></td></tr><tr><td><code>NATURAL</code></td><td>같은 이름 <strong>전부</strong></td><td><code>ON</code>/<code>USING</code> 병용 불가</td></tr></tbody></table>
+<blockquote>
+<p><strong>함정:</strong> <code>USING(부서코드)</code>로 묶은 컬럼을 <code>SELECT a.부서코드</code>처럼 <strong>테이블 별칭을 붙이면 오류</strong>입니다. 그냥 <code>부서코드</code>로 씁니다. NATURAL JOIN의 공통 컬럼도 같습니다.</p>
+</blockquote>
+<blockquote>
+<p><strong>함정:</strong> NATURAL JOIN은 이름이 같은 컬럼을 <strong>전부</strong> 조인 조건에 넣습니다. 우연히 이름만 같은 컬럼(<code>등록일</code> 등)이 있으면 결과가 의도보다 줄어듭니다.</p>
+</blockquote>
+<h2 id="-outercross-문법--생략-규칙"><a href="#-outercross-문법--생략-규칙">② OUTER·CROSS 문법 — 생략 규칙</a></h2>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> a</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">k</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">k</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;               </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- JOIN = INNER JOIN</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">LEFT  OUTER JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> a</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">k</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">k</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;   </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- OUTER 키워드는 생략 가능</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">CROSS JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b;                      </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 조건 없음, M×N</span></span></code></pre>
+<p><code>JOIN</code>만 쓰면 <strong>INNER</strong>입니다. OUTER를 원하면 <code>LEFT</code>/<code>RIGHT</code>/<code>FULL</code>을 반드시 명시합니다. 오라클 <code>(+)</code> 표기와 ANSI 문법은 <strong>한 문장에 섞어 쓸 수 없습니다.</strong></p>
+<h2 id="-on-vs-where--아우터가-이너로-변하는-최다-함정"><a href="#-on-vs-where--아우터가-이너로-변하는-최다-함정">③ ON vs WHERE — 아우터가 이너로 변하는 최다 함정</a></h2>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- (의도) 모든 회원 + 2026년 주문 — 주문 없는 회원도 보고 싶다</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- (실수) 옵션 테이블 조건을 WHERE에 → 주문 없는 회원 탈락(INNER 효과)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원 m </span><span style="color:#D73A49;--shiki-dark:#F97583">LEFT JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 주문 o </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> m</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">회원</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">회원</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">주문일</span><span style="color:#D73A49;--shiki-dark:#F97583"> &gt;=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> &#x27;2026-01-01&#x27;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;    </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- o.주문일이 NULL인 행이 걸러짐</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- (정답) 옵션 테이블 조건을 ON에</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원 m </span><span style="color:#D73A49;--shiki-dark:#F97583">LEFT JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 주문 o</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">     ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> m</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">회원</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">회원</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">주문일</span><span style="color:#D73A49;--shiki-dark:#F97583"> &gt;=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> &#x27;2026-01-01&#x27;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+<p><img alt="금액 조건을 ON에 두면 회원 세 명이 모두 남고 짝 없는 쪽은 NULL로 채워지지만, 같은 조건을 WHERE에 두면 NULL 행이 걸러져 한 명만 남는 결과 비교 표" src="/uploads/sqld-ansi-join-on-where.svg" loading="lazy"/></p>
+<p><em>그림 2. 옵션 테이블 조건을 ON에 두면 아우터 유지, WHERE에 두면 INNER처럼 된다. (자작 도식)</em></p>
+<p><strong>원리:</strong> LEFT JOIN은 짝 없는 행의 오른쪽 컬럼을 NULL로 채우는데, 그 컬럼에 대한 조건이 <code>WHERE</code>에 있으면 <strong>NULL 비교 = UNKNOWN</strong>이라 그 행이 걸러집니다. 조건이 <code>ON</code>에 있으면 &quot;조인 짝을 고르는 기준&quot;일 뿐이라 왼쪽 행은 살아남습니다.</p>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li><code>ON</code>(직접·유연) · <code>USING</code>(같은 이름 1개·<strong>별칭 금지</strong>) · <code>NATURAL</code>(같은 이름 전부·병용 불가).</li>
+<li><strong>옵션 테이블 조건은 ON에</strong> — WHERE에 두면 아우터가 이너 된다.</li>
+<li><code>JOIN</code> = INNER. OUTER는 방향 키워드 필수. <code>(+)</code>와 ANSI 혼용 금지.</li>
+</ul>
+<aside class="related-problems" aria-label="표준 조인(ANSI) 연계 문제"><div class="related-problems__info"><span class="related-problems__label">표준 조인(ANSI)</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->6<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/%ED%91%9C%EC%A4%80%20%EC%A1%B0%EC%9D%B8">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·배점: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>ANSI JOIN 문법·동작은 SQL 표준·오라클 SQL에 근거하며, 본문 예시·도식·설명은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향</h3><p>SQLD 제2과목 조인을 시험 관점으로 정리합니다. INNER·OUTER(LEFT/RIGHT/FULL)·CROSS·SELF가 각각 어떤 행을 남기는지, 조인 조건 누락 시 행 수가 M×N으로 폭발하는 카티션 곱, 오라클 (+) 표기의 방향 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T01:00">2026년 7월 31일 01:00</time><span>· <!-- -->SQLD, JOIN, OUTERJOIN</span></div></a><a class="post-card " href="/posts/sqld-orderby"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">ORDER BY — SQLD, NULL 정렬 위치와 별칭·순번 함정</h3><p>SQLD 제2과목 ORDER BY를 시험 관점으로 정리합니다. 오라클에서 NULL이 오름차순 맨 뒤로 가는 이유, SELECT 별칭·컬럼 순번을 ORDER BY에서만 쓸 수 있는 이유, 다중 정렬에서 방향을 각각 지정해야 하는 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T00:00">2026년 7월 31일 00:00</time><span>· <!-- -->SQLD, ORDERBY, 정렬</span></div></a><a class="post-card " href="/posts/sqld-groupby-having"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">GROUP BY · HAVING — SQLD, WHERE와 HAVING을 가르는 기준</h3><p>SQLD 제2과목 GROUP BY·HAVING을 시험 관점으로 정리합니다. WHERE는 그룹 전 행을 거르고 HAVING은 그룹 후 집계값을 거른다는 구분, 집계함수를 WHERE에 못 쓰는 이유, SELECT 컬럼과 GROUP BY의 관계를 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-30T23:00">2026년 7월 30일 23:00</time><span>· <!-- -->SQLD, GROUPBY, HAVING</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>
