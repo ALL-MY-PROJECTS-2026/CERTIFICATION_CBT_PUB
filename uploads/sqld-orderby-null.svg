@@ -1,0 +1,48 @@
+<svg viewBox="0 0 620 230" width="620" height="230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="오라클 ORDER BY: 원본 30 NULL 10 20를 ASC로 정렬하면 10 20 30 다음 NULL이 맨 뒤, DESC로 정렬하면 NULL이 맨 앞 30 20 10">
+  <defs>
+    <marker id="oa" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#17324c"/></marker>
+    <style>
+      .h{font:800 12px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .cell{fill:#fff;stroke:#e2ebf1;stroke-width:1}
+      .c{font:600 13px 'IBM Plex Mono',monospace;fill:#17324c;text-anchor:middle}
+      .nul{fill:#ffe066;stroke:#e2ebf1;stroke-width:1}
+      .nt{font:700 12px 'IBM Plex Mono',monospace;fill:#17324c;text-anchor:middle}
+      .op{font:800 12px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .note{font:400 11px 'Nanum Gothic',sans-serif;fill:#4a6580;text-anchor:middle}
+      .snote{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+  <!-- 원본 -->
+  <text class="h" x="70" y="26">원본</text>
+  <g>
+    <rect class="cell" x="36" y="36" width="68" height="28"/><text class="c" x="70" y="55">30</text>
+    <rect class="nul" x="36" y="64" width="68" height="28"/><text class="nt" x="70" y="83">NULL</text>
+    <rect class="cell" x="36" y="92" width="68" height="28"/><text class="c" x="70" y="111">10</text>
+    <rect class="cell" x="36" y="120" width="68" height="28"/><text class="c" x="70" y="139">20</text>
+  </g>
+  <!-- ASC 화살표 -->
+  <path d="M112 78 H196" stroke="#17324c" stroke-width="1.5" marker-end="url(#oa)"/>
+  <text class="op" x="154" y="60">ASC ↑</text>
+  <!-- ASC 결과 -->
+  <text class="h" x="270" y="26">오름차순(ASC)</text>
+  <g>
+    <rect class="cell" x="236" y="36" width="68" height="28"/><text class="c" x="270" y="55">10</text>
+    <rect class="cell" x="236" y="64" width="68" height="28"/><text class="c" x="270" y="83">20</text>
+    <rect class="cell" x="236" y="92" width="68" height="28"/><text class="c" x="270" y="111">30</text>
+    <rect class="nul" x="236" y="120" width="68" height="28"/><text class="nt" x="270" y="139">NULL</text>
+  </g>
+  <text class="note" x="270" y="166">NULL = 최댓값 → 맨 뒤</text>
+  <!-- DESC 화살표 -->
+  <path d="M312 78 H396" stroke="#17324c" stroke-width="1.5" marker-end="url(#oa)"/>
+  <text class="op" x="354" y="60">DESC ↓</text>
+  <!-- DESC 결과 -->
+  <text class="h" x="470" y="26">내림차순(DESC)</text>
+  <g>
+    <rect class="nul" x="436" y="36" width="68" height="28"/><text class="nt" x="470" y="55">NULL</text>
+    <rect class="cell" x="436" y="64" width="68" height="28"/><text class="c" x="470" y="83">30</text>
+    <rect class="cell" x="436" y="92" width="68" height="28"/><text class="c" x="470" y="111">20</text>
+    <rect class="cell" x="436" y="120" width="68" height="28"/><text class="c" x="470" y="139">10</text>
+  </g>
+  <text class="note" x="470" y="166">NULL 맨 앞</text>
+  <text x="36" y="204" class="snote">※ 오라클 기본: NULL 을 최댓값으로 취급 (ASC 맨 뒤 / DESC 맨 앞) · NULLS FIRST/LAST 로 지정</text>
+</svg>
