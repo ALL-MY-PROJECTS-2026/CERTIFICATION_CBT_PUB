@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>GROUP BY · HAVING — SQLD, WHERE와 HAVING을 가르는 기준 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 제2과목 GROUP BY·HAVING을 시험 관점으로 정리합니다. WHERE는 그룹 전 행을 거르고 HAVING은 그룹 후 집계값을 거른다는 구분, 집계함수를 WHERE에 못 쓰는 이유, SELECT 컬럼과 GROUP BY의 관계를 도식·확인 문제로 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-groupby-having" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="GROUP BY · HAVING — SQLD, WHERE와 HAVING을 가르는 기준 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 제2과목 GROUP BY·HAVING을 시험 관점으로 정리합니다. WHERE는 그룹 전 행을 거르고 HAVING은 그룹 후 집계값을 거른다는 구분, 집계함수를 WHERE에 못 쓰는 이유, SELECT 컬럼과 GROUP BY의 관계를 도식·확인 문제로 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-groupby-having" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-30T23:00" />
+    <meta property="article:modified_time" content="2026-07-30T23:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="GROUP BY · HAVING — SQLD, WHERE와 HAVING을 가르는 기준 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 제2과목 GROUP BY·HAVING을 시험 관점으로 정리합니다. WHERE는 그룹 전 행을 거르고 HAVING은 그룹 후 집계값을 거른다는 구분, 집계함수를 WHERE에 못 쓰는 이유, SELECT 컬럼과 GROUP BY의 관계를 도식·확인 문제로 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"GROUP BY · HAVING — SQLD, WHERE와 HAVING을 가르는 기준","description":"SQLD 제2과목 GROUP BY·HAVING을 시험 관점으로 정리합니다. WHERE는 그룹 전 행을 거르고 HAVING은 그룹 후 집계값을 거른다는 구분, 집계함수를 WHERE에 못 쓰는 이유, SELECT 컬럼과 GROUP BY의 관계를 도식·확인 문제로 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-30T23:00","dateModified":"2026-07-30T23:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-groupby-having"},"keywords":"SQLD, GROUPBY, HAVING, 집계함수, WHERE"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"SQL 기본 및 활용","item":"https://pancocbt.site/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9"},{"@type":"ListItem","position":3,"name":"GROUP BY · HAVING — SQLD, WHERE와 HAVING을 가르는 기준","item":"https://pancocbt.site/posts/sqld-groupby-having"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-BX7aP31u.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-tTOp4O6P.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a></li><li><span aria-current="page">GROUP BY · HAVING — SQLD, WHERE와 HAVING을 가르는 기준</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a><h1 style="margin-top:0.75rem">GROUP BY · HAVING — SQLD, WHERE와 HAVING을 가르는 기준</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-30T23:00">2026년 7월 30일 23:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->GROUPBY</span><span class="tag">#<!-- -->HAVING</span><span class="tag">#<!-- -->집계함수</span><span class="tag">#<!-- -->WHERE</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>GROUP BY</strong>는 행을 <strong>그룹으로 묶어</strong> 그룹마다 집계함수를 적용하고, <strong>HAVING</strong>은 그렇게 만들어진 <strong>그룹에 조건</strong>을 겁니다. 시험은 딱 하나를 집요하게 묻습니다 — <strong>&quot;이 조건, WHERE인가 HAVING인가?&quot;</strong></p>
+<h2 id="이-단원-시험에서-어디에-나오나-출제-비중"><a href="#이-단원-시험에서-어디에-나오나-출제-비중">이 단원, 시험에서 어디에 나오나 (출제 비중)</a></h2>
+<ul>
+<li><strong>제2과목 「SQL 기본 및 활용」 = 40문항 · 80점.</strong> GROUP BY·HAVING은 집계 SQL의 실행결과 예측 문제로 꾸준히 나옵니다.</li>
+<li>특히 <strong>WHERE vs HAVING 구분</strong>과 <strong>&quot;이 SQL은 오류인가?&quot;</strong> 유형이 단골입니다. <em>(단원별 문항수는 공개되지 않습니다 — 출처: KDATA 출제기준.)</em></li>
+</ul>
+<h2 id="출제-포인트--시험이-실제로-묻는-것"><a href="#출제-포인트--시험이-실제로-묻는-것">출제 포인트 — 시험이 실제로 묻는 것</a></h2>
+<ol>
+<li><strong>WHERE = 행 필터(그룹 전), HAVING = 그룹 필터(집계 후)</strong> (최다 출제)</li>
+<li><strong>집계함수는 WHERE에 못 쓰고 HAVING에 쓴다</strong></li>
+<li><code>SELECT</code>의 일반 컬럼이 <code>GROUP BY</code>에 없으면 <strong>오류</strong></li>
+<li>집계함수는 <strong>NULL을 무시</strong>하고 계산한다 (함수 단원과 연계)</li>
+</ol>
+<h2 id="-실행-순서-속-위치--where는-그룹-전-having은-그룹-후"><a href="#-실행-순서-속-위치--where는-그룹-전-having은-그룹-후">① 실행 순서 속 위치 — WHERE는 그룹 전, HAVING은 그룹 후</a></h2>
+<p><img alt="WHERE는 그룹을 만들기 전에 개별 행을 거르고, GROUP BY로 그룹을 만든 뒤 HAVING이 집계된 그룹을 거른다는 흐름 도식" src="/uploads/sqld-groupby-having-flow.svg" loading="lazy"/></p>
+<p><em>그림 1. WHERE(집계 전)와 HAVING(집계 후)이 작동하는 위치. (자작 도식)</em></p>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 부서, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 인원, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">AVG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(급여) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 평균</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8">   사원</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8">  입사일 </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> &#x27;2020-01-01&#x27;</span><span style="color:#6A737D;--shiki-dark:#6A737D">   -- ① 그룹 전, 개별 행 필터</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">GROUP BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 부서                    </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- ② 부서로 그룹화</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">HAVING</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> AVG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(급여) </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 5000</span><span style="color:#6A737D;--shiki-dark:#6A737D">         -- ③ 그룹 후, 집계값 조건</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 평균 </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;              </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- ④ 정렬</span></span></code></pre>
+<table><thead><tr><th></th><th>WHERE</th><th>HAVING</th></tr></thead><tbody><tr><td>대상</td><td><strong>개별 행</strong></td><td><strong>그룹(집계값)</strong></td></tr><tr><td>시점</td><td>GROUP BY <strong>전</strong></td><td>GROUP BY <strong>후</strong></td></tr><tr><td>집계함수</td><td>✗ 불가</td><td>✓ 가능</td></tr></tbody></table>
+<h2 id="-구체-예시--그룹을-만들고-집계값으로-거른다"><a href="#-구체-예시--그룹을-만들고-집계값으로-거른다">② 구체 예시 — 그룹을 만들고, 집계값으로 거른다</a></h2>
+<p><img alt="주문 표를 부서로 GROUP BY 하여 SUM하면 영업 800·인사 200·개발 900이 되고, HAVING SUM 500 이상 조건으로 인사 200이 탈락하는 예시 표" src="/uploads/sqld-groupby-having-sum.svg" loading="lazy"/></p>
+<p><em>그림 2. 부서별 SUM 집계 후 HAVING으로 그룹을 거른다(인사 탈락). (자작 도식)</em></p>
+<p><code>HAVING SUM(금액) &gt;= 500</code>은 <strong>행이 아니라 &quot;부서별 합계&quot;라는 집계값</strong>을 봅니다. 개별 행 금액 500이 아니라 <strong>그룹 합계 500</strong>이 기준입니다.</p>
+<h2 id="-함정--집계-조건을-where에-쓰면-오류"><a href="#-함정--집계-조건을-where에-쓰면-오류">③ 함정 — 집계 조건을 WHERE에 쓰면 오류</a></h2>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> AVG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(급여) </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 5000</span><span style="color:#6A737D;--shiki-dark:#6A737D">    -- ✘ 오류: WHERE는 그룹 생성 전이라 집계값이 없다</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">HAVING</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> AVG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(급여) </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 5000</span><span style="color:#6A737D;--shiki-dark:#6A737D">   -- ✔ 집계 조건은 HAVING</span></span></code></pre>
+<blockquote>
+<p><strong>판별법:</strong> 조건에 <strong>집계함수(SUM·AVG·COUNT…)가 들어가면 무조건 HAVING</strong>, 개별 컬럼 값이면 WHERE.</p>
+</blockquote>
+<p>반대로 <strong>행 조건을 HAVING에</strong> 쓰는 것도 함정입니다. &quot;2020년 이후 입사자만 집계&quot;는 그룹을 만들기 <strong>전에</strong> 걸러야 하므로 <code>WHERE</code>가 맞습니다. HAVING으로 하면 전부 그룹핑한 뒤 거르게 되어 비효율입니다.</p>
+<h2 id="-함정--select-컬럼과-group-by의-관계"><a href="#-함정--select-컬럼과-group-by의-관계">④ 함정 — SELECT 컬럼과 GROUP BY의 관계</a></h2>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 부서, 이름, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)   </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- ✘ 오류: &#x27;이름&#x27;이 GROUP BY에 없음</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8">   사원</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">GROUP BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 부서;</span></span></code></pre>
+<p>그룹당 결과는 <strong>한 행</strong>인데, 그룹에 없는 일반 컬럼(이름)은 <strong>어느 행의 값인지 정할 수 없어</strong> 오류입니다. <code>SELECT</code>의 집계함수가 아닌 컬럼은 <strong>반드시 <code>GROUP BY</code>에</strong> 있어야 합니다.</p>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li><strong>WHERE = 행(집계 전)</strong> · <strong>HAVING = 그룹(집계 후, 집계함수 가능)</strong>.</li>
+<li>조건에 <strong>집계함수가 보이면 HAVING</strong>, 아니면 WHERE.</li>
+<li><code>SELECT</code> 일반 컬럼 = <code>GROUP BY</code> 필수.</li>
+<li>행 조건은 WHERE로 미리 걸러야 효율↑.</li>
+</ul>
+<aside class="related-problems" aria-label="GROUP BY·HAVING 연계 문제"><div class="related-problems__info"><span class="related-problems__label">GROUP BY·HAVING</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->6<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/GROUP%20BY%C2%B7HAVING">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·배점: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>동작은 ANSI SQL 표준·오라클 SQL에 근거하며, 본문 예시·도식·설명은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-select"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">SELECT문과 실행 순서 — SQLD, 별칭은 어디서 쓸 수 있나</h3><p>SQLD 제2과목 SELECT문을 시험 관점으로 정리합니다. FROM→WHERE→GROUP BY→HAVING→SELECT→ORDER BY 논리적 실행 순서와, SELECT 별칭을 WHERE에서 못 쓰고 ORDER BY에서만 쓰는 이유를 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T10:00">2026년 7월 27일 10:00</time><span>· <!-- -->SQLD, SELECT, 실행순서</span></div></a><a class="post-card " href="/posts/sqld-where"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">WHERE절과 연산자 — SQLD, NULL과 AND·OR 우선순위 함정</h3><p>SQLD 제2과목 WHERE절을 시험 관점으로 정리합니다. NULL은 =가 아니라 IS NULL로 비교하는 이유, AND/OR/NOT 우선순위, NOT IN에 NULL이 섞이면 결과가 사라지는 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T12:00">2026년 7월 27일 12:00</time><span>· <!-- -->SQLD, WHERE, </span></div></a><a class="post-card " href="/posts/sqld-function"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">SQL 함수 — 단일행 vs 집계, 그리고 NULL 처리 함정</h3><p>SQLD 제2과목 함수를 시험 관점으로 정리합니다. 단일행 함수와 집계 함수의 결과 개수 차이, COUNT(*)와 COUNT(컬럼)의 차이, NVL·COALESCE·NULLIF·CASE의 NULL 처리를 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T11:00">2026년 7월 27일 11:00</time><span>· <!-- -->SQLD, 함수, 단일행함수</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>

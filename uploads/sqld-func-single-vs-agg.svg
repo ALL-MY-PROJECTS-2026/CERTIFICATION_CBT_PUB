@@ -1,4 +1,4 @@
-<svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="단일행 함수는 행마다 결과를 하나씩 만들고, 집계 함수는 여러 행을 묶어 그룹당 결과 하나를 만든다">
+<svg viewBox="0 0 700 160" width="700" height="160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="단일행 함수는 행마다 결과를 하나씩 만들고, 집계 함수는 여러 행을 묶어 그룹당 결과 하나를 만든다">
   <defs>
     <marker id="f" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#17324c"/></marker>
     <style>

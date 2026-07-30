@@ -1,0 +1,51 @@
+<svg viewBox="0 0 520 196" width="520" height="196" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="주문 표를 부서로 GROUP BY 하고 금액을 SUM 하면 영업 800, 인사 200, 개발 900이 되고, HAVING SUM 500 이상 조건으로 인사 200이 걸러진다">
+  <defs>
+    <marker id="gh-ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#17324c"/></marker>
+    <style>
+      .cap{font:800 13px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .hd{fill:#17324c}
+      .ht{font:700 11.5px 'Nanum Gothic',sans-serif;fill:#fff;text-anchor:middle}
+      .cell{fill:#fff;stroke:#e2ebf1;stroke-width:1}
+      .out{fill:#fdecea;stroke:#d62b2b;stroke-width:1}
+      .ct{font:400 12px 'IBM Plex Mono',monospace;fill:#17324c;text-anchor:middle}
+      .outt{font:600 12px 'IBM Plex Mono',monospace;fill:#d62b2b;text-anchor:middle}
+      .box{fill:none;stroke:#17324c;stroke-width:1.6}
+      .op{font:700 11px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <!-- 주문 원본 -->
+  <text x="86" y="24" class="cap">주문</text>
+  <rect class="hd" x="20" y="32" width="70" height="24"/><text class="ht" x="55" y="48">부서</text>
+  <rect class="hd" x="90" y="32" width="70" height="24"/><text class="ht" x="125" y="48">금액</text>
+  <rect class="cell" x="20" y="56" width="70" height="24"/><text class="ct" x="55" y="72">영업</text>
+  <rect class="cell" x="90" y="56" width="70" height="24"/><text class="ct" x="125" y="72">300</text>
+  <rect class="cell" x="20" y="80" width="70" height="24"/><text class="ct" x="55" y="96">영업</text>
+  <rect class="cell" x="90" y="80" width="70" height="24"/><text class="ct" x="125" y="96">500</text>
+  <rect class="cell" x="20" y="104" width="70" height="24"/><text class="ct" x="55" y="120">인사</text>
+  <rect class="cell" x="90" y="104" width="70" height="24"/><text class="ct" x="125" y="120">200</text>
+  <rect class="cell" x="20" y="128" width="70" height="24"/><text class="ct" x="55" y="144">개발</text>
+  <rect class="cell" x="90" y="128" width="70" height="24"/><text class="ct" x="125" y="144">900</text>
+  <rect class="box" x="20" y="32" width="140" height="120"/>
+
+  <!-- 화살표 -->
+  <line x1="172" y1="92" x2="216" y2="92" stroke="#17324c" stroke-width="1.8" marker-end="url(#gh-ar)"/>
+  <text x="194" y="76" class="op">GROUP BY</text>
+  <text x="194" y="112" class="op">SUM(금액)</text>
+
+  <!-- 결과 + HAVING -->
+  <text x="330" y="24" class="cap">부서별 합계</text>
+  <rect class="hd" x="250" y="32" width="90" height="24"/><text class="ht" x="295" y="48">부서</text>
+  <rect class="hd" x="340" y="32" width="110" height="24"/><text class="ht" x="395" y="48">SUM(금액)</text>
+  <rect class="cell" x="250" y="56" width="90" height="24"/><text class="ct" x="295" y="72">영업</text>
+  <rect class="cell" x="340" y="56" width="110" height="24"/><text class="ct" x="395" y="72">800</text>
+  <rect class="out" x="250" y="80" width="90" height="24"/><text class="outt" x="295" y="96">인사</text>
+  <rect class="out" x="340" y="80" width="110" height="24"/><text class="outt" x="395" y="96">200</text>
+  <rect class="cell" x="250" y="104" width="90" height="24"/><text class="ct" x="295" y="120">개발</text>
+  <rect class="cell" x="340" y="104" width="110" height="24"/><text class="ct" x="395" y="120">900</text>
+  <rect class="box" x="250" y="32" width="200" height="96"/>
+  <text x="462" y="96" style="font:700 11px 'Nanum Gothic';fill:#d62b2b" >← 탈락</text>
+
+  <text x="20" y="176" class="note">※ HAVING SUM(금액) >= 500 → 그룹의 집계값으로 거른다 (인사 200 탈락). WHERE 는 그룹 전 개별 행에만.</text>
+</svg>

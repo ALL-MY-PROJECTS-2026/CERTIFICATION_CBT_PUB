@@ -1,0 +1,25 @@
+<svg viewBox="0 0 700 150" width="700" height="150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="WHERE는 그룹 전에 개별 행을 거르고, GROUP BY로 그룹을 만든 뒤 HAVING이 그룹을 거른다">
+  <defs>
+    <marker id="g" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#17324c"/></marker>
+    <style>
+      .box{fill:#fff;stroke:#17324c;stroke-width:1.5}
+      .t{font:700 12px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .op{font:800 12px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .sub{font:400 10px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .hl{fill:#ffe066}
+    </style>
+  </defs>
+  <!-- stages -->
+  <rect class="box" x="10" y="46" width="120" height="46" rx="8"/><text class="t" x="70" y="66">원본 행들</text><text class="sub" x="70" y="82">테이블</text>
+  <rect class="box" x="210" y="46" width="120" height="46" rx="8"/><text class="t" x="270" y="66">남은 행</text><text class="sub" x="270" y="82">행 필터 후</text>
+  <rect class="box" x="410" y="46" width="120" height="46" rx="8"/><text class="t" x="470" y="66">그룹들</text><text class="sub" x="470" y="82">GROUP BY</text>
+  <rect class="box hl" x="580" y="46" width="110" height="46" rx="8" stroke="#17324c" stroke-width="1.5"/><text class="t" x="635" y="66">결과 그룹</text><text class="sub" x="635" y="82">집계 결과</text>
+
+  <!-- arrows with ops -->
+  <path d="M130 69 H210" stroke="#17324c" stroke-width="1.5" marker-end="url(#g)"/>
+  <text class="op" x="170" y="34">WHERE</text><text class="sub" x="170" y="112">행 필터(집계 전)</text>
+  <path d="M330 69 H410" stroke="#17324c" stroke-width="1.5" marker-end="url(#g)"/>
+  <text class="op" x="370" y="34" style="fill:#17324c">GROUP BY</text>
+  <path d="M530 69 H580" stroke="#17324c" stroke-width="1.5" marker-end="url(#g)"/>
+  <text class="op" x="555" y="34">HAVING</text><text class="sub" x="555" y="112">그룹 필터(집계 후)</text>
+</svg>
