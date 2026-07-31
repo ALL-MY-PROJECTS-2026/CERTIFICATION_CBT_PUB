@@ -1,0 +1,40 @@
+<svg viewBox="0 0 560 260" width="560" height="260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="키의 종류 관계. 슈퍼키는 유일성만, 후보키는 유일성과 최소성을 모두 만족, 기본키는 후보키 중 대표로 뽑은 것, 대체키는 뽑히지 않은 후보키, 외래키는 다른 릴레이션의 기본키를 참조">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .hl{fill:#fff6d6}
+      .t{font:800 12.5px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .s{font:400 10.5px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="26">키의 종류 — 유일성·최소성으로 구분</text>
+
+  <rect class="box" x="24" y="42" width="170" height="60" rx="10"/>
+  <text class="t" x="109" y="66">슈퍼키</text>
+  <text class="s" x="109" y="84">유일성 O · 최소성 X</text>
+  <text class="s" x="109" y="98">(불필요 속성 포함 가능)</text>
+
+  <rect class="box" x="210" y="42" width="170" height="60" rx="10"/>
+  <text class="t" x="295" y="66">후보키</text>
+  <text class="s" x="295" y="84">유일성 O · 최소성 O</text>
+  <text class="s" x="295" y="98">(슈퍼키 중 최소)</text>
+
+  <rect class="box hl" x="396" y="42" width="140" height="60" rx="10"/>
+  <text class="t" x="466" y="66">기본키(PK)</text>
+  <text class="s" x="466" y="84">후보키 중 대표</text>
+  <text class="s" x="466" y="98">NULL 불가</text>
+
+  <rect class="box" x="210" y="120" width="170" height="54" rx="10"/>
+  <text class="t" x="295" y="143">대체키</text>
+  <text class="s" x="295" y="160">기본키 안 된 후보키</text>
+
+  <rect class="box" x="396" y="120" width="140" height="54" rx="10"/>
+  <text class="t" x="466" y="143">외래키(FK)</text>
+  <text class="s" x="466" y="160">다른 표 PK 참조·NULL 가능</text>
+
+  <text class="note" x="24" y="210">※ 슈퍼키와 후보키의 차이 = '최소성' 충족 여부. 기본키는 NULL 불가, 외래키는 NULL 가능.</text>
+  <text class="note" x="24" y="232">   후보키 ⊂ 슈퍼키, 기본키·대체키 ⊂ 후보키.</text>
+</svg>

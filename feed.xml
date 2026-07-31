@@ -35,6 +35,13 @@
       <description>SQLD 제2과목 GROUP BY·HAVING을 시험 관점으로 정리합니다. WHERE는 그룹 전 행을 거르고 HAVING은 그룹 후 집계값을 거른다는 구분, 집계함수를 WHERE에 못 쓰는 이유, SELECT 컬럼과 GROUP BY의 관계를 도식·확인 문제로 짚습니다.</description>
     </item>
     <item>
+      <title>관계형 DB 개요와 키의 종류 — SQLD, 슈퍼키·후보키·기본키·외래키</title>
+      <link>https://pancocbt.site/posts/sqld-rdb-overview</link>
+      <guid isPermaLink="true">https://pancocbt.site/posts/sqld-rdb-overview</guid>
+      <pubDate>Mon, 27 Jul 2026 18:00:00 GMT</pubDate>
+      <description>SQLD 관계형 데이터베이스 기본을 시험 관점으로 정리합니다. 릴레이션·튜플·속성·도메인 용어와 키 5종(슈퍼키·후보키·기본키·대체키·외래키), 최소성·NULL 함정을 도식·확인 문제와 함께 짚습니다.</description>
+    </item>
+    <item>
       <title>NULL 속성 — SQLD 최다 함정, 연산·비교·집계 정리</title>
       <link>https://pancocbt.site/posts/sqld-null</link>
       <guid isPermaLink="true">https://pancocbt.site/posts/sqld-null</guid>

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>관계형 DB 개요와 키의 종류 — SQLD, 슈퍼키·후보키·기본키·외래키 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 관계형 데이터베이스 기본을 시험 관점으로 정리합니다. 릴레이션·튜플·속성·도메인 용어와 키 5종(슈퍼키·후보키·기본키·대체키·외래키), 최소성·NULL 함정을 도식·확인 문제와 함께 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-rdb-overview" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="관계형 DB 개요와 키의 종류 — SQLD, 슈퍼키·후보키·기본키·외래키 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 관계형 데이터베이스 기본을 시험 관점으로 정리합니다. 릴레이션·튜플·속성·도메인 용어와 키 5종(슈퍼키·후보키·기본키·대체키·외래키), 최소성·NULL 함정을 도식·확인 문제와 함께 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-rdb-overview" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-27T18:00" />
+    <meta property="article:modified_time" content="2026-07-27T18:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="관계형 DB 개요와 키의 종류 — SQLD, 슈퍼키·후보키·기본키·외래키 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 관계형 데이터베이스 기본을 시험 관점으로 정리합니다. 릴레이션·튜플·속성·도메인 용어와 키 5종(슈퍼키·후보키·기본키·대체키·외래키), 최소성·NULL 함정을 도식·확인 문제와 함께 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"관계형 DB 개요와 키의 종류 — SQLD, 슈퍼키·후보키·기본키·외래키","description":"SQLD 관계형 데이터베이스 기본을 시험 관점으로 정리합니다. 릴레이션·튜플·속성·도메인 용어와 키 5종(슈퍼키·후보키·기본키·대체키·외래키), 최소성·NULL 함정을 도식·확인 문제와 함께 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-27T18:00","dateModified":"2026-07-27T18:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-rdb-overview"},"keywords":"SQLD, 관계형DB, 기본키, 후보키, 외래키"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"SQL 기본 및 활용","item":"https://pancocbt.site/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9"},{"@type":"ListItem","position":3,"name":"관계형 DB 개요와 키의 종류 — SQLD, 슈퍼키·후보키·기본키·외래키","item":"https://pancocbt.site/posts/sqld-rdb-overview"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-BumCGi6j.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-IU7vILQX.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">과목 문제풀기</a><a href="/exam">실전 모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a></li><li><span aria-current="page">관계형 DB 개요와 키의 종류 — SQLD, 슈퍼키·후보키·기본키·외래키</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a><h1 style="margin-top:0.75rem">10. 관계형 DB 개요와 키의 종류 — SQLD, 슈퍼키·후보키·기본키·외래키</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-27T18:00">2026년 7월 27일 18:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->관계형DB</span><span class="tag">#<!-- -->기본키</span><span class="tag">#<!-- -->후보키</span><span class="tag">#<!-- -->외래키</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>관계형 데이터베이스</strong> 는 데이터를 <strong>표(릴레이션) 형태로 저장</strong> 하고, 표끼리 <strong>키(key)</strong> 로 관계를 맺는 DB입니다. SQLD에서는 <strong>용어</strong>(릴레이션·튜플·속성·도메인)와 <strong>키의 종류</strong> 를 개념 구분 문제로 묻습니다.</p>
+<h2 id="이-단원-시험에서-어디에-나오나"><a href="#이-단원-시험에서-어디에-나오나">이 단원, 시험에서 어디에 나오나</a></h2>
+<ul>
+<li>관계형 모델의 기본 용어와 <strong>키 5종 구분</strong> 이 핵심입니다.</li>
+<li>특히 <strong>슈퍼키 vs 후보키(최소성)</strong>, <strong>기본키 NULL 불가 vs 외래키 NULL 가능</strong> 이 단골 함정입니다.</li>
+</ul>
+<h2 id="-관계형-db-기본-용어"><a href="#-관계형-db-기본-용어">① 관계형 DB 기본 용어</a></h2>
+<p><img alt="관계형 DB 구조 도식. 릴레이션은 표 전체, 튜플은 행, 속성은 열, 도메인은 값의 범위" src="/uploads/sqld-rdb-structure.svg" loading="lazy"/></p>
+<p><em>그림 1. 릴레이션(표)·튜플(행)·속성(열)·도메인(값의 범위). (자작 도식)</em></p>
+<table><thead><tr><th>용어</th><th>뜻</th></tr></thead><tbody><tr><td><strong>릴레이션</strong></td><td>표 전체</td></tr><tr><td><strong>튜플</strong></td><td>행 하나(레코드 1건)</td></tr><tr><td><strong>속성</strong></td><td>열 하나</td></tr><tr><td><strong>도메인</strong></td><td>한 속성이 가질 수 있는 값의 범위</td></tr></tbody></table>
+<ul>
+<li><strong>차수(Degree)</strong> = 속성(열) 수, <strong>카디널리티(Cardinality)</strong> = 튜플(행) 수.</li>
+</ul>
+<h2 id="-키의-종류--5가지"><a href="#-키의-종류--5가지">② 키의 종류 — 5가지</a></h2>
+<p><img alt="키의 종류 관계 도식. 슈퍼키·후보키·기본키·대체키·외래키의 포함 관계" src="/uploads/sqld-rdb-keys.svg" loading="lazy"/></p>
+<p><em>그림 2. 슈퍼키 ⊃ 후보키, 후보키 중 대표가 기본키·나머지가 대체키, 외래키는 다른 표의 기본키 참조. (자작 도식)</em></p>
+<table><thead><tr><th>키</th><th>특징</th></tr></thead><tbody><tr><td><strong>슈퍼키</strong></td><td>유일성 O · <strong>최소성 X</strong></td></tr><tr><td><strong>후보키</strong></td><td>유일성 O · <strong>최소성 O</strong></td></tr><tr><td><strong>기본키(PK)</strong></td><td>후보키 중 대표 · <strong>NULL 불가</strong></td></tr><tr><td><strong>대체키</strong></td><td>기본키가 안 된 후보키</td></tr><tr><td><strong>외래키(FK)</strong></td><td>다른 릴레이션 PK 참조 · <strong>NULL 가능</strong></td></tr></tbody></table>
+<ul>
+<li><strong>유일성</strong>: 행을 유일하게 구분. <strong>최소성</strong>: 불필요한 속성이 없음.</li>
+<li>슈퍼키에서 불필요한 속성을 빼 최소로 만들면 후보키입니다.</li>
+</ul>
+<h2 id="자주-틀리는-함정"><a href="#자주-틀리는-함정">자주 틀리는 함정</a></h2>
+<ul>
+<li><strong>슈퍼키 = 후보키</strong> 로 착각 — 차이는 <strong>최소성</strong>. 슈퍼키는 불필요 속성이 붙어도 됨.</li>
+<li><strong>기본키에 NULL 허용</strong> 이라고 오인 — 기본키는 <strong>NULL 불가</strong>(존재성).</li>
+<li><strong>외래키는 NULL 불가</strong> 라고 오인 — 외래키는 <strong>NULL 가능</strong>(아직 관계 없을 수 있음).</li>
+<li><strong>차수 ↔ 카디널리티</strong> 혼동 — 차수=열 수, 카디널리티=행 수.</li>
+</ul>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li>용어: 릴레이션(표)·튜플(행)·속성(열)·도메인(값 범위). 차수=열 수·카디널리티=행 수.</li>
+<li>슈퍼키(유일)·후보키(유일+<strong>최소</strong>)·기본키(대표·<strong>NULL 불가</strong>)·대체키(안 뽑힌 후보키)·외래키(다른 PK 참조·<strong>NULL 가능</strong>).</li>
+<li>슈퍼키 vs 후보키 = <strong>최소성</strong>.</li>
+</ul>
+<aside class="related-problems" aria-label="관계형 DB 개요 연계 문제"><div class="related-problems__info"><span class="related-problems__label">관계형 DB 개요</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->8<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/%EA%B4%80%EA%B3%84%ED%98%95%20DB%20%EA%B0%9C%EC%9A%94">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·출제기준: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>관계형 모델·키 분류는 관계형 DB 표준(Codd) 이론에 근거하며, 본문 설명·예시·도식은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-ansi-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정</h3><p>SQLD 제2과목 표준 조인을 시험 관점으로 정리합니다. ON·USING·NATURAL 세 조건 지정 방식의 차이와 별칭 금지 규칙, OUTER JOIN에서 옵션 테이블 조건을 WHERE에 두면 INNER처럼 되는 최다 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T02:00">2026년 7월 31일 02:00</time><span>· <!-- -->SQLD, ANSIJOIN, USING</span></div></a><a class="post-card " href="/posts/sqld-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향</h3><p>SQLD 제2과목 조인을 시험 관점으로 정리합니다. INNER·OUTER(LEFT/RIGHT/FULL)·CROSS·SELF가 각각 어떤 행을 남기는지, 조인 조건 누락 시 행 수가 M×N으로 폭발하는 카티션 곱, 오라클 (+) 표기의 방향 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T01:00">2026년 7월 31일 01:00</time><span>· <!-- -->SQLD, JOIN, OUTERJOIN</span></div></a><a class="post-card " href="/posts/sqld-orderby"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">ORDER BY — SQLD, NULL 정렬 위치와 별칭·순번 함정</h3><p>SQLD 제2과목 ORDER BY를 시험 관점으로 정리합니다. 오라클에서 NULL이 오름차순 맨 뒤로 가는 이유, SELECT 별칭·컬럼 순번을 ORDER BY에서만 쓸 수 있는 이유, 다중 정렬에서 방향을 각각 지정해야 하는 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T00:00">2026년 7월 31일 00:00</time><span>· <!-- -->SQLD, ORDERBY, 정렬</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>

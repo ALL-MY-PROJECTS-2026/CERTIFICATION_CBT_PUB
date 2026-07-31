@@ -1,0 +1,33 @@
+<svg viewBox="0 0 560 240" width="560" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="관계형 데이터베이스 구조. 릴레이션은 표 전체, 튜플은 행 하나, 속성은 열 하나, 도메인은 한 속성이 가질 수 있는 값의 범위">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .th{fill:#e9f0f5;stroke:#17324c;stroke-width:1.3}
+      .td{fill:#fff;stroke:#cbd6de;stroke-width:1.1}
+      .h{font:800 11px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .x{font:400 11px 'IBM Plex Mono',monospace;fill:#10283d;text-anchor:middle}
+      .lbl{font:800 11.5px 'Nanum Gothic',sans-serif;fill:#3b5bdb}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="28">관계형 DB 용어 — 릴레이션·튜플·속성·도메인</text>
+
+  <!-- 표(릴레이션) -->
+  <rect class="th" x="120" y="52" width="110" height="28"/><text class="h" x="175" y="71">학번</text>
+  <rect class="th" x="230" y="52" width="110" height="28"/><text class="h" x="285" y="71">이름</text>
+  <rect class="th" x="340" y="52" width="150" height="28"/><text class="h" x="415" y="71">학년</text>
+  <rect class="td" x="120" y="80" width="110" height="30"/><text class="x" x="175" y="99">1001</text>
+  <rect class="td" x="230" y="80" width="110" height="30"/><text class="x" x="285" y="99">김철수</text>
+  <rect class="td" x="340" y="80" width="150" height="30"/><text class="x" x="415" y="99">1</text>
+  <rect class="td" x="120" y="110" width="110" height="30"/><text class="x" x="175" y="129">1002</text>
+  <rect class="td" x="230" y="110" width="110" height="30"/><text class="x" x="285" y="129">이영희</text>
+  <rect class="td" x="340" y="110" width="150" height="30"/><text class="x" x="415" y="129">2</text>
+
+  <text class="lbl" x="60" y="45">릴레이션 = 표 전체</text>
+  <text class="lbl" x="30" y="99" text-anchor="start">튜플(행)→</text>
+  <text class="lbl" x="285" y="160" text-anchor="middle">↑ 속성(열)</text>
+
+  <text class="note" x="24" y="192">※ 릴레이션=표, 튜플=행(1건), 속성=열, 도메인=한 속성이 가질 수 있는 값의 범위(예: 학년 ∈ 1~4).</text>
+  <text class="note" x="24" y="214">   차수(degree)=속성 수, 카디널리티=튜플 수.</text>
+</svg>
