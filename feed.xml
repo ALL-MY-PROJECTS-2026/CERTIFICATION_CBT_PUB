@@ -35,6 +35,13 @@
       <description>SQLD 제2과목 GROUP BY·HAVING을 시험 관점으로 정리합니다. WHERE는 그룹 전 행을 거르고 HAVING은 그룹 후 집계값을 거른다는 구분, 집계함수를 WHERE에 못 쓰는 이유, SELECT 컬럼과 GROUP BY의 관계를 도식·확인 문제로 짚습니다.</description>
     </item>
     <item>
+      <title>정규 표현식 — SQLD, REGEXP 함수와 메타문자 정리</title>
+      <link>https://pancocbt.site/posts/sqld-regexp</link>
+      <guid isPermaLink="true">https://pancocbt.site/posts/sqld-regexp</guid>
+      <pubDate>Tue, 28 Jul 2026 11:00:00 GMT</pubDate>
+      <description>SQLD 정규 표현식을 시험 관점으로 정리합니다. REGEXP_LIKE·REPLACE·SUBSTR·INSTR·COUNT 함수, 앵커(^ $)·메타문자, 부분 일치와 [^…] 부정 함정을 도식·확인 문제와 함께 짚습니다.</description>
+    </item>
+    <item>
       <title>PIVOT·UNPIVOT — SQLD, 행과 열을 뒤집는 교차표</title>
       <link>https://pancocbt.site/posts/sqld-pivot</link>
       <guid isPermaLink="true">https://pancocbt.site/posts/sqld-pivot</guid>

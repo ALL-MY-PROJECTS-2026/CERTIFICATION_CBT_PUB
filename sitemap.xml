@@ -121,6 +121,11 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>https://pancocbt.site/posts/sqld-regexp</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://pancocbt.site/posts/sqld-relationship-join</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>

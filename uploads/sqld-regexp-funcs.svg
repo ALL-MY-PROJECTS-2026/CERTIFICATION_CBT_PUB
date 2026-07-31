@@ -1,0 +1,26 @@
+<svg viewBox="0 0 560 220" width="560" height="220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="정규표현식 함수 다섯 가지. REGEXP_LIKE 매칭 여부, REGEXP_REPLACE 치환, REGEXP_SUBSTR 추출, REGEXP_INSTR 위치, REGEXP_COUNT 개수">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.4;fill:#fff}
+      .fn{font:700 12px 'IBM Plex Mono',monospace;fill:#3b5bdb}
+      .s{font:400 11px 'Nanum Gothic',sans-serif;fill:#4a6580}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="26">정규표현식 함수 5종 (REGEXP_)</text>
+
+  <rect class="box" x="24" y="42" width="512" height="26" rx="6"/>
+  <text class="fn" x="36" y="60">REGEXP_LIKE</text><text class="s" x="230" y="60">매칭 여부 판단 (WHERE 조건)</text>
+  <rect class="box" x="24" y="72" width="512" height="26" rx="6"/>
+  <text class="fn" x="36" y="90">REGEXP_REPLACE</text><text class="s" x="230" y="90">패턴을 찾아 치환</text>
+  <rect class="box" x="24" y="102" width="512" height="26" rx="6"/>
+  <text class="fn" x="36" y="120">REGEXP_SUBSTR</text><text class="s" x="230" y="120">패턴에 맞는 부분 추출</text>
+  <rect class="box" x="24" y="132" width="512" height="26" rx="6"/>
+  <text class="fn" x="36" y="150">REGEXP_INSTR</text><text class="s" x="230" y="150">패턴이 나타난 위치</text>
+  <rect class="box" x="24" y="162" width="512" height="26" rx="6"/>
+  <text class="fn" x="36" y="180">REGEXP_COUNT</text><text class="s" x="230" y="180">패턴이 나타난 횟수</text>
+
+  <text class="note" x="24" y="208">※ 이름은 일반 함수(LIKE·REPLACE·SUBSTR·INSTR·COUNT)에 REGEXP_ 접두어 — 패턴을 정규식으로 받는다.</text>
+</svg>
