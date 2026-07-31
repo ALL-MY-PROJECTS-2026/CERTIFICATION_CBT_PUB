@@ -1,0 +1,33 @@
+<svg viewBox="0 0 560 240" width="560" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="서브쿼리 위치별 분류. SELECT 절의 스칼라 서브쿼리는 1행 1열, FROM 절의 인라인뷰는 표처럼 사용, WHERE 절의 중첩 서브쿼리는 조건에 사용">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .kw{fill:#e9f0f5}
+      .t{font:800 12.5px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .s{font:400 10.5px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .code{font:700 12px 'IBM Plex Mono',monospace;fill:#3b5bdb}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="28">서브쿼리 — 어디에 놓이나</text>
+
+  <rect class="box kw" x="24" y="44" width="70" height="30"/><text class="code" x="59" y="64">SELECT</text>
+  <rect class="box" x="100" y="44" width="436" height="30" rx="6"/>
+  <text class="t" x="150" y="64" text-anchor="start">스칼라 서브쿼리</text>
+  <text class="s" x="330" y="64" text-anchor="start">1행 1열만 반환 (컬럼 자리)</text>
+
+  <rect class="box kw" x="24" y="88" width="70" height="30"/><text class="code" x="59" y="108">FROM</text>
+  <rect class="box" x="100" y="88" width="436" height="30" rx="6"/>
+  <text class="t" x="150" y="108" text-anchor="start">인라인 뷰</text>
+  <text class="s" x="330" y="108" text-anchor="start">표처럼 사용 · ORDER BY 가능</text>
+
+  <rect class="box kw" x="24" y="132" width="70" height="30"/><text class="code" x="59" y="152">WHERE</text>
+  <rect class="box" x="100" y="132" width="436" height="30" rx="6"/>
+  <text class="t" x="150" y="152" text-anchor="start">중첩 서브쿼리</text>
+  <text class="s" x="330" y="152" text-anchor="start">조건에 사용 (단일행/다중행 연산자)</text>
+
+  <text class="note" x="24" y="196">※ 상관 서브쿼리 = 메인쿼리 컬럼을 참조해 행마다 다시 평가(EXISTS와 자주 결합).</text>
+  <text class="note" x="24" y="218">   위치(스칼라·인라인뷰·중첩)를 묻는 문제가 단골.</text>
+</svg>

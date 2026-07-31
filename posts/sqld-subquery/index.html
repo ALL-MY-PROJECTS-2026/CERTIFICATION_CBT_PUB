@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>서브쿼리 — SQLD, 위치별 종류와 다중행 연산자 함정 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 서브쿼리를 시험 관점으로 정리합니다. 스칼라·인라인뷰·중첩 위치별 종류, 단일행·다중행 연산자(IN·ANY·ALL·EXISTS), 단일행 연산자에 다중행이 오면 나는 ORA-01427 함정을 도식·확인 문제와 함께 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-subquery" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="서브쿼리 — SQLD, 위치별 종류와 다중행 연산자 함정 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 서브쿼리를 시험 관점으로 정리합니다. 스칼라·인라인뷰·중첩 위치별 종류, 단일행·다중행 연산자(IN·ANY·ALL·EXISTS), 단일행 연산자에 다중행이 오면 나는 ORA-01427 함정을 도식·확인 문제와 함께 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-subquery" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-27T19:00" />
+    <meta property="article:modified_time" content="2026-07-27T19:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="서브쿼리 — SQLD, 위치별 종류와 다중행 연산자 함정 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 서브쿼리를 시험 관점으로 정리합니다. 스칼라·인라인뷰·중첩 위치별 종류, 단일행·다중행 연산자(IN·ANY·ALL·EXISTS), 단일행 연산자에 다중행이 오면 나는 ORA-01427 함정을 도식·확인 문제와 함께 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"서브쿼리 — SQLD, 위치별 종류와 다중행 연산자 함정","description":"SQLD 서브쿼리를 시험 관점으로 정리합니다. 스칼라·인라인뷰·중첩 위치별 종류, 단일행·다중행 연산자(IN·ANY·ALL·EXISTS), 단일행 연산자에 다중행이 오면 나는 ORA-01427 함정을 도식·확인 문제와 함께 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-27T19:00","dateModified":"2026-07-27T19:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-subquery"},"keywords":"SQLD, 서브쿼리, 스칼라서브쿼리, 인라인뷰, ANY, ALL"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"SQL 기본 및 활용","item":"https://pancocbt.site/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9"},{"@type":"ListItem","position":3,"name":"서브쿼리 — SQLD, 위치별 종류와 다중행 연산자 함정","item":"https://pancocbt.site/posts/sqld-subquery"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-Df0rZtwH.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-IU7vILQX.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">과목 문제풀기</a><a href="/exam">실전 모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a></li><li><span aria-current="page">서브쿼리 — SQLD, 위치별 종류와 다중행 연산자 함정</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a><h1 style="margin-top:0.75rem">18. 서브쿼리 — SQLD, 위치별 종류와 다중행 연산자 함정</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-27T19:00">2026년 7월 27일 19:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->서브쿼리</span><span class="tag">#<!-- -->스칼라서브쿼리</span><span class="tag">#<!-- -->인라인뷰</span><span class="tag">#<!-- -->ANY</span><span class="tag">#<!-- -->ALL</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>서브쿼리(Subquery)</strong> 는 <strong>다른 SQL 안에 들어간 SELECT 문</strong> 입니다. &quot;어디에 놓이는지(위치)&quot;와 &quot;몇 행을 반환하는지(연산자)&quot;를 정확히 구분하는 게 시험의 핵심입니다.</p>
+<h2 id="이-단원-시험에서-어디에-나오나"><a href="#이-단원-시험에서-어디에-나오나">이 단원, 시험에서 어디에 나오나</a></h2>
+<ul>
+<li>제2과목 「SQL 기본 및 활용」의 빈출 단원입니다.</li>
+<li><strong>위치별 종류</strong>, <strong>행수별 연산자</strong>, 그리고 <strong>단일행 연산자에 다중행이 오는 오류(ORA-01427)</strong> 가 단골입니다.</li>
+</ul>
+<h2 id="-위치별-종류--어디에-놓이나"><a href="#-위치별-종류--어디에-놓이나">① 위치별 종류 — 어디에 놓이나</a></h2>
+<p><img alt="서브쿼리 위치별 종류 도식. SELECT의 스칼라, FROM의 인라인뷰, WHERE의 중첩 서브쿼리" src="/uploads/sqld-subquery-position.svg" loading="lazy"/></p>
+<p><em>그림 1. SELECT=스칼라, FROM=인라인뷰, WHERE=중첩. 위치로 종류가 나뉩니다. (자작 도식)</em></p>
+<table><thead><tr><th>위치</th><th>종류</th><th>특징</th></tr></thead><tbody><tr><td><strong>SELECT</strong></td><td>스칼라 서브쿼리</td><td><strong>1행 1열</strong> 만 반환</td></tr><tr><td><strong>FROM</strong></td><td>인라인 뷰</td><td>표처럼 사용(별칭)</td></tr><tr><td><strong>WHERE</strong></td><td>중첩 서브쿼리</td><td>조건에 사용</td></tr></tbody></table>
+<ul>
+<li><strong>상관 서브쿼리</strong>: 메인쿼리의 컬럼을 참조해 <strong>행마다 다시 평가</strong>(주로 <code>EXISTS</code> 와 결합).</li>
+</ul>
+<h2 id="-행수별-연산자--단일행-vs-다중행"><a href="#-행수별-연산자--단일행-vs-다중행">② 행수별 연산자 — 단일행 vs 다중행</a></h2>
+<p>서브쿼리가 <strong>몇 행을 반환하느냐</strong> 에 따라 쓰는 연산자가 다릅니다.</p>
+<p><img alt="행수별 연산자 도식. 단일행은 등호 부등호, 다중행은 IN·ANY·ALL·EXISTS, 단일행 연산자에 다중행이 오면 ORA-01427 오류" src="/uploads/sqld-subquery-operator.svg" loading="lazy"/></p>
+<p><em>그림 2. 단일행=<code>=,&lt;,&gt;</code>, 다중행=<code>IN·ANY·ALL·EXISTS</code>. 단일행 연산자에 여러 행이 오면 오류입니다. (자작 도식)</em></p>
+<ul>
+<li><strong>단일행 서브쿼리</strong>(1행): <code>=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>&lt;&gt;</code></li>
+<li><strong>다중행 서브쿼리</strong>(여러 행): <code>IN</code>, <code>ANY</code>, <code>ALL</code>, <code>EXISTS</code></li>
+</ul>
+<h2 id="-any--all-의-의미"><a href="#-any--all-의-의미">③ ANY · ALL 의 의미</a></h2>
+<ul>
+<li><strong><code>&gt; ANY (집합)</code></strong>: 집합의 <strong>최솟값보다 크면</strong> 참(하나라도 만족).</li>
+<li><strong><code>&gt; ALL (집합)</code></strong>: 집합의 <strong>최댓값보다 크면</strong> 참(전부 만족).</li>
+<li>반대로 <code>&lt; ANY</code> = 최댓값 미만, <code>&lt; ALL</code> = 최솟값 미만.</li>
+</ul>
+<h2 id="자주-틀리는-함정"><a href="#자주-틀리는-함정">자주 틀리는 함정</a></h2>
+<ul>
+<li><strong><code>= (다중행 서브쿼리)</code></strong> → <strong>ORA-01427</strong>(단일행 하위 질의에 하나 이상의 행 반환). 다중행이면 <code>IN</code> 등을 써야 함.</li>
+<li><strong><code>NOT IN (…, NULL)</code></strong> → 전체가 UNKNOWN이 되어 <strong>결과 0건</strong>(전멸).</li>
+<li><strong><code>&gt;ALL</code> ↔ <code>&gt;ANY</code> 혼동</strong> — ALL=최댓값 기준, ANY=최솟값 기준.</li>
+<li><strong>스칼라 서브쿼리가 2행 이상</strong> 반환 → 오류(1행 1열이어야 함).</li>
+</ul>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li>위치: SELECT=<strong>스칼라</strong>(1행1열)·FROM=<strong>인라인뷰</strong>·WHERE=<strong>중첩</strong>.</li>
+<li>행수: 단일행 <code>=,&lt;,&gt;</code> / 다중행 <code>IN·ANY·ALL·EXISTS</code>.</li>
+<li><code>&gt;ANY</code>=최솟값 초과 · <code>&gt;ALL</code>=최댓값 초과.</li>
+<li>단일행 연산자에 다중행 → <strong>ORA-01427</strong>. <code>NOT IN</code>에 NULL 섞이면 전멸.</li>
+</ul>
+<aside class="related-problems" aria-label="서브쿼리 연계 문제"><div class="related-problems__info"><span class="related-problems__label">서브쿼리</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->8<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/%EC%84%9C%EB%B8%8C%EC%BF%BC%EB%A6%AC">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·출제기준: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>서브쿼리 종류·연산자 동작은 ANSI SQL·오라클 표준에 근거하며, 본문 설명·예시·도식은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-ansi-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정</h3><p>SQLD 제2과목 표준 조인을 시험 관점으로 정리합니다. ON·USING·NATURAL 세 조건 지정 방식의 차이와 별칭 금지 규칙, OUTER JOIN에서 옵션 테이블 조건을 WHERE에 두면 INNER처럼 되는 최다 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T02:00">2026년 7월 31일 02:00</time><span>· <!-- -->SQLD, ANSIJOIN, USING</span></div></a><a class="post-card " href="/posts/sqld-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향</h3><p>SQLD 제2과목 조인을 시험 관점으로 정리합니다. INNER·OUTER(LEFT/RIGHT/FULL)·CROSS·SELF가 각각 어떤 행을 남기는지, 조인 조건 누락 시 행 수가 M×N으로 폭발하는 카티션 곱, 오라클 (+) 표기의 방향 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T01:00">2026년 7월 31일 01:00</time><span>· <!-- -->SQLD, JOIN, OUTERJOIN</span></div></a><a class="post-card " href="/posts/sqld-orderby"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">ORDER BY — SQLD, NULL 정렬 위치와 별칭·순번 함정</h3><p>SQLD 제2과목 ORDER BY를 시험 관점으로 정리합니다. 오라클에서 NULL이 오름차순 맨 뒤로 가는 이유, SELECT 별칭·컬럼 순번을 ORDER BY에서만 쓸 수 있는 이유, 다중 정렬에서 방향을 각각 지정해야 하는 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T00:00">2026년 7월 31일 00:00</time><span>· <!-- -->SQLD, ORDERBY, 정렬</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>

@@ -1,0 +1,31 @@
+<svg viewBox="0 0 560 250" width="560" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="서브쿼리 행수별 연산자. 단일행 서브쿼리는 등호 부등호를 쓰고, 다중행 서브쿼리는 IN·ANY·ALL·EXISTS를 쓴다. 단일행 연산자에 다중행 결과가 오면 오류가 난다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .no{fill:#fdeceb;stroke:#d62b2b;stroke-width:1.5}
+      .t{font:800 12.5px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .s{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .op{font:700 12.5px 'IBM Plex Mono',monospace;fill:#10283d;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="28">서브쿼리 결과 행 수 → 연산자</text>
+
+  <rect class="box" x="24" y="44" width="250" height="70" rx="10"/>
+  <text class="t" x="149" y="68">단일행 서브쿼리</text>
+  <text class="op" x="149" y="90">=  &lt;  &gt;  &lt;=  &gt;=  &lt;&gt;</text>
+  <text class="s" x="149" y="106">결과가 1행일 때</text>
+
+  <rect class="box" x="286" y="44" width="250" height="70" rx="10"/>
+  <text class="t" x="411" y="68">다중행 서브쿼리</text>
+  <text class="op" x="411" y="90">IN · ANY · ALL · EXISTS</text>
+  <text class="s" x="411" y="106">결과가 여러 행일 때</text>
+
+  <rect class="no" x="24" y="128" width="512" height="34" rx="10"/>
+  <text class="t" x="280" y="150" fill="#d62b2b">단일행 연산자(=)에 여러 행이 오면 → 오류(ORA-01427)</text>
+
+  <text class="note" x="24" y="196">※ &gt;ALL(…) = 서브쿼리 "최댓값보다 큼", &gt;ANY(…) = "최솟값보다 큼". 헷갈리기 쉬움.</text>
+  <text class="note" x="24" y="218">   NOT IN (…, NULL) 은 전체 UNKNOWN → 결과 0건(전멸).</text>
+</svg>
