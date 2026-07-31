@@ -61,6 +61,11 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>https://pancocbt.site/posts/sqld-dml</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://pancocbt.site/posts/sqld-entity</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>

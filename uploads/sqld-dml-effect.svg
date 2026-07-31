@@ -1,0 +1,43 @@
+<svg viewBox="0 0 520 214" width="520" height="214" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="회원 표에 대한 DML 효과: INSERT는 새 행 추가, UPDATE는 기존 값 수정, DELETE는 행 삭제. 대상은 WHERE로 지정한다">
+  <defs>
+    <style>
+      .cap{font:800 13px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .hd{fill:#17324c}
+      .ht{font:700 12px 'Nanum Gothic',sans-serif;fill:#fff;text-anchor:middle}
+      .cell{fill:#fff;stroke:#e2ebf1;stroke-width:1}
+      .upd{fill:#fff7d6;stroke:#e2ebf1;stroke-width:1}
+      .del{fill:#fdecea;stroke:#d62b2b;stroke-width:1}
+      .ins{fill:#e7f4ec;stroke:#1a7d45;stroke-width:1}
+      .ct{font:400 12.5px 'IBM Plex Mono',monospace;fill:#17324c;text-anchor:middle}
+      .box{fill:none;stroke:#17324c;stroke-width:1.6}
+      .aUpd{font:700 11.5px 'Nanum Gothic',sans-serif;fill:#8a6d00}
+      .aDel{font:700 11.5px 'Nanum Gothic',sans-serif;fill:#d62b2b}
+      .aIns{font:700 11.5px 'Nanum Gothic',sans-serif;fill:#1a7d45}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text x="20" y="24" class="cap">회원</text>
+  <rect class="hd" x="20" y="32" width="90" height="26"/><text class="ht" x="65" y="50">회원번호</text>
+  <rect class="hd" x="110" y="32" width="90" height="26"/><text class="ht" x="155" y="50">등급</text>
+
+  <rect class="cell" x="20" y="58" width="90" height="30"/><text class="ct" x="65" y="78">1</text>
+  <rect class="cell" x="110" y="58" width="90" height="30"/><text class="ct" x="155" y="78">GOLD</text>
+
+  <rect class="upd" x="20" y="88" width="90" height="30"/><text class="ct" x="65" y="108">2</text>
+  <rect class="upd" x="110" y="88" width="90" height="30"/><text class="ct" x="155" y="108">GOLD</text>
+  <text class="aUpd" x="214" y="107">← UPDATE (SILVER→GOLD)</text>
+
+  <rect class="del" x="20" y="118" width="90" height="30"/><text class="ct" x="65" y="138">3</text>
+  <rect class="del" x="110" y="118" width="90" height="30"/><text class="ct" x="155" y="138">GOLD</text>
+  <line x1="28" y1="133" x2="192" y2="133" stroke="#d62b2b" stroke-width="1.4"/>
+  <text class="aDel" x="214" y="137">← DELETE (행 삭제)</text>
+
+  <rect class="ins" x="20" y="148" width="90" height="30"/><text class="ct" x="65" y="168">4</text>
+  <rect class="ins" x="110" y="148" width="90" height="30"/><text class="ct" x="155" y="168">SILVER</text>
+  <text class="aIns" x="214" y="167">← INSERT (새 행 추가)</text>
+
+  <rect class="box" x="20" y="32" width="180" height="146"/>
+
+  <text x="20" y="200" class="note">※ 대상 행은 WHERE 로 지정 · MERGE = 있으면 UPDATE, 없으면 INSERT (UPSERT)</text>
+</svg>

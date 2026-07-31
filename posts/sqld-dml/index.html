@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>DML — SQLD, INSERT·UPDATE·DELETE·MERGE와 TRUNCATE 함정 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 제2과목 DML을 시험 관점으로 정리합니다. INSERT·UPDATE·DELETE·MERGE 문법, WHERE 없는 UPDATE/DELETE가 전체 행에 적용되는 사고, DELETE(복구 가능) vs TRUNCATE(DDL·복구 불가) vs DROP(구조 삭제) 구분을 도식·확인 문제로 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-dml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="DML — SQLD, INSERT·UPDATE·DELETE·MERGE와 TRUNCATE 함정 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 제2과목 DML을 시험 관점으로 정리합니다. INSERT·UPDATE·DELETE·MERGE 문법, WHERE 없는 UPDATE/DELETE가 전체 행에 적용되는 사고, DELETE(복구 가능) vs TRUNCATE(DDL·복구 불가) vs DROP(구조 삭제) 구분을 도식·확인 문제로 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-dml" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-31T22:00" />
+    <meta property="article:modified_time" content="2026-07-31T22:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DML — SQLD, INSERT·UPDATE·DELETE·MERGE와 TRUNCATE 함정 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 제2과목 DML을 시험 관점으로 정리합니다. INSERT·UPDATE·DELETE·MERGE 문법, WHERE 없는 UPDATE/DELETE가 전체 행에 적용되는 사고, DELETE(복구 가능) vs TRUNCATE(DDL·복구 불가) vs DROP(구조 삭제) 구분을 도식·확인 문제로 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"DML — SQLD, INSERT·UPDATE·DELETE·MERGE와 TRUNCATE 함정","description":"SQLD 제2과목 DML을 시험 관점으로 정리합니다. INSERT·UPDATE·DELETE·MERGE 문법, WHERE 없는 UPDATE/DELETE가 전체 행에 적용되는 사고, DELETE(복구 가능) vs TRUNCATE(DDL·복구 불가) vs DROP(구조 삭제) 구분을 도식·확인 문제로 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-31T22:00","dateModified":"2026-07-31T22:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-dml"},"keywords":"SQLD, DML, INSERT, UPDATE, DELETE, MERGE, TRUNCATE"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"SQL 기본 및 활용","item":"https://pancocbt.site/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9"},{"@type":"ListItem","position":3,"name":"DML — SQLD, INSERT·UPDATE·DELETE·MERGE와 TRUNCATE 함정","item":"https://pancocbt.site/posts/sqld-dml"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-CKyjvZ9x.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-IU7vILQX.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">과목 문제풀기</a><a href="/exam">실전 모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a></li><li><span aria-current="page">DML — SQLD, INSERT·UPDATE·DELETE·MERGE와 TRUNCATE 함정</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a><h1 style="margin-top:0.75rem">26. DML — SQLD, INSERT·UPDATE·DELETE·MERGE와 TRUNCATE 함정</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-31T22:00">2026년 7월 31일 22:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->DML</span><span class="tag">#<!-- -->INSERT</span><span class="tag">#<!-- -->UPDATE</span><span class="tag">#<!-- -->DELETE</span><span class="tag">#<!-- -->MERGE</span><span class="tag">#<!-- -->TRUNCATE</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>DML(Data Manipulation Language)</strong> 은 테이블의 <strong>데이터를 조작</strong>하는 명령입니다. <code>INSERT</code>(추가)·<code>UPDATE</code>(수정)·<code>DELETE</code>(삭제)·<code>MERGE</code>(있으면 수정, 없으면 추가)가 있고, <strong>COMMIT 전까지 ROLLBACK으로 되돌릴 수 있다</strong>는 것이 이 단원의 핵심이자 최다 출제 포인트입니다.</p>
+<h2 id="이-단원-시험에서-어디에-나오나-출제-비중"><a href="#이-단원-시험에서-어디에-나오나-출제-비중">이 단원, 시험에서 어디에 나오나 (출제 비중)</a></h2>
+<ul>
+<li><strong>제2과목 「SQL 기본 및 활용」 = 40문항 · 80점.</strong> DML은 관리 구문 파트의 첫 단원으로, 개념 구분·트랜잭션 동작 판별 유형으로 출제됩니다.</li>
+<li><strong>DELETE vs TRUNCATE vs DROP</strong> 구분이 오답을 가르는 단골입니다. <em>(단원별 문항수는 공개되지 않습니다 — 출처: KDATA 출제기준.)</em></li>
+</ul>
+<h2 id="출제-포인트--시험이-실제로-묻는-것"><a href="#출제-포인트--시험이-실제로-묻는-것">출제 포인트 — 시험이 실제로 묻는 것</a></h2>
+<ol>
+<li><strong>DML은 COMMIT 전 ROLLBACK 가능</strong> (DDL은 자동 커밋) (최다 출제)</li>
+<li><strong>DELETE(DML·복구 가능) vs TRUNCATE(DDL·복구 불가) vs DROP(구조 삭제)</strong></li>
+<li><strong>WHERE 없는 UPDATE/DELETE = 전체 행 적용</strong></li>
+<li><code>MERGE</code> = UPSERT — <code>WHEN MATCHED / NOT MATCHED</code></li>
+</ol>
+<h2 id="-기본-문법--대상은-where로-지정"><a href="#-기본-문법--대상은-where로-지정">① 기본 문법 — 대상은 WHERE로 지정</a></h2>
+<p><img alt="회원 표에 INSERT는 새 행을 추가하고, UPDATE는 등급을 SILVER에서 GOLD로 수정하고, DELETE는 행을 삭제하는 효과를 보여주는 예시 표" src="/uploads/sqld-dml-effect.svg" loading="lazy"/></p>
+<p><em>그림 1. INSERT 추가·UPDATE 수정·DELETE 삭제 — 대상은 WHERE로 지정. (자작 도식)</em></p>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">INSERT INTO</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원 (회원번호, 등급) </span><span style="color:#D73A49;--shiki-dark:#F97583">VALUES</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">&#x27;SILVER&#x27;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);   </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 추가</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">UPDATE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원 </span><span style="color:#D73A49;--shiki-dark:#F97583">SET</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 등급 </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> &#x27;GOLD&#x27;</span><span style="color:#D73A49;--shiki-dark:#F97583"> WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원번호 </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;         </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 수정</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">DELETE</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원 </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원번호 </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;                      </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 삭제</span></span></code></pre>
+<blockquote>
+<p><strong>함정:</strong> <code>WHERE</code>를 빼먹으면 <code>UPDATE</code>·<code>DELETE</code>가 <strong>전체 행</strong>에 적용됩니다. <code>DELETE FROM 회원;</code>은 모든 행 삭제입니다.</p>
+</blockquote>
+<p><code>INSERT ... SELECT</code>를 쓰면 다른 테이블의 조회 결과를 <strong>여러 행 한 번에</strong> 넣을 수 있습니다(VALUES는 오라클에서 한 행).</p>
+<h2 id="-merge--있으면-update-없으면-insert"><a href="#-merge--있으면-update-없으면-insert">② MERGE — 있으면 UPDATE, 없으면 INSERT</a></h2>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">MERGE</span><span style="color:#D73A49;--shiki-dark:#F97583"> INTO</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원 t</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">USING</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 4</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원번호, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">&#x27;SILVER&#x27;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 등급 </span><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> DUAL) s</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">t</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">회원번호</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> s</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">회원번호</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHEN</span><span style="color:#D73A49;--shiki-dark:#F97583"> MATCHED</span><span style="color:#D73A49;--shiki-dark:#F97583">     THEN</span><span style="color:#D73A49;--shiki-dark:#F97583"> UPDATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> SET</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> t</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">등급</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> s</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">등급</span><span style="color:#6A737D;--shiki-dark:#6A737D">          -- 있으면 수정</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHEN</span><span style="color:#D73A49;--shiki-dark:#F97583"> NOT</span><span style="color:#D73A49;--shiki-dark:#F97583"> MATCHED</span><span style="color:#D73A49;--shiki-dark:#F97583"> THEN</span><span style="color:#D73A49;--shiki-dark:#F97583"> INSERT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (회원번호, 등급)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                      VALUES</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">s</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">회원번호</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">s</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">등급</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);        </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 없으면 추가</span></span></code></pre>
+<p>키가 일치하는 행이 <strong>있으면 <code>WHEN MATCHED</code>(UPDATE), 없으면 <code>WHEN NOT MATCHED</code>(INSERT)</strong> — 이른바 UPSERT입니다.</p>
+<h2 id="-delete-vs-truncate-vs-drop--최다-출제-비교"><a href="#-delete-vs-truncate-vs-drop--최다-출제-비교">③ DELETE vs TRUNCATE vs DROP — 최다 출제 비교</a></h2>
+<table><thead><tr><th></th><th>DELETE</th><th>TRUNCATE</th><th>DROP</th></tr></thead><tbody><tr><td>분류</td><td><strong>DML</strong></td><td><strong>DDL</strong></td><td><strong>DDL</strong></td></tr><tr><td>WHERE</td><td>가능(일부만)</td><td>불가(전체)</td><td>—</td></tr><tr><td>ROLLBACK</td><td><strong>가능</strong>(COMMIT 전)</td><td><strong>불가</strong>(자동 커밋)</td><td>불가</td></tr><tr><td>테이블 구조</td><td>유지</td><td>유지</td><td><strong>삭제</strong></td></tr></tbody></table>
+<ul>
+<li><strong>DELETE</strong>는 DML이라 COMMIT 전이면 <code>ROLLBACK</code>으로 복구됩니다. 행별 로그를 남겨 상대적으로 느립니다.</li>
+<li><strong>TRUNCATE</strong>는 DDL이라 실행 즉시 <strong>자동 커밋</strong> → 되돌릴 수 없습니다. 전체 행을 빠르게 비우지만 구조는 남습니다.</li>
+<li><strong>DROP</strong>은 데이터와 함께 <strong>테이블 구조 자체</strong>를 삭제합니다.</li>
+</ul>
+<blockquote>
+<p><strong>판별법:</strong> &quot;지운 걸 ROLLBACK으로 되돌릴 수 있는가?&quot;라고 물으면 <strong>DELETE만 예</strong>입니다.</p>
+</blockquote>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li><code>INSERT</code>(추가)·<code>UPDATE</code>(수정)·<code>DELETE</code>(삭제)·<code>MERGE</code>(UPSERT). 대상은 <strong>WHERE</strong> — 없으면 전체 적용.</li>
+<li><strong>DML = COMMIT 전 ROLLBACK 가능</strong>, DDL(TRUNCATE·DROP)은 자동 커밋.</li>
+<li><code>DELETE</code>(일부·복구 가능) / <code>TRUNCATE</code>(전체·복구 불가·구조 유지) / <code>DROP</code>(구조까지 삭제).</li>
+</ul>
+<aside class="related-problems" aria-label="DML 연계 문제"><div class="related-problems__info"><span class="related-problems__label">DML</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->6<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/DML">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·배점: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>DML·MERGE·TRUNCATE 동작은 오라클 SQL·표준 SQL에 근거하며, 본문 예시·도식·설명은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-ansi-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정</h3><p>SQLD 제2과목 표준 조인을 시험 관점으로 정리합니다. ON·USING·NATURAL 세 조건 지정 방식의 차이와 별칭 금지 규칙, OUTER JOIN에서 옵션 테이블 조건을 WHERE에 두면 INNER처럼 되는 최다 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T02:00">2026년 7월 31일 02:00</time><span>· <!-- -->SQLD, ANSIJOIN, USING</span></div></a><a class="post-card " href="/posts/sqld-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향</h3><p>SQLD 제2과목 조인을 시험 관점으로 정리합니다. INNER·OUTER(LEFT/RIGHT/FULL)·CROSS·SELF가 각각 어떤 행을 남기는지, 조인 조건 누락 시 행 수가 M×N으로 폭발하는 카티션 곱, 오라클 (+) 표기의 방향 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T01:00">2026년 7월 31일 01:00</time><span>· <!-- -->SQLD, JOIN, OUTERJOIN</span></div></a><a class="post-card " href="/posts/sqld-orderby"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">ORDER BY — SQLD, NULL 정렬 위치와 별칭·순번 함정</h3><p>SQLD 제2과목 ORDER BY를 시험 관점으로 정리합니다. 오라클에서 NULL이 오름차순 맨 뒤로 가는 이유, SELECT 별칭·컬럼 순번을 ORDER BY에서만 쓸 수 있는 이유, 다중 정렬에서 방향을 각각 지정해야 하는 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T00:00">2026년 7월 31일 00:00</time><span>· <!-- -->SQLD, ORDERBY, 정렬</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>
