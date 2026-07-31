@@ -35,6 +35,13 @@
       <description>SQLD 제2과목 GROUP BY·HAVING을 시험 관점으로 정리합니다. WHERE는 그룹 전 행을 거르고 HAVING은 그룹 후 집계값을 거른다는 구분, 집계함수를 WHERE에 못 쓰는 이유, SELECT 컬럼과 GROUP BY의 관계를 도식·확인 문제로 짚습니다.</description>
     </item>
     <item>
+      <title>계층 질의·셀프 조인 — SQLD, CONNECT BY와 PRIOR 방향</title>
+      <link>https://pancocbt.site/posts/sqld-hierarchical-selfjoin</link>
+      <guid isPermaLink="true">https://pancocbt.site/posts/sqld-hierarchical-selfjoin</guid>
+      <pubDate>Tue, 28 Jul 2026 09:00:00 GMT</pubDate>
+      <description>SQLD 계층 질의와 셀프 조인을 시험 관점으로 정리합니다. START WITH·CONNECT BY·PRIOR·LEVEL, PRIOR 방향이 전개를 결정하는 함정, 셀프 조인의 별칭과 최상위 보존(아우터)을 도식·확인 문제와 함께 짚습니다.</description>
+    </item>
+    <item>
       <title>Top N 쿼리 — SQLD, ROWNUM 함정과 상위 N건 뽑기</title>
       <link>https://pancocbt.site/posts/sqld-topn</link>
       <guid isPermaLink="true">https://pancocbt.site/posts/sqld-topn</guid>

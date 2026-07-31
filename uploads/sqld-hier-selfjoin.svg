@@ -1,0 +1,34 @@
+<svg viewBox="0 0 560 240" width="560" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="셀프 조인. 같은 사원 표를 별칭 e와 m 두 개로 조인해 사원의 관리자 이름을 함께 조회한다. 최상위 사원을 남기려면 아우터 조인을 쓴다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .a{fill:#e9f0f5}
+      .t{font:800 12px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .s{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580;text-anchor:middle}
+      .ln{stroke:#3b5bdb;stroke-width:1.8;fill:none}
+      .lbl{font:700 11px 'IBM Plex Mono',monospace;fill:#3b5bdb;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="26">셀프 조인 — 같은 표를 별칭 2개로</text>
+
+  <rect class="box a" x="60" y="52" width="170" height="90" rx="10"/>
+  <text class="t" x="145" y="76">사원 e</text>
+  <text class="s" x="145" y="98">사번 · 이름</text>
+  <text class="s" x="145" y="116">관리자번호</text>
+  <text class="s" x="145" y="134">(자식 역할)</text>
+
+  <rect class="box a" x="330" y="52" width="170" height="90" rx="10"/>
+  <text class="t" x="415" y="76">사원 m</text>
+  <text class="s" x="415" y="98">사번 · 이름</text>
+  <text class="s" x="415" y="116">(관리자)</text>
+  <text class="s" x="415" y="134">(부모 역할)</text>
+
+  <path class="ln" d="M230 97 L330 97"/>
+  <text class="lbl" x="280" y="88">e.관리자번호 = m.사번</text>
+
+  <text class="note" x="24" y="180">※ 같은 사원 표를 e(사원)·m(관리자) 두 별칭으로 조인 → 각 사원의 관리자 이름 조회.</text>
+  <text class="note" x="24" y="202">※ 관리자 없는 최상위(사장)까지 남기려면 LEFT OUTER JOIN. INNER면 최상위 누락(함정).</text>
+</svg>

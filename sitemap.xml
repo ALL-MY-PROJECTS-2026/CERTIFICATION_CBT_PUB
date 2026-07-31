@@ -81,6 +81,11 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>https://pancocbt.site/posts/sqld-hierarchical-selfjoin</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://pancocbt.site/posts/sqld-identifier</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>

@@ -108,6 +108,7 @@
   "src/content/posts/sqld-function.mdx": [],
   "src/content/posts/sqld-group-functions.mdx": [],
   "src/content/posts/sqld-groupby-having.mdx": [],
+  "src/content/posts/sqld-hierarchical-selfjoin.mdx": [],
   "src/content/posts/sqld-identifier.mdx": [],
   "src/content/posts/sqld-join.mdx": [],
   "src/content/posts/sqld-normalization.mdx": [],
