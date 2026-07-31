@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>Top N 쿼리 — SQLD, ROWNUM 함정과 상위 N건 뽑기 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD Top N 쿼리를 시험 관점으로 정리합니다. ROWNUM이 정렬보다 먼저 매겨지는 함정, 인라인뷰로 정렬 후 ROWNUM, ROW_NUMBER·FETCH FIRST 방법을 도식·확인 문제와 함께 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-topn" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="Top N 쿼리 — SQLD, ROWNUM 함정과 상위 N건 뽑기 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD Top N 쿼리를 시험 관점으로 정리합니다. ROWNUM이 정렬보다 먼저 매겨지는 함정, 인라인뷰로 정렬 후 ROWNUM, ROW_NUMBER·FETCH FIRST 방법을 도식·확인 문제와 함께 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-topn" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-27T23:00" />
+    <meta property="article:modified_time" content="2026-07-27T23:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Top N 쿼리 — SQLD, ROWNUM 함정과 상위 N건 뽑기 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD Top N 쿼리를 시험 관점으로 정리합니다. ROWNUM이 정렬보다 먼저 매겨지는 함정, 인라인뷰로 정렬 후 ROWNUM, ROW_NUMBER·FETCH FIRST 방법을 도식·확인 문제와 함께 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Top N 쿼리 — SQLD, ROWNUM 함정과 상위 N건 뽑기","description":"SQLD Top N 쿼리를 시험 관점으로 정리합니다. ROWNUM이 정렬보다 먼저 매겨지는 함정, 인라인뷰로 정렬 후 ROWNUM, ROW_NUMBER·FETCH FIRST 방법을 도식·확인 문제와 함께 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-27T23:00","dateModified":"2026-07-27T23:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-topn"},"keywords":"SQLD, TopN, ROWNUM, ROW_NUMBER, FETCH FIRST"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"SQL 기본 및 활용","item":"https://pancocbt.site/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9"},{"@type":"ListItem","position":3,"name":"Top N 쿼리 — SQLD, ROWNUM 함정과 상위 N건 뽑기","item":"https://pancocbt.site/posts/sqld-topn"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-U9--AvY2.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-IU7vILQX.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">과목 문제풀기</a><a href="/exam">실전 모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a></li><li><span aria-current="page">Top N 쿼리 — SQLD, ROWNUM 함정과 상위 N건 뽑기</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a><h1 style="margin-top:0.75rem">22. Top N 쿼리 — SQLD, ROWNUM 함정과 상위 N건 뽑기</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-27T23:00">2026년 7월 27일 23:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->TopN</span><span class="tag">#<!-- -->ROWNUM</span><span class="tag">#<!-- -->ROW_NUMBER</span><span class="tag">#<!-- -->FETCH FIRST</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>Top N 쿼리</strong> 는 <strong>&quot;상위 N건&quot;을 뽑는</strong> 쿼리입니다(급여 상위 3명 등). 시험은 오라클 <strong><code>ROWNUM</code> 이 정렬보다 먼저 매겨진다</strong> 는 함정을 결과 예측으로 자주 냅니다.</p>
+<h2 id="이-단원-시험에서-어디에-나오나"><a href="#이-단원-시험에서-어디에-나오나">이 단원, 시험에서 어디에 나오나</a></h2>
+<ul>
+<li>제2과목 「SQL 기본 및 활용」 단원입니다.</li>
+<li><strong>ROWNUM 함정</strong>(정렬 순서 문제)과 상위 N건 뽑는 방법이 출제 포인트입니다.</li>
+</ul>
+<h2 id="-rownum-함정--정렬보다-먼저-매겨진다"><a href="#-rownum-함정--정렬보다-먼저-매겨진다">① ROWNUM 함정 — 정렬보다 먼저 매겨진다</a></h2>
+<p><img alt="ROWNUM 함정 도식. ROWNUM을 먼저 걸고 정렬하면 아무 3건이 나오고, 정렬을 인라인뷰로 먼저 한 뒤 ROWNUM을 걸어야 상위 3건이 나온다" src="/uploads/sqld-topn-rownum.svg" loading="lazy"/></p>
+<p><em>그림 1. ROWNUM은 WHERE 단계(정렬 전)에 매겨집니다. 정렬을 서브쿼리로 먼저 끝낸 뒤 ROWNUM을 걸어야 상위 N건입니다. (자작 도식)</em></p>
+<ul>
+<li><strong><code>ROWNUM</code></strong> 은 결과 행에 <strong>읽히는 순서대로</strong> 번호를 매깁니다 — <strong><code>ORDER BY</code> 보다 먼저</strong>.</li>
+<li>그래서 <code>WHERE ROWNUM &lt;= 3 ... ORDER BY 급여 DESC</code> 는 <strong>아무 3건을 뽑은 뒤 정렬</strong> → 상위 3명이 아닙니다.</li>
+<li><strong>정렬을 인라인뷰로 먼저</strong> 한 뒤 바깥에서 ROWNUM을 걸어야 합니다.</li>
+</ul>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 사원 </span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 급여 </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ROWNUM </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;   </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 급여 상위 3명</span></span></code></pre>
+<h2 id="-rownum의-또-다른-함정"><a href="#-rownum의-또-다른-함정">② ROWNUM의 또 다른 함정</a></h2>
+<ul>
+<li><strong><code>ROWNUM = N</code>(N&gt;1)</strong> 은 결과가 <strong>없습니다</strong>. (첫 행이 1이어야 하는데 건너뛸 수 없음)</li>
+<li><strong><code>ROWNUM &gt; 1</code></strong> 도 결과가 <strong>없습니다</strong>. → &quot;N번째부터&quot;가 필요하면 인라인뷰로 ROWNUM을 별칭 컬럼으로 만든 뒤 조건을 겁니다.</li>
+</ul>
+<h2 id="-상위-n건-뽑는-3가지-방법"><a href="#-상위-n건-뽑는-3가지-방법">③ 상위 N건 뽑는 3가지 방법</a></h2>
+<p><img alt="Top N 3가지 방법 도식. ROWNUM 인라인뷰, ROW_NUMBER OVER, FETCH FIRST N ROWS ONLY" src="/uploads/sqld-topn-methods.svg" loading="lazy"/></p>
+<p><em>그림 2. ROWNUM(오라클)·ROW_NUMBER() OVER·FETCH FIRST N ROWS ONLY(표준). (자작 도식)</em></p>
+<table><thead><tr><th>방법</th><th>특징</th></tr></thead><tbody><tr><td><strong>ROWNUM</strong></td><td>오라클. 정렬 인라인뷰 후 사용</td></tr><tr><td><strong>ROW_NUMBER() OVER</strong></td><td>순위로 필터. <strong>그룹별 Top-N</strong> 도 가능</td></tr><tr><td><strong>FETCH FIRST N ROWS ONLY</strong></td><td>표준 SQL(간결)</td></tr></tbody></table>
+<h2 id="자주-틀리는-함정"><a href="#자주-틀리는-함정">자주 틀리는 함정</a></h2>
+<ul>
+<li><strong>ROWNUM 먼저, ORDER BY 나중</strong> → 상위 N이 아님(정렬을 먼저).</li>
+<li><strong><code>ROWNUM = 3</code></strong> → 결과 없음.</li>
+<li><strong>그룹별 Top-N</strong> 은 ROWNUM으로 어렵고 <code>ROW_NUMBER() OVER(PARTITION BY …)</code> 가 적합.</li>
+</ul>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li><strong>ROWNUM은 정렬보다 먼저</strong> → <strong>정렬을 인라인뷰로 먼저</strong> 하고 바깥에서 <code>ROWNUM &lt;= N</code>.</li>
+<li><code>ROWNUM = N(N&gt;1)</code>·<code>ROWNUM &gt; 1</code> → 결과 없음.</li>
+<li>방법 3종: <strong>ROWNUM · ROW_NUMBER() OVER · FETCH FIRST N ROWS ONLY</strong>.</li>
+<li>그룹별 Top-N → <code>ROW_NUMBER() OVER(PARTITION BY …)</code>.</li>
+</ul>
+<aside class="related-problems" aria-label="Top N 연계 문제"><div class="related-problems__info"><span class="related-problems__label">Top N</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->6<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/Top%20N">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·출제기준: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>ROWNUM·ROW_NUMBER·FETCH 동작은 오라클·ANSI SQL 표준에 근거하며, 본문 설명·예시·도식은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-window-functions"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">윈도우 함수 — SQLD, 순위 3종과 OVER 절 정리</h3><p>SQLD 윈도우 함수를 시험 관점으로 정리합니다. RANK·DENSE_RANK·ROW_NUMBER 순위 3종의 동점 처리 차이, OVER(PARTITION BY·ORDER BY), LAG·LEAD를 도식·확인 문제와 함께 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-27T22:00">2026년 7월 27일 22:00</time><span>· <!-- -->SQLD, 윈도우함수, RANK</span></div></a><a class="post-card " href="/posts/sqld-ansi-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정</h3><p>SQLD 제2과목 표준 조인을 시험 관점으로 정리합니다. ON·USING·NATURAL 세 조건 지정 방식의 차이와 별칭 금지 규칙, OUTER JOIN에서 옵션 테이블 조건을 WHERE에 두면 INNER처럼 되는 최다 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T02:00">2026년 7월 31일 02:00</time><span>· <!-- -->SQLD, ANSIJOIN, USING</span></div></a><a class="post-card " href="/posts/sqld-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향</h3><p>SQLD 제2과목 조인을 시험 관점으로 정리합니다. INNER·OUTER(LEFT/RIGHT/FULL)·CROSS·SELF가 각각 어떤 행을 남기는지, 조인 조건 누락 시 행 수가 M×N으로 폭발하는 카티션 곱, 오라클 (+) 표기의 방향 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T01:00">2026년 7월 31일 01:00</time><span>· <!-- -->SQLD, JOIN, OUTERJOIN</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>

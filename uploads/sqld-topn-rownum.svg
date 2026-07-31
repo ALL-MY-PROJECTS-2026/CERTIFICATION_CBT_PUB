@@ -1,0 +1,27 @@
+<svg viewBox="0 0 560 250" width="560" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ROWNUM 함정. ROWNUM은 정렬(ORDER BY) 전에 매겨지므로 WHERE ROWNUM 3 뒤에 정렬하면 상위 3이 아니라 아무 3건이 나온다. 정렬을 인라인뷰로 먼저 한 뒤 ROWNUM을 걸어야 한다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.4;fill:#fff}
+      .no{fill:#fdeceb;stroke:#d62b2b;stroke-width:1.4}
+      .ok{fill:#eaf6ee;stroke:#1a7d45;stroke-width:1.4}
+      .code{font:700 11.5px 'IBM Plex Mono',monospace;fill:#10283d}
+      .t{font:800 12px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="26">ROWNUM 함정 — 정렬보다 먼저 매겨진다</text>
+
+  <text class="t" x="24" y="54" fill="#d62b2b">✗ 잘못 — ROWNUM 먼저, 정렬 나중</text>
+  <rect class="no" x="24" y="62" width="512" height="52" rx="8"/>
+  <text class="code" x="38" y="83">SELECT * FROM 사원</text>
+  <text class="code" x="38" y="103">WHERE ROWNUM &lt;= 3  ORDER BY 급여 DESC;  → 아무 3건 정렬(상위 X)</text>
+
+  <text class="t" x="24" y="142" fill="#1a7d45">✓ 올바름 — 정렬을 인라인뷰로 먼저</text>
+  <rect class="ok" x="24" y="150" width="512" height="52" rx="8"/>
+  <text class="code" x="38" y="171">SELECT * FROM (SELECT * FROM 사원 ORDER BY 급여 DESC)</text>
+  <text class="code" x="38" y="191">WHERE ROWNUM &lt;= 3;   → 급여 상위 3명</text>
+
+  <text class="note" x="24" y="230">※ ROWNUM은 WHERE 단계에서 부여 → 정렬을 서브쿼리(인라인뷰)로 끝낸 뒤 ROWNUM 적용.</text>
+</svg>

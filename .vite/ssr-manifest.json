@@ -119,6 +119,7 @@
   "src/content/posts/sqld-select.mdx": [],
   "src/content/posts/sqld-set-operators.mdx": [],
   "src/content/posts/sqld-subquery.mdx": [],
+  "src/content/posts/sqld-topn.mdx": [],
   "src/content/posts/sqld-transaction.mdx": [],
   "src/content/posts/sqld-where.mdx": [],
   "src/content/posts/sqld-window-functions.mdx": [],
