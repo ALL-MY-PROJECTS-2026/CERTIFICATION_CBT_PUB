@@ -1,0 +1,41 @@
+<svg viewBox="0 0 560 220" width="560" height="220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="UNPIVOT은 열을 행으로 바꾼다. Q1 Q2 Q3 열로 펼쳐진 표를 분기와 매출 두 열의 세로 표로 되돌린다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .th{fill:#e9f0f5;stroke:#17324c;stroke-width:1.2}
+      .td{fill:#fff;stroke:#cbd6de;stroke-width:1}
+      .h{font:800 10.5px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .x{font:400 10.5px 'IBM Plex Mono',monospace;fill:#10283d;text-anchor:middle}
+      .arw{stroke:#3b5bdb;stroke-width:2.5;fill:none;marker-end:url(#a)}
+      .lbl{font:800 12px 'Nanum Gothic',sans-serif;fill:#3b5bdb;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3b5bdb"/></marker>
+  </defs>
+
+  <text class="cap" x="24" y="26">UNPIVOT — 열을 행으로 (가로 → 세로)</text>
+
+  <!-- before: wide -->
+  <rect class="th" x="24" y="52" width="70" height="24"/><text class="h" x="59" y="69">Q1</text>
+  <rect class="th" x="94" y="52" width="70" height="24"/><text class="h" x="129" y="69">Q2</text>
+  <rect class="th" x="164" y="52" width="70" height="24"/><text class="h" x="199" y="69">Q3</text>
+  <rect class="td" x="24" y="76" width="70" height="24"/><text class="x" x="59" y="93">100</text>
+  <rect class="td" x="94" y="76" width="70" height="24"/><text class="x" x="129" y="93">200</text>
+  <rect class="td" x="164" y="76" width="70" height="24"/><text class="x" x="199" y="93">150</text>
+
+  <path class="arw" d="M250 78 L320 78"/>
+  <text class="lbl" x="285" y="68">UNPIVOT</text>
+
+  <!-- after: long -->
+  <rect class="th" x="345" y="52" width="70" height="24"/><text class="h" x="380" y="69">분기</text>
+  <rect class="th" x="415" y="52" width="80" height="24"/><text class="h" x="455" y="69">매출</text>
+  <rect class="td" x="345" y="76" width="70" height="22"/><text class="x" x="380" y="92">Q1</text>
+  <rect class="td" x="415" y="76" width="80" height="22"/><text class="x" x="455" y="92">100</text>
+  <rect class="td" x="345" y="98" width="70" height="22"/><text class="x" x="380" y="114">Q2</text>
+  <rect class="td" x="415" y="98" width="80" height="22"/><text class="x" x="455" y="114">200</text>
+  <rect class="td" x="345" y="120" width="70" height="22"/><text class="x" x="380" y="136">Q3</text>
+  <rect class="td" x="415" y="120" width="80" height="22"/><text class="x" x="455" y="136">150</text>
+
+  <text class="note" x="24" y="176">※ UNPIVOT은 PIVOT의 반대 — 여러 열을 (이름, 값) 두 열의 여러 행으로 되돌린다.</text>
+  <text class="note" x="24" y="198">   집계는 없고 구조만 세로로 바꾼다.</text>
+</svg>

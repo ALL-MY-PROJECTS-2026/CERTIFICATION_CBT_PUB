@@ -1,0 +1,41 @@
+<svg viewBox="0 0 560 240" width="560" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PIVOT은 행을 열로 바꾼다. 분기별 매출이 세로로 쌓인 표를 Q1 Q2 Q3 열로 펼치며, 값은 합계 같은 집계 함수로 만든다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .th{fill:#e9f0f5;stroke:#17324c;stroke-width:1.2}
+      .td{fill:#fff;stroke:#cbd6de;stroke-width:1}
+      .h{font:800 10.5px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .x{font:400 10.5px 'IBM Plex Mono',monospace;fill:#10283d;text-anchor:middle}
+      .arw{stroke:#3b5bdb;stroke-width:2.5;fill:none;marker-end:url(#a)}
+      .lbl{font:800 12px 'Nanum Gothic',sans-serif;fill:#3b5bdb;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3b5bdb"/></marker>
+  </defs>
+
+  <text class="cap" x="24" y="26">PIVOT — 행을 열로 (세로 → 가로)</text>
+
+  <!-- before: long -->
+  <rect class="th" x="24" y="42" width="60" height="24"/><text class="h" x="54" y="59">분기</text>
+  <rect class="th" x="84" y="42" width="70" height="24"/><text class="h" x="119" y="59">매출</text>
+  <rect class="td" x="24" y="66" width="60" height="22"/><text class="x" x="54" y="82">Q1</text>
+  <rect class="td" x="84" y="66" width="70" height="22"/><text class="x" x="119" y="82">100</text>
+  <rect class="td" x="24" y="88" width="60" height="22"/><text class="x" x="54" y="104">Q2</text>
+  <rect class="td" x="84" y="88" width="70" height="22"/><text class="x" x="119" y="104">200</text>
+  <rect class="td" x="24" y="110" width="60" height="22"/><text class="x" x="54" y="126">Q3</text>
+  <rect class="td" x="84" y="110" width="70" height="22"/><text class="x" x="119" y="126">150</text>
+
+  <path class="arw" d="M175 90 L245 90"/>
+  <text class="lbl" x="210" y="80">PIVOT</text>
+
+  <!-- after: wide -->
+  <rect class="th" x="270" y="66" width="80" height="24"/><text class="h" x="310" y="83">Q1</text>
+  <rect class="th" x="350" y="66" width="80" height="24"/><text class="h" x="390" y="83">Q2</text>
+  <rect class="th" x="430" y="66" width="80" height="24"/><text class="h" x="470" y="83">Q3</text>
+  <rect class="td" x="270" y="90" width="80" height="24"/><text class="x" x="310" y="107">100</text>
+  <rect class="td" x="350" y="90" width="80" height="24"/><text class="x" x="390" y="107">200</text>
+  <rect class="td" x="430" y="90" width="80" height="24"/><text class="x" x="470" y="107">150</text>
+
+  <text class="note" x="24" y="176">※ PIVOT은 값에 집계 함수(SUM 등)가 필수. FOR 분기 IN (Q1,Q2,Q3) 처럼 펼칠 값을 나열.</text>
+  <text class="note" x="24" y="198">   IN 목록에 없는 값은 결과 열에서 빠진다.</text>
+</svg>

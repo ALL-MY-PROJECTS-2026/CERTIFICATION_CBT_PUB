@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>PIVOT·UNPIVOT — SQLD, 행과 열을 뒤집는 교차표 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD PIVOT·UNPIVOT을 시험 관점으로 정리합니다. 행을 열로 바꾸는 PIVOT(집계 함수 필수)과 열을 행으로 되돌리는 UNPIVOT, FOR … IN 구문과 함정을 도식·확인 문제와 함께 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-pivot" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="PIVOT·UNPIVOT — SQLD, 행과 열을 뒤집는 교차표 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD PIVOT·UNPIVOT을 시험 관점으로 정리합니다. 행을 열로 바꾸는 PIVOT(집계 함수 필수)과 열을 행으로 되돌리는 UNPIVOT, FOR … IN 구문과 함정을 도식·확인 문제와 함께 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-pivot" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-07-28T10:00" />
+    <meta property="article:modified_time" content="2026-07-28T10:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PIVOT·UNPIVOT — SQLD, 행과 열을 뒤집는 교차표 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD PIVOT·UNPIVOT을 시험 관점으로 정리합니다. 행을 열로 바꾸는 PIVOT(집계 함수 필수)과 열을 행으로 되돌리는 UNPIVOT, FOR … IN 구문과 함정을 도식·확인 문제와 함께 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"PIVOT·UNPIVOT — SQLD, 행과 열을 뒤집는 교차표","description":"SQLD PIVOT·UNPIVOT을 시험 관점으로 정리합니다. 행을 열로 바꾸는 PIVOT(집계 함수 필수)과 열을 행으로 되돌리는 UNPIVOT, FOR … IN 구문과 함정을 도식·확인 문제와 함께 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-07-28T10:00","dateModified":"2026-07-28T10:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-pivot"},"keywords":"SQLD, PIVOT, UNPIVOT, 교차표, 집계"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"SQL 기본 및 활용","item":"https://pancocbt.site/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9"},{"@type":"ListItem","position":3,"name":"PIVOT·UNPIVOT — SQLD, 행과 열을 뒤집는 교차표","item":"https://pancocbt.site/posts/sqld-pivot"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-BqDKjvpr.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-IU7vILQX.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">과목 문제풀기</a><a href="/exam">실전 모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a></li><li><span aria-current="page">PIVOT·UNPIVOT — SQLD, 행과 열을 뒤집는 교차표</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a><h1 style="margin-top:0.75rem">24. PIVOT·UNPIVOT — SQLD, 행과 열을 뒤집는 교차표</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-07-28T10:00">2026년 7월 28일 10:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->PIVOT</span><span class="tag">#<!-- -->UNPIVOT</span><span class="tag">#<!-- -->교차표</span><span class="tag">#<!-- -->집계</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>PIVOT</strong> 은 <strong>행으로 쌓인 데이터를 열로 펼쳐</strong> 교차표(요약표)를 만드는 기능이고, <strong>UNPIVOT</strong> 은 그 반대로 <strong>열을 행으로 되돌립니다.</strong> 시험은 <strong>결과 교차표 예측</strong> 과 <strong>PIVOT에 집계 함수가 필수</strong> 라는 점을 묻습니다.</p>
+<h2 id="이-단원-시험에서-어디에-나오나"><a href="#이-단원-시험에서-어디에-나오나">이 단원, 시험에서 어디에 나오나</a></h2>
+<ul>
+<li>제2과목 「SQL 기본 및 활용」 단원(비교적 최근 추가)입니다.</li>
+<li><strong>PIVOT/UNPIVOT의 방향</strong> 과 <strong>집계 함수·<code>FOR … IN</code> 구문</strong> 이 출제 포인트입니다.</li>
+</ul>
+<h2 id="-pivot--행을-열로"><a href="#-pivot--행을-열로">① PIVOT — 행을 열로</a></h2>
+<p><img alt="PIVOT 도식. 분기별 매출이 세로로 쌓인 표를 Q1·Q2·Q3 열로 펼치는 과정" src="/uploads/sqld-pivot.svg" loading="lazy"/></p>
+<p><em>그림 1. 세로로 쌓인 분기 매출을 Q1·Q2·Q3 열로 펼칩니다. 값은 집계 함수(SUM 등)로 만듭니다. (자작 도식)</em></p>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 매출</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">PIVOT ( </span><span style="color:#005CC5;--shiki-dark:#79B8FF">SUM</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(매출) </span><span style="color:#D73A49;--shiki-dark:#F97583">FOR</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 분기 </span><span style="color:#D73A49;--shiki-dark:#F97583">IN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#032F62;--shiki-dark:#9ECBFF">&#x27;Q1&#x27;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">&#x27;Q2&#x27;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">&#x27;Q3&#x27;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) );</span></span></code></pre>
+<ul>
+<li><strong>집계 함수 필수</strong>: PIVOT의 값 자리에는 <code>SUM</code>·<code>COUNT</code> 등 <strong>집계 함수가 반드시</strong> 들어갑니다.</li>
+<li><strong><code>FOR 컬럼 IN (값들)</code></strong>: 펼칠 값을 나열합니다.</li>
+<li><strong>IN 목록에 없는 값</strong> 은 결과 열에서 빠집니다.</li>
+</ul>
+<h2 id="-unpivot--열을-행으로"><a href="#-unpivot--열을-행으로">② UNPIVOT — 열을 행으로</a></h2>
+<p><img alt="UNPIVOT 도식. Q1·Q2·Q3 열로 펼쳐진 표를 분기·매출 두 열의 세로 표로 되돌리는 과정" src="/uploads/sqld-unpivot.svg" loading="lazy"/></p>
+<p><em>그림 2. 펼쳐진 열(Q1·Q2·Q3)을 (분기, 매출) 두 열의 여러 행으로 되돌립니다. (자작 도식)</em></p>
+<ul>
+<li>PIVOT의 <strong>반대</strong> — 여러 열을 <strong>(이름 열, 값 열)</strong> 형태의 행으로 바꿉니다.</li>
+<li><strong>집계는 없고</strong> 구조만 세로로 되돌립니다.</li>
+</ul>
+<h2 id="자주-틀리는-함정"><a href="#자주-틀리는-함정">자주 틀리는 함정</a></h2>
+<ul>
+<li><strong>PIVOT에 집계 함수 누락</strong> → 오류. 값은 반드시 집계 함수로.</li>
+<li><strong>IN 목록 누락</strong> — 나열하지 않은 값은 결과에 안 나옴.</li>
+<li><strong>PIVOT ↔ UNPIVOT 방향 혼동</strong> — PIVOT=행→열(가로로 넓게), UNPIVOT=열→행(세로로 길게).</li>
+<li><strong>UNPIVOT이 값을 합친다고 오인</strong> — UNPIVOT은 집계가 아니라 구조 변환.</li>
+</ul>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li><strong>PIVOT</strong>: 행 → 열(교차표), <strong>집계 함수 필수</strong>, <code>FOR 컬럼 IN (값들)</code>.</li>
+<li><strong>UNPIVOT</strong>: 열 → 행(되돌리기), 집계 없음.</li>
+<li>IN 목록에 없는 값은 제외.</li>
+</ul>
+<aside class="related-problems" aria-label="PIVOT·UNPIVOT 연계 문제"><div class="related-problems__info"><span class="related-problems__label">PIVOT·UNPIVOT</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->6<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/PIVOT">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·출제기준: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>PIVOT·UNPIVOT 동작은 오라클·표준 SQL에 근거하며, 본문 설명·예시·도식은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-ansi-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정</h3><p>SQLD 제2과목 표준 조인을 시험 관점으로 정리합니다. ON·USING·NATURAL 세 조건 지정 방식의 차이와 별칭 금지 규칙, OUTER JOIN에서 옵션 테이블 조건을 WHERE에 두면 INNER처럼 되는 최다 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T02:00">2026년 7월 31일 02:00</time><span>· <!-- -->SQLD, ANSIJOIN, USING</span></div></a><a class="post-card " href="/posts/sqld-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향</h3><p>SQLD 제2과목 조인을 시험 관점으로 정리합니다. INNER·OUTER(LEFT/RIGHT/FULL)·CROSS·SELF가 각각 어떤 행을 남기는지, 조인 조건 누락 시 행 수가 M×N으로 폭발하는 카티션 곱, 오라클 (+) 표기의 방향 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T01:00">2026년 7월 31일 01:00</time><span>· <!-- -->SQLD, JOIN, OUTERJOIN</span></div></a><a class="post-card " href="/posts/sqld-orderby"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">ORDER BY — SQLD, NULL 정렬 위치와 별칭·순번 함정</h3><p>SQLD 제2과목 ORDER BY를 시험 관점으로 정리합니다. 오라클에서 NULL이 오름차순 맨 뒤로 가는 이유, SELECT 별칭·컬럼 순번을 ORDER BY에서만 쓸 수 있는 이유, 다중 정렬에서 방향을 각각 지정해야 하는 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T00:00">2026년 7월 31일 00:00</time><span>· <!-- -->SQLD, ORDERBY, 정렬</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>
