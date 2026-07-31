@@ -1,0 +1,31 @@
+<svg viewBox="0 0 560 240" width="560" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ROLLUP과 CUBE의 조합 수. ROLLUP(A,B)는 세 가지 그룹 조합, CUBE(A,B)는 네 가지 그룹 조합을 만든다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.5;fill:#fff}
+      .hl{fill:#fff6d6}
+      .t{font:800 13px 'IBM Plex Mono',monospace;fill:#17324c;text-anchor:middle}
+      .c{font:400 11.5px 'IBM Plex Mono',monospace;fill:#10283d;text-anchor:middle}
+      .s{font:400 10.5px 'Nanum Gothic',sans-serif;fill:#4a6580;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="26">ROLLUP vs CUBE — 만드는 그룹 조합 수 (인자 2개 기준)</text>
+
+  <rect class="box" x="24" y="44" width="250" height="120" rx="10"/>
+  <text class="t" x="149" y="66">ROLLUP(A, B)</text>
+  <text class="c" x="149" y="90">(A, B)</text>
+  <text class="c" x="149" y="110">(A)</text>
+  <text class="c" x="149" y="130">( ) 총계</text>
+  <text class="s" x="149" y="152">계층적 소계 = n+1 = 3개</text>
+
+  <rect class="box hl" x="286" y="44" width="250" height="120" rx="10"/>
+  <text class="t" x="411" y="66">CUBE(A, B)</text>
+  <text class="c" x="411" y="88">(A, B)   (A)</text>
+  <text class="c" x="411" y="108">(B)   ( ) 총계</text>
+  <text class="s" x="411" y="152">모든 조합 = 2ⁿ = 4개</text>
+
+  <text class="note" x="24" y="196">※ ROLLUP은 (B) 단독 소계가 없다(계층적). CUBE는 (B) 소계까지 모두 만든다.</text>
+  <text class="note" x="24" y="218">   인자 n개 → ROLLUP: n+1 그룹 / CUBE: 2ⁿ 그룹.</text>
+</svg>

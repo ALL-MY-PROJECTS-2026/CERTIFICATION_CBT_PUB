@@ -1,0 +1,31 @@
+<svg viewBox="0 0 560 250" width="560" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ROLLUP 실행 결과 예시. 부서별 소계 행과 전체 총계 행이 추가되며, 소계·총계 행의 그룹 컬럼은 NULL로 표시된다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .th{fill:#e9f0f5;stroke:#17324c;stroke-width:1.3}
+      .td{fill:#fff;stroke:#cbd6de;stroke-width:1.1}
+      .sub{fill:#fff6d6;stroke:#cbd6de;stroke-width:1.1}
+      .h{font:800 11px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .x{font:400 11px 'IBM Plex Mono',monospace;fill:#10283d;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="26">ROLLUP(부서) 결과 — 소계·총계 행 추가</text>
+
+  <rect class="th" x="24" y="42" width="160" height="28"/><text class="h" x="104" y="61">부서</text>
+  <rect class="th" x="184" y="42" width="160" height="28"/><text class="h" x="264" y="61">합계</text>
+  <rect class="td" x="24" y="70" width="160" height="26"/><text class="x" x="104" y="88">영업</text>
+  <rect class="td" x="184" y="70" width="160" height="26"/><text class="x" x="264" y="88">300</text>
+  <rect class="td" x="24" y="96" width="160" height="26"/><text class="x" x="104" y="114">인사</text>
+  <rect class="td" x="184" y="96" width="160" height="26"/><text class="x" x="264" y="114">200</text>
+  <rect class="sub" x="24" y="122" width="160" height="26"/><text class="x" x="104" y="140" fill="#b26a00">NULL</text>
+  <rect class="sub" x="184" y="122" width="160" height="26"/><text class="x" x="264" y="140">500</text>
+
+  <text class="note" x="360" y="90">← 실제 부서 행</text>
+  <text class="note" x="360" y="139" fill="#b26a00">← 총계 행</text>
+  <text class="note" x="360" y="155">   (부서=NULL)</text>
+
+  <text class="note" x="24" y="190">※ 소계·총계 행의 그룹 컬럼은 NULL로 나온다 → 실제 NULL과 구분하려면 GROUPING() 사용.</text>
+  <text class="note" x="24" y="212">   GROUPING(부서)=1 이면 소계/총계 행, 0 이면 실제 값 행.</text>
+</svg>
