@@ -1,0 +1,27 @@
+<svg viewBox="0 0 560 220" width="560" height="220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="윈도우 함수 구조. OVER 절 안에서 PARTITION BY로 그룹을 나누고 ORDER BY로 순서를 정한다. LAG는 이전 행 값, LEAD는 다음 행 값을 가져온다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.4;fill:#fff}
+      .kw{fill:#e9f0f5}
+      .code{font:700 12.5px 'IBM Plex Mono',monospace;fill:#10283d;text-anchor:middle}
+      .lbl{font:800 11px 'Nanum Gothic',sans-serif;fill:#3b5bdb;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="26">윈도우 함수 구조 — OVER(PARTITION BY … ORDER BY …)</text>
+
+  <rect class="box" x="24" y="42" width="512" height="40" rx="8"/>
+  <text class="code" x="280" y="67">함수() OVER ( PARTITION BY 부서  ORDER BY 급여 DESC )</text>
+  <text class="lbl" x="205" y="98">그룹을 나눔</text>
+  <text class="lbl" x="360" y="98">그룹 안 순서</text>
+
+  <text class="cap" x="24" y="132" font-size="13">이전·다음 행 참조</text>
+  <rect class="box kw" x="24" y="142" width="250" height="34" rx="8"/>
+  <text class="code" x="149" y="164" text-anchor="middle">LAG(급여, 1)</text>
+  <rect class="box kw" x="286" y="142" width="250" height="34" rx="8"/>
+  <text class="code" x="411" y="164" text-anchor="middle">LEAD(급여, 1)</text>
+
+  <text class="note" x="24" y="200">※ LAG=이전 행 값, LEAD=다음 행 값. 순위·집계 모두 PARTITION BY(그룹)·ORDER BY(순서)로 제어.</text>
+</svg>

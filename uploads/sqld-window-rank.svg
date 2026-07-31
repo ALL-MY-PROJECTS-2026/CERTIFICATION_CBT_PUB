@@ -1,0 +1,46 @@
+<svg viewBox="0 0 560 250" width="560" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="순위 함수 세 가지 결과 차이. 같은 점수 90이 두 개일 때 RANK는 1,2,2,4로 건너뛰고 DENSE_RANK는 1,2,2,3으로 안 건너뛰며 ROW_NUMBER는 1,2,3,4로 유일 연속값을 준다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .th{fill:#e9f0f5;stroke:#17324c;stroke-width:1.3}
+      .td{fill:#fff;stroke:#cbd6de;stroke-width:1.1}
+      .tie{fill:#fff6d6;stroke:#cbd6de;stroke-width:1.1}
+      .h{font:800 11px 'Nanum Gothic',sans-serif;fill:#17324c;text-anchor:middle}
+      .x{font:400 12px 'IBM Plex Mono',monospace;fill:#10283d;text-anchor:middle}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="26">순위 함수 3종 — 동점(90) 처리 차이</text>
+
+  <rect class="th" x="24" y="42" width="100" height="28"/><text class="h" x="74" y="61">점수</text>
+  <rect class="th" x="124" y="42" width="140" height="28"/><text class="h" x="194" y="61">RANK</text>
+  <rect class="th" x="264" y="42" width="150" height="28"/><text class="h" x="339" y="61">DENSE_RANK</text>
+  <rect class="th" x="414" y="42" width="122" height="28"/><text class="h" x="475" y="61">ROW_NUMBER</text>
+
+  <!-- rows -->
+  <g>
+    <rect class="td" x="24" y="70" width="100" height="26"/><text class="x" x="74" y="88">100</text>
+    <rect class="td" x="124" y="70" width="140" height="26"/><text class="x" x="194" y="88">1</text>
+    <rect class="td" x="264" y="70" width="150" height="26"/><text class="x" x="339" y="88">1</text>
+    <rect class="td" x="414" y="70" width="122" height="26"/><text class="x" x="475" y="88">1</text>
+
+    <rect class="tie" x="24" y="96" width="100" height="26"/><text class="x" x="74" y="114">90</text>
+    <rect class="tie" x="124" y="96" width="140" height="26"/><text class="x" x="194" y="114">2</text>
+    <rect class="tie" x="264" y="96" width="150" height="26"/><text class="x" x="339" y="114">2</text>
+    <rect class="tie" x="414" y="96" width="122" height="26"/><text class="x" x="475" y="114">2</text>
+
+    <rect class="tie" x="24" y="122" width="100" height="26"/><text class="x" x="74" y="140">90</text>
+    <rect class="tie" x="124" y="122" width="140" height="26"/><text class="x" x="194" y="140">2</text>
+    <rect class="tie" x="264" y="122" width="150" height="26"/><text class="x" x="339" y="140">2</text>
+    <rect class="tie" x="414" y="122" width="122" height="26"/><text class="x" x="475" y="140">3</text>
+
+    <rect class="td" x="24" y="148" width="100" height="26"/><text class="x" x="74" y="166">80</text>
+    <rect class="td" x="124" y="148" width="140" height="26"/><text class="x" x="194" y="166" fill="#d62b2b">4 (건너뜀)</text>
+    <rect class="td" x="264" y="148" width="150" height="26"/><text class="x" x="339" y="166" fill="#1a7d45">3</text>
+    <rect class="td" x="414" y="148" width="122" height="26"/><text class="x" x="475" y="166">4</text>
+  </g>
+
+  <text class="note" x="24" y="200">※ RANK=1,2,2,4(다음 순위 건너뜀) · DENSE_RANK=1,2,2,3(안 건너뜀) · ROW_NUMBER=유일 연속.</text>
+  <text class="note" x="24" y="222">   순위 함수는 OVER 안에 ORDER BY 필수.</text>
+</svg>

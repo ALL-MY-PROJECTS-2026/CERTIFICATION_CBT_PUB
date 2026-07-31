@@ -121,6 +121,7 @@
   "src/content/posts/sqld-subquery.mdx": [],
   "src/content/posts/sqld-transaction.mdx": [],
   "src/content/posts/sqld-where.mdx": [],
+  "src/content/posts/sqld-window-functions.mdx": [],
   "src/content/questions/sqld.ts": [],
   "src/content/schedule.ts": [],
   "src/content/site.json": [],
