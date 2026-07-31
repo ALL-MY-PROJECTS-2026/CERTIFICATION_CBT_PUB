@@ -1,0 +1,27 @@
+<svg viewBox="0 0 560 220" width="560" height="220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="집합 연산자 규칙. 각 SELECT의 컬럼 수와 대응 위치의 타입이 같아야 하며 컬럼 이름은 달라도 되고, ORDER BY는 맨 끝에 한 번만 쓴다">
+  <defs>
+    <style>
+      .cap{font:800 14px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{stroke:#17324c;stroke-width:1.4;fill:#fff}
+      .ok{fill:#eaf6ee;stroke:#1a7d45;stroke-width:1.4}
+      .no{fill:#fdeceb;stroke:#d62b2b;stroke-width:1.4}
+      .code{font:700 12px 'IBM Plex Mono',monospace;fill:#10283d}
+      .lbl{font:800 12px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text class="cap" x="24" y="26">집합 연산 규칙</text>
+
+  <text class="lbl" x="24" y="54">① 컬럼 수·타입 일치 (이름은 무관)</text>
+  <rect class="ok" x="24" y="62" width="250" height="34" rx="8"/>
+  <text class="code" x="38" y="84">SELECT 이름,나이 … (2열)</text>
+  <rect class="ok" x="286" y="62" width="250" height="34" rx="8"/>
+  <text class="code" x="300" y="84">SELECT 성명,연령 … (2열) ✓</text>
+
+  <rect class="no" x="24" y="102" width="512" height="34" rx="8"/>
+  <text class="code" x="38" y="124" fill="#d62b2b">한쪽만 3열이거나 타입이 안 맞으면 → 오류</text>
+
+  <text class="lbl" x="24" y="164">② ORDER BY 는 맨 마지막 SELECT 뒤에 한 번만</text>
+  <text class="note" x="24" y="190">※ 대응 "위치"의 타입만 맞으면 됨(컬럼명 달라도 OK). 결과 컬럼명은 첫 SELECT 기준.</text>
+</svg>

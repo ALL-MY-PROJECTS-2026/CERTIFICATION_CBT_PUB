@@ -35,6 +35,13 @@
       <description>SQLD 제2과목 GROUP BY·HAVING을 시험 관점으로 정리합니다. WHERE는 그룹 전 행을 거르고 HAVING은 그룹 후 집계값을 거른다는 구분, 집계함수를 WHERE에 못 쓰는 이유, SELECT 컬럼과 GROUP BY의 관계를 도식·확인 문제로 짚습니다.</description>
     </item>
     <item>
+      <title>집합 연산자 — SQLD, UNION·UNION ALL·INTERSECT·MINUS 정리</title>
+      <link>https://pancocbt.site/posts/sqld-set-operators</link>
+      <guid isPermaLink="true">https://pancocbt.site/posts/sqld-set-operators</guid>
+      <pubDate>Mon, 27 Jul 2026 20:00:00 GMT</pubDate>
+      <description>SQLD 집합 연산자를 시험 관점으로 정리합니다. UNION과 UNION ALL의 중복·정렬 차이, INTERSECT·MINUS, 컬럼 수·타입 일치 규칙과 ORDER BY 위치 함정을 도식·확인 문제와 함께 짚습니다.</description>
+    </item>
+    <item>
       <title>서브쿼리 — SQLD, 위치별 종류와 다중행 연산자 함정</title>
       <link>https://pancocbt.site/posts/sqld-subquery</link>
       <guid isPermaLink="true">https://pancocbt.site/posts/sqld-subquery</guid>
