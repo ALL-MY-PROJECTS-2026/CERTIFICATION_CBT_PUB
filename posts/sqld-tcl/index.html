@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>TCL — SQLD, COMMIT·ROLLBACK·SAVEPOINT와 DDL 자동 커밋 함정 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 제2과목 TCL을 시험 관점으로 정리합니다. COMMIT 후에는 ROLLBACK으로 복구할 수 없다는 원칙, ROLLBACK TO 저장점이 그 이후 작업만 취소하는 범위, 트랜잭션 도중 DDL이 앞선 DML까지 자동 커밋하는 함정을 도식·확인 문제로 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-tcl" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="TCL — SQLD, COMMIT·ROLLBACK·SAVEPOINT와 DDL 자동 커밋 함정 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 제2과목 TCL을 시험 관점으로 정리합니다. COMMIT 후에는 ROLLBACK으로 복구할 수 없다는 원칙, ROLLBACK TO 저장점이 그 이후 작업만 취소하는 범위, 트랜잭션 도중 DDL이 앞선 DML까지 자동 커밋하는 함정을 도식·확인 문제로 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-tcl" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-08-01T14:00" />
+    <meta property="article:modified_time" content="2026-08-01T14:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TCL — SQLD, COMMIT·ROLLBACK·SAVEPOINT와 DDL 자동 커밋 함정 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 제2과목 TCL을 시험 관점으로 정리합니다. COMMIT 후에는 ROLLBACK으로 복구할 수 없다는 원칙, ROLLBACK TO 저장점이 그 이후 작업만 취소하는 범위, 트랜잭션 도중 DDL이 앞선 DML까지 자동 커밋하는 함정을 도식·확인 문제로 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"TCL — SQLD, COMMIT·ROLLBACK·SAVEPOINT와 DDL 자동 커밋 함정","description":"SQLD 제2과목 TCL을 시험 관점으로 정리합니다. COMMIT 후에는 ROLLBACK으로 복구할 수 없다는 원칙, ROLLBACK TO 저장점이 그 이후 작업만 취소하는 범위, 트랜잭션 도중 DDL이 앞선 DML까지 자동 커밋하는 함정을 도식·확인 문제로 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-08-01T14:00","dateModified":"2026-08-01T14:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-tcl"},"keywords":"SQLD, TCL, COMMIT, ROLLBACK, SAVEPOINT"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"SQL 기본 및 활용","item":"https://pancocbt.site/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9"},{"@type":"ListItem","position":3,"name":"TCL — SQLD, COMMIT·ROLLBACK·SAVEPOINT와 DDL 자동 커밋 함정","item":"https://pancocbt.site/posts/sqld-tcl"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-Ut-1mFLQ.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-IU7vILQX.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">과목 문제풀기</a><a href="/exam">실전 모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a></li><li><span aria-current="page">TCL — SQLD, COMMIT·ROLLBACK·SAVEPOINT와 DDL 자동 커밋 함정</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a><h1 style="margin-top:0.75rem">27. TCL — SQLD, COMMIT·ROLLBACK·SAVEPOINT와 DDL 자동 커밋 함정</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-08-01T14:00">2026년 8월 1일 14:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->TCL</span><span class="tag">#<!-- -->COMMIT</span><span class="tag">#<!-- -->ROLLBACK</span><span class="tag">#<!-- -->SAVEPOINT</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>TCL(Transaction Control Language)</strong> 은 트랜잭션(하나로 묶인 작업 단위)을 <strong>확정(COMMIT)</strong> 하거나 <strong>취소(ROLLBACK)</strong> 하고, <strong>중간 저장점(SAVEPOINT)</strong> 으로 부분 취소하는 명령입니다. 시험은 &quot;이 시점에 ROLLBACK하면 <strong>무엇이 남는가</strong>&quot;를 묻습니다. <em>(트랜잭션·ACID 개념은 트랜잭션 단원 참고.)</em></p>
+<h2 id="이-단원-시험에서-어디에-나오나-출제-비중"><a href="#이-단원-시험에서-어디에-나오나-출제-비중">이 단원, 시험에서 어디에 나오나 (출제 비중)</a></h2>
+<ul>
+<li><strong>제2과목 「SQL 기본 및 활용」 = 40문항 · 80점.</strong> TCL은 트랜잭션 결과 판별 유형으로 출제됩니다.</li>
+<li><strong>ROLLBACK TO의 취소 범위</strong>와 <strong>DDL 자동 커밋</strong>이 오답을 가르는 포인트입니다. <em>(단원별 문항수는 공개되지 않습니다 — 출처: KDATA 출제기준.)</em></li>
+</ul>
+<h2 id="출제-포인트--시험이-실제로-묻는-것"><a href="#출제-포인트--시험이-실제로-묻는-것">출제 포인트 — 시험이 실제로 묻는 것</a></h2>
+<ol>
+<li><code>COMMIT</code>(확정) · <code>ROLLBACK</code>(전체 취소) · <code>SAVEPOINT</code> + <code>ROLLBACK TO</code>(부분 취소)</li>
+<li><strong><code>ROLLBACK TO 저장점</code> = 그 지점 &quot;이후&quot;만 취소</strong> — 저장점과 그 이전은 유지</li>
+<li><strong>COMMIT 후에는 되돌릴 수 없다</strong> (지속성)</li>
+<li><strong>트랜잭션 도중 DDL 실행 = 앞선 DML까지 자동 커밋</strong> (최다 함정)</li>
+</ol>
+<h2 id="-네-명령의-동작"><a href="#-네-명령의-동작">① 네 명령의 동작</a></h2>
+<table><thead><tr><th>명령</th><th>동작</th></tr></thead><tbody><tr><td><code>COMMIT</code></td><td>지금까지 변경을 <strong>영구 확정</strong></td></tr><tr><td><code>ROLLBACK</code></td><td><strong>마지막 COMMIT 이후</strong> 전부 취소</td></tr><tr><td><code>SAVEPOINT 이름</code></td><td>중간 <strong>저장점</strong> 설정</td></tr><tr><td><code>ROLLBACK TO 이름</code></td><td>그 저장점 <strong>이후만</strong> 취소</td></tr></tbody></table>
+<p>DML 변경은 COMMIT 전까지 <strong>다른 세션에서 보이지 않습니다</strong>(격리성). COMMIT해야 모두에게 확정됩니다.</p>
+<h2 id="-savepoint--되감기의-범위-계산"><a href="#-savepoint--되감기의-범위-계산">② SAVEPOINT — 되감기의 범위 계산</a></h2>
+<p><img alt="작업 A, 저장점 s1, 작업 B, 저장점 s2, 작업 C 순서로 진행했을 때 ROLLBACK TO s2는 C만 취소하고 ROLLBACK TO s1은 B와 C를 취소하며 COMMIT은 전부 확정하는 범위 도식" src="/uploads/sqld-tcl-savepoint.svg" loading="lazy"/></p>
+<p><em>그림 1. ROLLBACK TO는 저장점 이후만 취소한다. (자작 도식)</em></p>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">INSERT INTO</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 계좌 ...;    </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 작업 A</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">SAVEPOINT s1;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">UPDATE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 계좌 </span><span style="color:#D73A49;--shiki-dark:#F97583">SET</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ...;     </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 작업 B</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">SAVEPOINT s2;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">DELETE</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 계좌 ...;    </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 작업 C</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ROLLBACK</span><span style="color:#D73A49;--shiki-dark:#F97583"> TO</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> s1;         </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- B, C 취소 — A는 남는다</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">COMMIT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;                 </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- A만 확정</span></span></code></pre>
+<blockquote>
+<p><strong>판별법:</strong> <code>ROLLBACK TO s1</code>은 <strong>s1 이후만</strong> 되감습니다. &quot;s1 이전까지 다 취소&quot;로 읽으면 반대로 틀립니다. 전체 취소는 그냥 <code>ROLLBACK</code>.</p>
+</blockquote>
+<h2 id="-commit-후-복구-불가--지속성"><a href="#-commit-후-복구-불가--지속성">③ COMMIT 후 복구 불가 — 지속성</a></h2>
+<p><code>ROLLBACK</code>이 되돌리는 범위는 <strong>마지막 COMMIT 이후</strong>뿐입니다. 이미 COMMIT된 변경은 영구 확정(지속성)이라 <strong>&quot;실수로 COMMIT → ROLLBACK으로 복구&quot;는 불가능</strong>합니다.</p>
+<h2 id="-ddl-자동-커밋--앞선-dml까지-확정된다"><a href="#-ddl-자동-커밋--앞선-dml까지-확정된다">④ DDL 자동 커밋 — 앞선 DML까지 확정된다</a></h2>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">DELETE</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 주문;        </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- DML (아직 취소 가능)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CREATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> INDEX</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> idx</span><span style="color:#D73A49;--shiki-dark:#F97583"> ON</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ...;  </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- DDL → 자동 커밋! DELETE까지 확정</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ROLLBACK</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;                 </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 아무것도 안 돌아온다</span></span></code></pre>
+<p>트랜잭션 도중 <code>CREATE</code>·<code>ALTER</code>·<code>DROP</code>·<code>TRUNCATE</code> 같은 <strong>DDL을 실행하면 그 앞의 DML까지 자동 COMMIT</strong>됩니다. 이후 ROLLBACK해도 돌아오지 않습니다 — DML 단원의 &quot;TRUNCATE 복구 불가&quot;와 같은 원리입니다.</p>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li><code>COMMIT</code> 확정 · <code>ROLLBACK</code> 전체 취소 · <code>SAVEPOINT</code>+<code>ROLLBACK TO</code> 부분 취소.</li>
+<li><strong><code>ROLLBACK TO</code> = 저장점 &quot;이후&quot;만</strong> 취소. 저장점·그 이전은 유지.</li>
+<li><strong>COMMIT 후 복구 불가</strong>(지속성). COMMIT 전 변경은 다른 세션에 안 보임.</li>
+<li><strong>DDL = 자동 커밋</strong> — 앞선 DML까지 확정.</li>
+</ul>
+<aside class="related-problems" aria-label="TCL 연계 문제"><div class="related-problems__info"><span class="related-problems__label">TCL</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->6<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/TCL">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·배점: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>TCL 동작은 표준 SQL·오라클 SQL에 근거하며, 본문 예시·도식·설명은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-dml"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">DML — SQLD, INSERT·UPDATE·DELETE·MERGE와 TRUNCATE 함정</h3><p>SQLD 제2과목 DML을 시험 관점으로 정리합니다. INSERT·UPDATE·DELETE·MERGE 문법, WHERE 없는 UPDATE/DELETE가 전체 행에 적용되는 사고, DELETE(복구 가능) vs TRUNCATE(DDL·복구 불가) vs DROP(구조 삭제) 구분을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T22:00">2026년 7월 31일 22:00</time><span>· <!-- -->SQLD, DML, INSERT</span></div></a><a class="post-card " href="/posts/sqld-ansi-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정</h3><p>SQLD 제2과목 표준 조인을 시험 관점으로 정리합니다. ON·USING·NATURAL 세 조건 지정 방식의 차이와 별칭 금지 규칙, OUTER JOIN에서 옵션 테이블 조건을 WHERE에 두면 INNER처럼 되는 최다 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T02:00">2026년 7월 31일 02:00</time><span>· <!-- -->SQLD, ANSIJOIN, USING</span></div></a><a class="post-card " href="/posts/sqld-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">조인(JOIN) — SQLD, 종류별 결과와 카티션 곱·(+) 방향</h3><p>SQLD 제2과목 조인을 시험 관점으로 정리합니다. INNER·OUTER(LEFT/RIGHT/FULL)·CROSS·SELF가 각각 어떤 행을 남기는지, 조인 조건 누락 시 행 수가 M×N으로 폭발하는 카티션 곱, 오라클 (+) 표기의 방향 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T01:00">2026년 7월 31일 01:00</time><span>· <!-- -->SQLD, JOIN, OUTERJOIN</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>
