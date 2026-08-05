@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
+    <!-- 디자인시안 웹폰트: Nanum Gothic(본문·UI) · IBM Plex Mono(코드) — 렌더 비차단 로드
+         (한글은 Google 의 unicode-range 서브셋이 효율적이라 유지하고, CSS 만 비차단으로) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <meta name="naver-site-verification" content="f6149829d01a0470b8f4d3f3c7e9c6bc04c96e0e" />
+    <link rel="alternate" type="application/rss+xml" title="CBT 전자문제집 RSS" href="https://pancocbt.site/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CBT 전자문제집","url":"https://pancocbt.site/","logo":"https://pancocbt.site/og-default.png"}</script>
+    <title>DDL·제약조건 — SQLD, PK vs UNIQUE의 NULL과 자동 커밋 — CBT 전자문제집</title>
+    <meta name="description" content="SQLD 제2과목 DDL을 시험 관점으로 정리합니다. CREATE·ALTER·DROP·TRUNCATE 문법, 제약조건 5종(PK·FK·UNIQUE·NOT NULL·CHECK), PK는 NULL 불가지만 UNIQUE는 NULL을 허용하는 함정, DDL 자동 커밋을 도식·확인 문제로 짚습니다." />
+    <link rel="canonical" href="https://pancocbt.site/posts/sqld-ddl" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="CBT 전자문제집" />
+    <meta property="og:title" content="DDL·제약조건 — SQLD, PK vs UNIQUE의 NULL과 자동 커밋 — CBT 전자문제집" />
+    <meta property="og:description" content="SQLD 제2과목 DDL을 시험 관점으로 정리합니다. CREATE·ALTER·DROP·TRUNCATE 문법, 제약조건 5종(PK·FK·UNIQUE·NOT NULL·CHECK), PK는 NULL 불가지만 UNIQUE는 NULL을 허용하는 함정, DDL 자동 커밋을 도식·확인 문제로 짚습니다." />
+    <meta property="og:url" content="https://pancocbt.site/posts/sqld-ddl" />
+    <meta property="og:image" content="https://pancocbt.site/og-default.png" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="article:published_time" content="2026-08-05T19:00" />
+    <meta property="article:modified_time" content="2026-08-05T19:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DDL·제약조건 — SQLD, PK vs UNIQUE의 NULL과 자동 커밋 — CBT 전자문제집" />
+    <meta name="twitter:description" content="SQLD 제2과목 DDL을 시험 관점으로 정리합니다. CREATE·ALTER·DROP·TRUNCATE 문법, 제약조건 5종(PK·FK·UNIQUE·NOT NULL·CHECK), PK는 NULL 불가지만 UNIQUE는 NULL을 허용하는 함정, DDL 자동 커밋을 도식·확인 문제로 짚습니다." />
+    <meta name="twitter:image" content="https://pancocbt.site/og-default.png" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"DDL·제약조건 — SQLD, PK vs UNIQUE의 NULL과 자동 커밋","description":"SQLD 제2과목 DDL을 시험 관점으로 정리합니다. CREATE·ALTER·DROP·TRUNCATE 문법, 제약조건 5종(PK·FK·UNIQUE·NOT NULL·CHECK), PK는 NULL 불가지만 UNIQUE는 NULL을 허용하는 함정, DDL 자동 커밋을 도식·확인 문제로 짚습니다.","image":"https://pancocbt.site/og-default.png","author":{"@type":"Person","name":"CBT 전자문제집 편집팀"},"publisher":{"@type":"Organization","name":"CBT 전자문제집"},"datePublished":"2026-08-05T19:00","dateModified":"2026-08-05T19:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://pancocbt.site/posts/sqld-ddl"},"keywords":"SQLD, DDL, 제약조건, PRIMARYKEY, UNIQUE, CHECK"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://pancocbt.site/"},{"@type":"ListItem","position":2,"name":"SQL 기본 및 활용","item":"https://pancocbt.site/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9"},{"@type":"ListItem","position":3,"name":"DDL·제약조건 — SQLD, PK vs UNIQUE의 NULL과 자동 커밋","item":"https://pancocbt.site/posts/sqld-ddl"}]}</script>
+    <!-- FOUC 방지: 기본은 노트풍(디자인 5), 사용자가 토글로 바꾼 경우만 그 값 사용 -->
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme = localStorage.getItem('theme') || 'note';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'note';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-B1VptR5i.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DJMACk3X.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-IU7vILQX.css">
+  </head>
+  <body>
+    <div id="root"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="site-header"><div class="container site-header__inner"><a class="brand" href="/">CBT 전자문제집</a><div class="site-header__actions"><nav id="site-nav" class="nav" aria-label="주요 메뉴"><a href="/">홈</a><a aria-current="page" class="active" href="/posts">전체 문제</a><a href="/mock">과목 문제풀기</a><a href="/exam">실전 모의고사</a><a href="/schedule">시험일정</a><a href="/my/scores">내 성적</a></nav><button class="theme-toggle" aria-label="테마: 노트 (클릭하면 라이트 모드로)" title="노트 모드 · 클릭하면 라이트 모드로"><span aria-hidden="true" style="font-size:1.05rem;line-height:1">✎</span></button><button type="button" class="nav__hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span class="nav__hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span></button></div></div></header><main id="main" class="container"><div class="reading-progress" style="width:0%" aria-hidden="true"></div><div class="post-layout"><article><nav class="breadcrumbs" aria-label="현재 위치"><ol><li><a href="/">홈</a></li><li><a href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a></li><li><span aria-current="page">DDL·제약조건 — SQLD, PK vs UNIQUE의 NULL과 자동 커밋</span></li></ol></nav><header class="post-header"><a class="tag" href="/category/SQL%20%EA%B8%B0%EB%B3%B8%20%EB%B0%8F%20%ED%99%9C%EC%9A%A9">SQL 기본 및 활용</a><h1 style="margin-top:0.75rem">28. DDL·제약조건 — SQLD, PK vs UNIQUE의 NULL과 자동 커밋</h1><div class="post-header__meta"><span>CBT 전자문제집 편집팀</span><time dateTime="2026-08-05T19:00">2026년 8월 5일 19:00</time></div><div class="tag-row" style="margin-top:1rem"><span class="tag">#<!-- -->SQLD</span><span class="tag">#<!-- -->DDL</span><span class="tag">#<!-- -->제약조건</span><span class="tag">#<!-- -->PRIMARYKEY</span><span class="tag">#<!-- -->UNIQUE</span><span class="tag">#<!-- -->CHECK</span></div></header><div id="article-body" class="prose" style="margin-top:2rem"><p><strong>DDL(Data Definition Language)</strong> 은 테이블 같은 <strong>객체의 구조를 정의</strong>하는 명령입니다. <code>CREATE</code>(생성)·<code>ALTER</code>(변경)·<code>DROP</code>(삭제)·<code>TRUNCATE</code>(비우기)가 있고, 구조를 만들 때 <strong>제약조건(Constraint)</strong> 으로 데이터 무결성 규칙을 겁니다. 시험은 <strong>제약조건 구분</strong>과 <strong>PK vs UNIQUE의 NULL 차이</strong>를 가장 많이 묻습니다.</p>
+<h2 id="이-단원-시험에서-어디에-나오나-출제-비중"><a href="#이-단원-시험에서-어디에-나오나-출제-비중">이 단원, 시험에서 어디에 나오나 (출제 비중)</a></h2>
+<ul>
+<li><strong>제2과목 「SQL 기본 및 활용」 = 40문항 · 80점.</strong> DDL은 개념 구분·오류 찾기 유형으로 출제됩니다.</li>
+<li><strong>제약조건 5종의 역할</strong>과 <strong>UNIQUE의 NULL 허용</strong>이 오답을 가르는 포인트입니다. <em>(단원별 문항수는 공개되지 않습니다 — 출처: KDATA 출제기준.)</em></li>
+</ul>
+<h2 id="출제-포인트--시험이-실제로-묻는-것"><a href="#출제-포인트--시험이-실제로-묻는-것">출제 포인트 — 시험이 실제로 묻는 것</a></h2>
+<ol>
+<li><strong>제약조건 5종</strong> — <code>PRIMARY KEY</code>·<code>FOREIGN KEY</code>·<code>UNIQUE</code>·<code>NOT NULL</code>·<code>CHECK</code> (+<code>DEFAULT</code>)</li>
+<li><strong>PK = UNIQUE + NOT NULL, 테이블당 1개</strong> — <strong>UNIQUE는 NULL 허용</strong> (최다 함정)</li>
+<li><code>ALTER</code>(구조 변경) / <code>DROP</code>(구조 삭제) vs <code>TRUNCATE</code>(데이터만)</li>
+<li><strong>DDL = 자동 커밋</strong> — 롤백 불가 (TCL 단원과 연계)</li>
+</ol>
+<h2 id="-create-table--컬럼마다-무결성-규칙을-건다"><a href="#-create-table--컬럼마다-무결성-규칙을-건다">① CREATE TABLE — 컬럼마다 무결성 규칙을 건다</a></h2>
+<p><img alt="회원 테이블 정의 예시: 회원번호는 PRIMARY KEY, 이름은 NOT NULL, 이메일은 UNIQUE, 등급은 CHECK, 부서코드는 FOREIGN KEY, 가입일은 DEFAULT SYSDATE 제약이 걸려 있다" src="/uploads/sqld-ddl-constraints.svg" loading="lazy"/></p>
+<p><em>그림 1. 컬럼마다 걸린 제약조건 — 무결성 규칙. (자작 도식)</em></p>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CREATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> TABLE</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> 회원</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  회원번호  </span><span style="color:#D73A49;--shiki-dark:#F97583">NUMBER</span><span style="color:#D73A49;--shiki-dark:#F97583">        PRIMARY KEY</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,               </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 유일 + NOT NULL</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  이름      </span><span style="color:#D73A49;--shiki-dark:#F97583">VARCHAR2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">20</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)  </span><span style="color:#D73A49;--shiki-dark:#F97583">NOT NULL</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,                  </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 필수</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  이메일    </span><span style="color:#D73A49;--shiki-dark:#F97583">VARCHAR2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">50</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)  </span><span style="color:#D73A49;--shiki-dark:#F97583">UNIQUE</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,                    </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 중복 불가(NULL은 허용)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  등급      </span><span style="color:#D73A49;--shiki-dark:#F97583">VARCHAR2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)  </span><span style="color:#D73A49;--shiki-dark:#F97583">CHECK</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (등급 </span><span style="color:#D73A49;--shiki-dark:#F97583">IN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#032F62;--shiki-dark:#9ECBFF">&#x27;GOLD&#x27;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span><span style="color:#032F62;--shiki-dark:#9ECBFF">&#x27;SILVER&#x27;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  부서코드  </span><span style="color:#D73A49;--shiki-dark:#F97583">NUMBER</span><span style="color:#D73A49;--shiki-dark:#F97583">        REFERENCES</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 부서(부서코드), </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- FK(참조 무결성)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  가입일    </span><span style="color:#D73A49;--shiki-dark:#F97583">DATE</span><span style="color:#D73A49;--shiki-dark:#F97583">          DEFAULT</span><span style="color:#D73A49;--shiki-dark:#F97583"> SYSDATE</span><span style="color:#6A737D;--shiki-dark:#6A737D">            -- 기본값</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre>
+<h2 id="-제약조건-5종--역할-구분"><a href="#-제약조건-5종--역할-구분">② 제약조건 5종 — 역할 구분</a></h2>
+<table><thead><tr><th>제약</th><th>뜻</th></tr></thead><tbody><tr><td><strong>PRIMARY KEY</strong></td><td>행 유일 식별 = <strong>UNIQUE + NOT NULL</strong>, 테이블당 <strong>1개</strong></td></tr><tr><td><strong>FOREIGN KEY</strong></td><td>다른 테이블의 PK 참조(참조 무결성)</td></tr><tr><td><strong>UNIQUE</strong></td><td>중복 금지 — 단, <strong>NULL은 허용</strong></td></tr><tr><td><strong>NOT NULL</strong></td><td>NULL 금지(필수 입력)</td></tr><tr><td><strong>CHECK</strong></td><td>값의 조건(범위·목록) 검사</td></tr></tbody></table>
+<p><code>DEFAULT</code>는 값을 안 넣었을 때 채울 <strong>기본값 설정</strong>으로, 무결성 제약은 아닙니다.</p>
+<blockquote>
+<p><strong>최다 함정:</strong> <code>PRIMARY KEY</code>는 <strong>NULL 불가</strong>, <code>UNIQUE</code>는 <strong>NULL 허용</strong>입니다. &quot;UNIQUE도 유일해야 하니 NULL 금지&quot;라고 착각하기 쉽습니다. <strong>PK = UNIQUE + NOT NULL</strong>로 기억하면 구분이 끝납니다.</p>
+</blockquote>
+<h2 id="-alter--drop--truncate"><a href="#-alter--drop--truncate">③ ALTER · DROP · TRUNCATE</a></h2>
+<pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ALTER</span><span style="color:#D73A49;--shiki-dark:#F97583"> TABLE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원 </span><span style="color:#D73A49;--shiki-dark:#F97583">ADD</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 전화 </span><span style="color:#D73A49;--shiki-dark:#F97583">VARCHAR2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">20</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);      </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 컬럼 추가</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ALTER</span><span style="color:#D73A49;--shiki-dark:#F97583"> TABLE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원 </span><span style="color:#D73A49;--shiki-dark:#F97583">MODIFY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 이름 </span><span style="color:#D73A49;--shiki-dark:#F97583">VARCHAR2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">30</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);   </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 자료형 변경</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ALTER</span><span style="color:#D73A49;--shiki-dark:#F97583"> TABLE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원 </span><span style="color:#D73A49;--shiki-dark:#F97583">DROP</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> COLUMN 전화;           </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 컬럼 삭제</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">DROP</span><span style="color:#D73A49;--shiki-dark:#F97583"> TABLE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원;                             </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 테이블 자체 삭제(구조까지)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">TRUNCATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> TABLE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 회원;                         </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 데이터만 전부 삭제(구조 유지)</span></span></code></pre>
+<ul>
+<li><strong>DROP</strong> = 구조까지 삭제 / <strong>TRUNCATE</strong> = 데이터만 비우고 구조 유지(DDL이라 복구 불가) / <strong>DELETE</strong> = DML이라 COMMIT 전 복구 가능. <em>(비교표는 DML 단원.)</em></li>
+<li><code>CREATE</code>·<code>ALTER</code>·<code>DROP</code>·<code>TRUNCATE</code> 모두 <strong>실행 즉시 자동 커밋</strong> — 앞선 DML까지 확정되고 롤백이 통하지 않습니다. <em>(원리는 TCL 단원.)</em></li>
+</ul>
+<h2 id="한-장-정리-암기-카드"><a href="#한-장-정리-암기-카드">한 장 정리 (암기 카드)</a></h2>
+<ul>
+<li>제약 5종: <strong>PK</strong>(=UNIQUE+NOT NULL·1개)·<strong>FK</strong>(참조)·<strong>UNIQUE</strong>(<strong>NULL 허용</strong>)·<strong>NOT NULL</strong>·<strong>CHECK</strong>. <code>DEFAULT</code>는 기본값.</li>
+<li><code>ALTER</code> 구조 변경 · <code>DROP</code> 구조 삭제 · <code>TRUNCATE</code> 데이터만(구조 유지).</li>
+<li><strong>DDL = 자동 커밋</strong> — 롤백 불가, 앞선 DML까지 확정.</li>
+</ul>
+<aside class="related-problems" aria-label="DDL·제약조건 연계 문제"><div class="related-problems__info"><span class="related-problems__label">DDL·제약조건</span><span class="related-problems__count">이 개념 연계 문제 <!-- -->6<!-- -->개</span></div><a class="related-problems__cta" href="/quiz/DDL">관련 문제 풀기 →</a></aside>
+<h2 id="참고-출처"><a href="#참고-출처">참고 출처</a></h2>
+<ul>
+<li>시험 과목·배점: <a href="https://www.dataq.or.kr" target="_blank" rel="noopener noreferrer">한국데이터산업진흥원(KDATA) 데이터자격검정</a> (2026년 7월 확인)</li>
+<li>DDL·제약조건 동작은 오라클 SQL·표준 SQL에 근거하며, 본문 예시·도식·설명은 자작입니다.</li>
+</ul></div><div style="margin-top:3rem;padding:1.4rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)"><strong>CBT 전자문제집 편집팀</strong><p class="muted" style="margin-top:0.35rem">자격증 개념과 기출 유형을 쉽게 정리합니다.</p></div></article></div><section><div class="section-title"><h2>관련 글</h2></div><div class="bento"><a class="post-card " href="/posts/sqld-tcl"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">TCL — SQLD, COMMIT·ROLLBACK·SAVEPOINT와 DDL 자동 커밋 함정</h3><p>SQLD 제2과목 TCL을 시험 관점으로 정리합니다. COMMIT 후에는 ROLLBACK으로 복구할 수 없다는 원칙, ROLLBACK TO 저장점이 그 이후 작업만 취소하는 범위, 트랜잭션 도중 DDL이 앞선 DML까지 자동 커밋하는 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-08-01T14:00">2026년 8월 1일 14:00</time><span>· <!-- -->SQLD, TCL, COMMIT</span></div></a><a class="post-card " href="/posts/sqld-dml"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">DML — SQLD, INSERT·UPDATE·DELETE·MERGE와 TRUNCATE 함정</h3><p>SQLD 제2과목 DML을 시험 관점으로 정리합니다. INSERT·UPDATE·DELETE·MERGE 문법, WHERE 없는 UPDATE/DELETE가 전체 행에 적용되는 사고, DELETE(복구 가능) vs TRUNCATE(DDL·복구 불가) vs DROP(구조 삭제) 구분을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T22:00">2026년 7월 31일 22:00</time><span>· <!-- -->SQLD, DML, INSERT</span></div></a><a class="post-card " href="/posts/sqld-ansi-join"><span class="tag" style="align-self:flex-start">SQL 기본 및 활용</span><h3 style="margin-top:0.75rem">표준 조인(ANSI) — SQLD, ON·USING·NATURAL과 ON vs WHERE 함정</h3><p>SQLD 제2과목 표준 조인을 시험 관점으로 정리합니다. ON·USING·NATURAL 세 조건 지정 방식의 차이와 별칭 금지 규칙, OUTER JOIN에서 옵션 테이블 조건을 WHERE에 두면 INNER처럼 되는 최다 함정을 도식·확인 문제로 짚습니다.</p><div class="post-card__meta"><time dateTime="2026-07-31T02:00">2026년 7월 31일 02:00</time><span>· <!-- -->SQLD, ANSIJOIN, USING</span></div></a></div></section></main><footer class="site-footer"><div class="container"><strong>CBT 전자문제집</strong><p class="muted" style="margin-top:0.4rem;max-width:48ch">개념을 읽고 바로 문제를 푸는 자격증 CBT 전자문제집입니다.</p><nav class="site-footer__links" aria-label="푸터 메뉴"><a href="/about">소개</a><a href="/contact">문의</a><a href="/privacy">개인정보처리방침</a><a href="/terms">이용약관</a></nav><p class="muted" style="margin-top:1.25rem;font-size:0.82rem">© 2026 CBT 전자문제집. All rights reserved.</p></div></footer></div>
+    <!--
+      Google AdSense / 사이트 소유확인:
+      이제 코드를 직접 넣지 않습니다. src/site.config.ts 에서
+        adsense.client = 실제 ca-pub-XXXX,  adsense.review = true (심사) / enabled = true (운영)
+        verification.google = Search Console 인증 코드
+      로 설정하면 빌드 시 모든 페이지 <head> 에 자동 삽입됩니다 (src/lib/head.tsx).
+    -->
+  </body>
+</html>

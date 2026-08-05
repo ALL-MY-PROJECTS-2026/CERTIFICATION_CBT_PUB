@@ -1,0 +1,47 @@
+<svg viewBox="0 0 560 224" width="560" height="224" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="회원 테이블 정의: 회원번호는 기본키, 이름은 NOT NULL, 이메일은 UNIQUE, 등급은 CHECK, 부서코드는 외래키, 가입일은 DEFAULT SYSDATE">
+  <defs>
+    <style>
+      .cap{font:800 13px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .hd{fill:#17324c}
+      .ht{font:700 12px 'Nanum Gothic',sans-serif;fill:#fff;text-anchor:middle}
+      .cell{fill:#fff;stroke:#e2ebf1;stroke-width:1}
+      .pk{fill:#ffe066;stroke:#e2ebf1;stroke-width:1}
+      .col{font:600 12px 'IBM Plex Mono',monospace;fill:#17324c}
+      .ty{font:400 11.5px 'IBM Plex Mono',monospace;fill:#4a6580}
+      .con{font:600 11.5px 'Nanum Gothic',sans-serif;fill:#17324c}
+      .box{fill:none;stroke:#17324c;stroke-width:1.6}
+      .note{font:400 11px 'IBM Plex Mono',monospace;fill:#4a6580}
+    </style>
+  </defs>
+
+  <text x="20" y="24" class="cap">CREATE TABLE 회원</text>
+  <rect class="hd" x="20" y="32" width="110" height="26"/><text class="ht" x="75" y="50">컬럼</text>
+  <rect class="hd" x="130" y="32" width="150" height="26"/><text class="ht" x="205" y="50">자료형</text>
+  <rect class="hd" x="280" y="32" width="260" height="26"/><text class="ht" x="410" y="50">제약조건</text>
+
+  <rect class="pk" x="20" y="58" width="110" height="26"/><text class="col" x="28" y="76">회원번호</text>
+  <rect class="pk" x="130" y="58" width="150" height="26"/><text class="ty" x="138" y="76">NUMBER</text>
+  <rect class="pk" x="280" y="58" width="260" height="26"/><text class="con" x="288" y="76">PRIMARY KEY (유일 + NOT NULL)</text>
+
+  <rect class="cell" x="20" y="84" width="110" height="26"/><text class="col" x="28" y="102">이름</text>
+  <rect class="cell" x="130" y="84" width="150" height="26"/><text class="ty" x="138" y="102">VARCHAR2(20)</text>
+  <rect class="cell" x="280" y="84" width="260" height="26"/><text class="con" x="288" y="102">NOT NULL (필수 입력)</text>
+
+  <rect class="cell" x="20" y="110" width="110" height="26"/><text class="col" x="28" y="128">이메일</text>
+  <rect class="cell" x="130" y="110" width="150" height="26"/><text class="ty" x="138" y="128">VARCHAR2(50)</text>
+  <rect class="cell" x="280" y="110" width="260" height="26"/><text class="con" x="288" y="128">UNIQUE (중복 불가)</text>
+
+  <rect class="cell" x="20" y="136" width="110" height="26"/><text class="col" x="28" y="154">등급</text>
+  <rect class="cell" x="130" y="136" width="150" height="26"/><text class="ty" x="138" y="154">VARCHAR2(10)</text>
+  <rect class="cell" x="280" y="136" width="260" height="26"/><text class="con" x="288" y="154">CHECK (IN 'GOLD','SILVER')</text>
+
+  <rect class="cell" x="20" y="162" width="110" height="26"/><text class="col" x="28" y="180">부서코드</text>
+  <rect class="cell" x="130" y="162" width="150" height="26"/><text class="ty" x="138" y="180">NUMBER</text>
+  <rect class="cell" x="280" y="162" width="260" height="26"/><text class="con" x="288" y="180">FOREIGN KEY → 부서(부서코드)</text>
+
+  <rect class="cell" x="20" y="188" width="110" height="26"/><text class="col" x="28" y="206">가입일</text>
+  <rect class="cell" x="130" y="188" width="150" height="26"/><text class="ty" x="138" y="206">DATE</text>
+  <rect class="cell" x="280" y="188" width="260" height="26"/><text class="con" x="288" y="206">DEFAULT SYSDATE (기본값)</text>
+
+  <rect class="box" x="20" y="32" width="520" height="182"/>
+</svg>

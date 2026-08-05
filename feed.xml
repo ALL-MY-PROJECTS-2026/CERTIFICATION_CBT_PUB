@@ -7,6 +7,13 @@
     <language>ko</language>
     <atom:link href="https://pancocbt.site/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>DDL·제약조건 — SQLD, PK vs UNIQUE의 NULL과 자동 커밋</title>
+      <link>https://pancocbt.site/posts/sqld-ddl</link>
+      <guid isPermaLink="true">https://pancocbt.site/posts/sqld-ddl</guid>
+      <pubDate>Wed, 05 Aug 2026 19:00:00 GMT</pubDate>
+      <description>SQLD 제2과목 DDL을 시험 관점으로 정리합니다. CREATE·ALTER·DROP·TRUNCATE 문법, 제약조건 5종(PK·FK·UNIQUE·NOT NULL·CHECK), PK는 NULL 불가지만 UNIQUE는 NULL을 허용하는 함정, DDL 자동 커밋을 도식·확인 문제로 짚습니다.</description>
+    </item>
+    <item>
       <title>TCL — SQLD, COMMIT·ROLLBACK·SAVEPOINT와 DDL 자동 커밋 함정</title>
       <link>https://pancocbt.site/posts/sqld-tcl</link>
       <guid isPermaLink="true">https://pancocbt.site/posts/sqld-tcl</guid>
